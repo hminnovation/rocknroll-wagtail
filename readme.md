@@ -1,5 +1,7 @@
-Monkey learning wagtail cookiecutter
+A learning wagtail cookiecutter
 ====================
+
+Status: A work in progress
 
 A [cookiecutter](https://github.com/audreyr/cookiecutter) template for Wagtail based on Torchbox's [Wagtail cookiecutter](https://github.com/torchbox/cookiecutter-wagtail).
 
