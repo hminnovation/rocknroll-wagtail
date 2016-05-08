@@ -26,6 +26,16 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     'monkeywagtail.home',
     'monkeywagtail.search',
+    'monkeywagtail.standardpage',
+    'monkeywagtail.review',
+    'monkeywagtail.album',
+    'monkeywagtail.artist',
+    'monkeywagtail.genre',
+    'monkeywagtail.author',
+    'monkeywagtail.feature_content_page',
+
+    'wagtailfontawesome',
+    'wagtailerrorpages',
 
     'wagtail.contrib.wagtailsearchpromotions',
     'wagtail.wagtailforms',
