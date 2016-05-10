@@ -1,6 +1,6 @@
 Rock n roll wagtail cookiecutter
 ====================
-!https://github.com/heymonkeyriot/rocknroll-wagtail-cookiecutter/blob/master/wagtail%20rock%20n%20roll.jpg
+!(https://github.com/heymonkeyriot/rocknroll-wagtail-cookiecutter/blob/master/wagtail%20rock%20n%20roll.jpg)
 
 **Status**: Currently very much a work in progress...
 
