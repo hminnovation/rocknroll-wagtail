@@ -1,7 +1,10 @@
-A learning wagtail cookiecutter
+Rock n roll wagtail cookiecutter
 ====================
+!https://github.com/heymonkeyriot/rocknroll-wagtail-cookiecutter/blob/master/wagtail%20rock%20n%20roll.jpg
 
-Status: Currently very much a work in progress...
+**Status**: Currently very much a work in progress...
+
+### A Wagtail cookiecutter for cut 'n' paste pulling apart
 
 A [cookiecutter](https://github.com/audreyr/cookiecutter) template for Wagtail based on Torchbox's [Wagtail cookiecutter](https://github.com/torchbox/cookiecutter-wagtail).
 
