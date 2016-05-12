@@ -54,6 +54,12 @@ class Artist(models.Model):
     ]
 
     def __str__(self):              # __unicode__ on Python 2
-        # We're returning the string that populates the snippets screen. Obvs whatever field you choose
-        # will come through as plain text
+        # We're returning the string that populates the snippets screen. Note it returns as plain-text
         return self.artist_name
+
+        class Meta:
+        # We need to clarify the meta class else we get a issubclass() arg 1 error (which I don't really
+        # understand)
+            ordering = ['artist_name']
+            verbose_name = "Artist"
+            verbose_name_plural = "Artists"

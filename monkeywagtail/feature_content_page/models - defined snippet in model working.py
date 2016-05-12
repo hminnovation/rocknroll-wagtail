@@ -24,17 +24,35 @@ from wagtail.wagtailsnippets.models import register_snippet
 #        related_name='artist'
 #    )
 #    is_abstract = True
-    
+#    
 #    class Meta:
 #        abstract = True
 
 
-class ArtistFeaturePageRelationship(models.Model):
+@register_snippet
+class ArtistCategory(models.Model):
+    title = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text="This is the artist title",
+        verbose_name=('Artist title')
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['title']
+        verbose_name = "artist category"
+        verbose_name_plural = "artist categories"
+
+class ArtistCategoryRelationship(models.Model):
     page = ParentalKey(
-        'FeatureContentPage', related_name='artist_feature_page_relationship'
+        'FeatureContentPage', related_name='artist_category_relationship'
     )
     artist = models.ForeignKey(
-        'artist.artist',
+        'ArtistCategory',
         related_name="+"
     )
     panels = [
@@ -89,17 +107,17 @@ class FeatureContentPage(Page):
     body = StreamField(StandardBlock(), blank=True)
 
     @property
-    def artists(self):
-        artists = [
-            n.artist for n in self.artist_feature_page_relationship.all()
+    def categories(self):
+        categories = [
+            n.category for n in self.artist_category_relationship.all()
         ]
-        for artist in artists:
-            artist.url = '/'+'/'.join(s.strip('/') for s in [
+        for category in categories:
+            category.url = '/'+'/'.join(s.strip('/') for s in [
                 self.get_parent().url,
-                'artist',
-                artist.slug
+                'category',
+                category.slug
             ])
-        return artists
+        return categories
 
     def get_context(self, request):
         # This is display view - I think - though I'm less show about what it's *actually* doing
@@ -122,5 +140,5 @@ class FeatureContentPage(Page):
         FieldPanel('introduction'),
         FieldPanel('listing_introduction'),
         StreamFieldPanel('body'),
-        InlinePanel('artist_feature_page_relationship', label="Artists")
+        InlinePanel('artist_category_relationship', label="Categories")
     ]
