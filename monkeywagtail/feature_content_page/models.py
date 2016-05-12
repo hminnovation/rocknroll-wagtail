@@ -12,7 +12,7 @@ from monkeywagtail.core.blocks import StandardBlock
 class FeatureContentPageArtistGroup(Orderable, models.Model):
     # Okay... this is bringing in the content from the artist class within the artist model
     # but it hits an error immediately where TypeError: issubclass() arg 1 must be a class
-    page = ParentalKey('FeatureContentPage.FeatureContentPage',
+    page = ParentalKey('Feature_Content_Page.FeatureContentPage',
                        related_name='artist_groups')
     artist_group = models.ForeignKey(
         'artist.Artist',
@@ -21,6 +21,9 @@ class FeatureContentPageArtistGroup(Orderable, models.Model):
         on_delete=models.SET_NULL,
         related_name='artist'
     )
+    is_abstract = True
+    class Meta:
+        abstract = True
 
 
 class FeatureContentPage(Page):
