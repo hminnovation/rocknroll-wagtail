@@ -1,14 +1,12 @@
 {% extends "base.html" %}
-{% image page.image fill-1265x608-c100 as image %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
 <h1>{{ page.title }}</h1>
+        
+        {% image page.image width-400 %}
 
 <p><strong>{{ page.introduction }}</strong></p>
 {{ page.body }}
 
-{% for artist in page.artist_feature_page_relationship.all %}
-    <ul><li>
-        
-            {{ artist_feature_page_relationship.artist.artist_name }}
-    </li></ul>
-{% endfor %}
+
 {% endblock %}

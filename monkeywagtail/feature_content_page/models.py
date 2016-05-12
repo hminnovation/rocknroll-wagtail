@@ -10,26 +10,11 @@ from monkeywagtail.core.blocks import StandardBlock
 from wagtail.wagtailsnippets.models import register_snippet
 
 
-#class FeatureContentPageArtistGroup(Orderable, models.Model):
-    # Okay... this is bringing in the content from the artist class within the artist model
-    # but it hits an error immediately where TypeError: issubclass() arg 1 must be a class
-    # http://www.tivix.com/blog/working-wagtail-i-want-my-m2ms/
-#    page = ParentalKey('FeatureContentPage',
-#                       related_name='artist_groups')
-#    artist_group = models.ForeignKey(
-#        'artist.Artist',
-#        null=True,
-#        blank=True,
-#        on_delete=models.SET_NULL,
-#        related_name='artist'
-#    )
-#    is_abstract = True
-    
-#    class Meta:
-#        abstract = True
-
-
 class ArtistFeaturePageRelationship(models.Model):
+    # http://www.tivix.com/blog/working-wagtail-i-want-my-m2ms/
+    # This is the start of defining the m2m. The related name is the bit of 'magic' that Wagtail
+    # hooks to. The class (artist) within the model (artist) is a terrible naming convention
+    # that I need to fix
     page = ParentalKey(
         'FeatureContentPage', related_name='artist_feature_page_relationship'
     )
@@ -38,6 +23,7 @@ class ArtistFeaturePageRelationship(models.Model):
         related_name="+"
     )
     panels = [
+    # We need this for the inlinepanel on the Feature Content Page to grab hold of
         FieldPanel('artist')
     ]
 
@@ -66,15 +52,6 @@ class FeatureContentPage(Page):
         related_name='+'
     )
 
-#    @property
-#    def artist_groups_list(self):
-#        artist_groups = [
-#            artist.artist_group for artist in self.artist_groups.select_related(
-#                'artist'
-#            ) if artist.artist_group.live
-#        ]
-#        return artist_groups
-
     # Note below that standard blocks use 'help_text' for supplementary text rather than 'label' as with StreamField
     introduction = models.TextField(blank=True, help_text="Text to show at the top of the individual page")
 
@@ -89,23 +66,19 @@ class FeatureContentPage(Page):
     body = StreamField(StandardBlock(), blank=True)
 
     @property
+    # We're returning artists for the FeatureContentPage class. Note the fact we're
+    # using `artist_feature_page_relationship` to grab them
     def artists(self):
         artists = [
             n.artist for n in self.artist_feature_page_relationship.all()
         ]
-        for artist in artists:
-            artist.url = '/'+'/'.join(s.strip('/') for s in [
-                self.get_parent().url,
-                'artist',
-                artist.slug
-            ])
         return artists
 
     def get_context(self, request):
         # This is display view - I think - though I'm less show about what it's *actually* doing
         context = super(FeatureContentPage, self).get_context(request)
-        context['children'] = Page.objects.live().in_menu().child_of(self)
-        context['artist_groups'] = self.artist_groups_list
+#        context['children'] = Page.objects.live().in_menu().child_of(self)
+#        context['artist_groups'] = self.artist_groups_list
 #        context['artist'] = self.artist
         return context
 
