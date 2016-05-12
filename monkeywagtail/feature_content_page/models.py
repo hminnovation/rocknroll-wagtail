@@ -1,13 +1,13 @@
 from django.db import models
-from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.wagtailcore.models import Page
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailcore.fields import StreamField
-from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
+#from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from modelcluster.fields import ParentalKey
 from wagtail.wagtailsearch import index
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel
 from monkeywagtail.core.blocks import StandardBlock
-from wagtail.wagtailsnippets.models import register_snippet
+#from wagtail.wagtailsnippets.models import register_snippet
 
 
 class ArtistFeaturePageRelationship(models.Model):
@@ -23,7 +23,7 @@ class ArtistFeaturePageRelationship(models.Model):
         related_name="+"
     )
     panels = [
-    # We need this for the inlinepanel on the Feature Content Page to grab hold of
+        # We need this for the inlinepanel on the Feature Content Page to grab hold of
         FieldPanel('artist')
     ]
 
