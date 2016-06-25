@@ -56,21 +56,21 @@ class StandardBlock(blocks.StreamBlock):
         ('attribute_group', blocks.CharBlock(blank=True,required=False, label='e.g. Fugazi')),
     ], icon="openquote", template="blocks/blockquote.html")
 
-    def render_basic(self, value):
-        headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+#    def render_basic(self, value):
+#        headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
 
-        blocks = []
-        for i, child in enumerate(value):
-            childtype = child.block_type
-            childtext = force_text(child)
-            try:
-                nextchildtype = value[i+1].block_type
-                if childtype in headings and nextchildtype in bgs:
-                    childtext = '<div class="match-bg">{0}</div>'.format(
-                        force_text(child))
-                    childtext = mark_safe(childtext)
-            except IndexError:
-                pass
-            blocks.append((childtext, childtype))
+#        blocks = []
+#        for i, child in enumerate(value):
+#            childtype = child.block_type
+#            childtext = force_text(child)
+#            try:
+#                nextchildtype = value[i+1].block_type
+#                if childtype in headings and nextchildtype in bgs:
+#                    childtext = '<div class="match-bg">{0}</div>'.format(
+#                        force_text(child))
+#                    childtext = mark_safe(childtext)
+#            except IndexError:
+#                pass
+#            blocks.append((childtext, childtype))
 
-        return format_html_join('\n', '{0}', blocks)
+#        return format_html_join('\n', '{0}', blocks)

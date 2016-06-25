@@ -3,8 +3,42 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailsearch import index
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel
+from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
+from modelcluster.fields import ParentalKey
 from monkeywagtail.core.blocks import StandardBlock
+
+# Artist
+class ReviewArtistRelationship(models.Model):
+    ArtistRelationship = ParentalKey(
+        'ReviewPage',
+        related_name='review_artist_relationship'
+    )
+    artist_name = models.ForeignKey(
+        'artist.Artist',
+        #app.class
+        related_name="+",
+        help_text='The artist who made the album being reviewed'
+    )
+    panels = [
+        SnippetChooserPanel('artist_name')
+    ]
+
+# Album
+class ReviewAlbumRelationship(models.Model):
+    AlbumRelationship = ParentalKey(
+        'ReviewPage',
+        related_name='review_album_relationship'
+    )
+    album_name = models.ForeignKey(
+        'album.Album',
+        #app.class
+        related_name="+",
+        help_text='The album being reviewed'
+    )
+    panels = [
+        SnippetChooserPanel('album_name')
+    ]
 
 
 class ReviewPage(Page):
@@ -39,6 +73,20 @@ class ReviewPage(Page):
     # the StreamField directly within the model, but this method aids consistency.
     body = StreamField(StandardBlock(), blank=True)
 
+    @property
+    def artist_in_editor(self):
+        artist_in_editor = [
+            n.artist for n in self.review_artist_relationship.all()
+        ]
+        return artist_in_editor
+
+    @property
+    def album_in_editor(self):
+        album_in_editor = [
+            n.album for n in self.review_album_relationship.all()
+        ]
+        return album_in_editor
+
     def get_context(self, request):
         # This is display view - I think - though I'm less show about what it's *actually* doing
         context = super(ReviewPage, self).get_context(request)
@@ -51,6 +99,8 @@ class ReviewPage(Page):
         # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
+        InlinePanel('review_album_relationship', label="Album", panels=None, min_num=1, max_num=1),
+        InlinePanel('review_artist_relationship', label="Arist", panels=None, min_num=1),
         FieldPanel('date'),
         FieldPanel('rating'),
         FieldPanel('introduction'),

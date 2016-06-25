@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+
+{% block content %}
+<main class="content inner-page">
+  <div class="article-header">
+    {% breadcrumbs %}
+
+    {% block article_header %}
+    {% endblock %}
+  </div>
+
+<div class="inner-content">
+      <article>
+        {% block article_content %}
+        {% if page.image %}
+            <header class="banner">
+              {% image page.image fill-1265x608-c100 as banner_image %}
+              <div class="image" style="background-image: url('{{ banner_image.url }}')"></div>
+            </header>
+        {% endif %}
+        {% endblock %}
+      </article>
+</div>
+
+  {% block article_footer %}
+  {% endblock %}
+
+</main>
+{% endblock %}

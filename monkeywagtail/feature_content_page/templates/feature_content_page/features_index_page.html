@@ -1,0 +1,24 @@
+{% extends "inner-page.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+{% if features %}
+<div class="row">
+    {% for feature in features %}
+        {{ feature.title }}
+        {{ feature.listing_introduction }}
+        {% if feature.image %}
+              {% image feature.image width-100 as photo %}
+              <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+        {% endif %}
+        <a href="{{ feature.url }}">{{ feature.url }}</a>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if feature %}
+{% endif %}
+
+
+
+{% endblock %}

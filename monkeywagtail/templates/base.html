@@ -21,17 +21,20 @@
         {% endblock %}
     </head>
 
-    <body class="{% block body_class %}{% endblock %}">
+    <body class="{% block body_class %}template-{{ self.get_verbose_name|slugify }}{% endblock %}">
         {% wagtailuserbar %}
 
+        {% block header %}{% endblock %}
+
         {% block content %}{% endblock %}
+
+        {% block header %}{% endblock %
 
         {% compress js %}
             <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
         {% endcompress %}
 
         {% block extra_js %}
-
         {% endblock %}
     </body>
 </html>

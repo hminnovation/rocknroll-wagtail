@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'monkeywagtail.genre',
     'monkeywagtail.author',
     'monkeywagtail.feature_content_page',
+#   'monkeywagtail.wagtailbettereditor.wagtailbettereditor',
 
     'wagtailfontawesome',
     'wagtailerrorpages',

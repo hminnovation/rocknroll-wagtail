@@ -1,0 +1,29 @@
+{% extends "inner-page.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<h1>{{ page.title }}</h1>
+{% for author in page.authors %}
+    <p>
+        {{ author.author_name }}
+    </p>
+{% endfor %}
+        
+        {% image page.image width-400 %}
+
+<p><strong>{{ page.introduction }}</strong></p>
+{{ page.publication_date }}
+{{ page.body }}
+
+
+{% for artist in page.artists %}
+    {% comment %}
+        Artist has been placed into the page by the authors @property.
+        We get content from it by model.property e.g. artist.artist_name
+    {% endcomment %}
+    <p>
+            <a href="#">{{ artist.artist_name }}</a>
+    </p>
+{% endfor %}
+
+{% endblock %}

@@ -5,6 +5,8 @@ from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailsearch import index
 from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailsnippets.models import register_snippet
+from modelcluster.models import ClusterableModel
+from wagtail.wagtailcore.models import Page
 
 
 @register_snippet
@@ -15,7 +17,7 @@ from wagtail.wagtailsnippets.models import register_snippet
 # Note: the properties and panels are defined in exactly the same way as on a page model
 # TODO: The author and artist snippets are very close to identical (single change that the title property is artist_name
 # on one and author_name on the other)
-class Artist(models.Model):
+class Artist(ClusterableModel):
     """
     The author snippet gives a way to add authors to a site and create a one-way relationship with content
     """
@@ -63,3 +65,10 @@ class Artist(models.Model):
             ordering = ['artist_name']
             verbose_name = "Artist"
             verbose_name_plural = "Artists"
+
+    def get_context(self, request):
+        context = super(Artist, self).get_context(request)
+
+        # Add extra variables and return the updated context
+        context['artists'] = artist.objects.child_of(self).live()
+        return context
