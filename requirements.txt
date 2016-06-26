@@ -2,10 +2,10 @@ Django==1.9
 psycopg2==2.6.1
 elasticsearch==1.2.0
 django-redis==4.3.0
-wagtail==1.3.1
+wagtail==1.5.2
 django-libsass==0.6
 libsass==0.8.3
-Pillow==2.9.0
+Pillow==3.0.0
 wagtailfontawesome==1.0.5 
 #This allows us to use FontAwesome icons for the admin area e.g. with StreamField
 wagtailerrorpages>=1.1.0 
