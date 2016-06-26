@@ -1,5 +1,5 @@
 from django.db import models
-from wagtail.wagtailcore.fields import StreamField
+from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Orderable
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
@@ -8,20 +8,31 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 
-# You've got to have some sub-genres with that genre
-class Subgenre(models.Model):
-    subgenre = models.CharField(max_length=255, blank=True)
+@register_snippet
+class SubgenreClass(ClusterableModel):
+
+    subgenre = models.CharField(max_length=255, help_text="Be as esoteric as you'd like")
+    description = models.TextField(blank=True, help_text='A description of the sub-genre')
 
     panels = [
-        FieldPanel('subgenre')
+        FieldPanel('subgenre'),
+        FieldPanel('description')
     ]
 
+    def __str__(self):              # __unicode__ on Python 2
+        # We're returning the string that populates the snippets screen. Obvs whatever field you choose
+        # will come through as plain text
+        return self.subgenre
+
     class Meta:
-        abstract = True
+        verbose_name = "Subgenre"
+        verbose_name_plural = "Subgenres"
 
 
-class SubgenreRelationship(Orderable, Subgenre):
-    subgenre_in_editor = ParentalKey('GenreClass', related_name='subgenre_relationship')
+## This, calls _all_ of the fields from the snippet above, but not the actual content    
+## It's because we don't have the next
+class SubGenreRelationship(Orderable, SubgenreClass):
+        subgenre_in_editor = ParentalKey('GenreClass', related_name='sub_genre_relationship')
 
 
 @register_snippet
@@ -35,8 +46,8 @@ class GenreClass(ClusterableModel):
     You've gotta define a genre right
     """
 
-    genre = models.CharField("The genre", max_length=254, help_text='The genre. You can only have one e.g. metal')
-
+    genre = models.CharField("The genre", max_length=254, help_text='The genre. Something high level e.g. pop, metal, punk etc')
+    description = RichTextField(blank=True, help_text='A description of the genre')
     panels = [
         # The content panels are displaying the components of content we defined in the StandardPage class above
         # If you add something to the class and want it to appear for the editor you have to define it here too
@@ -44,7 +55,8 @@ class GenreClass(ClusterableModel):
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
         FieldPanel('genre'),
-        InlinePanel('subgenre_relationship', label="Subgenres", help_text="And... add the sub-genres", min_num=1)
+        FieldPanel('description'),
+        InlinePanel('sub_genre_relationship', label="Subgenre", help_text="Note: this subgenres will populate the sub-genre snippet", min_num=1)
     ]
 
     def __str__(self):              # __unicode__ on Python 2

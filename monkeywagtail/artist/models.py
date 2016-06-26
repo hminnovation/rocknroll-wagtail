@@ -1,12 +1,36 @@
 from django.db import models
-from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailsearch import index
-from wagtail.wagtailadmin.edit_handlers import FieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.models import ClusterableModel
-from wagtail.wagtailcore.models import Page
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey
+#from taggit.models import TaggedItemBase
+from monkeywagtail.genre.models import SubgenreClass
+
+
+class SubGenreClassRelationship(Orderable, models.Model):
+    # http://www.tivix.com/blog/working-wagtail-i-want-my-m2ms/
+    # This is the start of defining the m2m. The related name is the 'magic' that Wagtail
+    # hooks to. The model name (artist) within the app (artist) is a terrible naming convention
+    # that you should avoid. It's 'class.model'
+    page = ParentalKey(
+        'Artist', related_name='subgenre_artist_relationship'
+    )
+    subgenre = models.ForeignKey(
+        'genre.SubgenreClass',
+        related_name="+"
+    )
+    panels = [
+        # We need this for the inlinepanel on the Feature Content Page to grab hold of
+        FieldPanel('subgenre')
+    ]
+
+#class GenreTagRelationship(TaggedItemBase, GenreClass):
+#    content_object = ParentalKey('artist.Artist', related_name='genres')
 
 
 @register_snippet
@@ -38,10 +62,21 @@ class Artist(ClusterableModel):
         related_name='+'
     )
 
+    #tags = ClusterTaggableManager(through=GenreTagRelationship, blank=True)
+
     # Note below that standard blocks use 'help_text' for supplementary text rather than 'label' as with StreamField
     biography = RichTextField(blank=True, help_text="Short biography about the user")
 
     external_url = models.URLField(blank=True, null=True)
+
+    @property
+    # We're returning artists for the FeatureContentPage class. Note the fact we're
+    # using `artist_feature_page_relationship` to grab them
+    def subgenres(self):
+        subgenres = [
+            n.subgenre for n in self.subgenre_artist_relationship.all()
+        ]
+        return subgenres
 
     panels = [
         # The content panels are displaying the components of content we defined in the StandardPage class above
@@ -50,8 +85,10 @@ class Artist(ClusterableModel):
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
         FieldPanel('artist_name'),
+        InlinePanel('subgenre_artist_relationship', label="Genres", panels=None, min_num=1),
         ImageChooserPanel('image'),
         FieldPanel('biography'),
+        #FieldPanel('tags'),
         FieldPanel('external_url')
     ]
 
@@ -70,5 +107,5 @@ class Artist(ClusterableModel):
         context = super(Artist, self).get_context(request)
 
         # Add extra variables and return the updated context
-        context['artists'] = artist.objects.child_of(self).live()
+        # context['artists'] = artist.objects.child_of(self).live()
         return context
