@@ -23,8 +23,10 @@ class HomePage(Page):
 
     def get_context(self, request):
         context = super(HomePage, self).get_context(request)
-        context['children'] = Page.objects.live().in_menu().child_of(self)
+        context['children'] = Page.objects.live().in_menu().descendant_of(self)
         return context
+
+        all_entries = Page.objects.all()
 
     content_panels = Page.content_panels + [
         ImageChooserPanel('image'),

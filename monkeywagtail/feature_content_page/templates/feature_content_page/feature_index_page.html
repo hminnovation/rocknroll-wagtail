@@ -1,10 +1,19 @@
-{% extends "inner-page.html" %}
+{% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-{% if features %}
+abc
+
+{{ self.features }}
 <div class="row">
     {% for feature in features %}
+    <div class="row">
+          {% for artist in feature.artists %}
+            <a href="{{ artist.url }}">{{ artist }}</a>{% endfor %}
+
+             {% for author in feature.authors %}
+            <a href="{{ author.url }}">{{ author }}</a>{% endfor %}
+
         {{ feature.title }}
         {{ feature.listing_introduction }}
         {% if feature.image %}
@@ -12,13 +21,15 @@
               <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
         {% endif %}
         <a href="{{ feature.url }}">{{ feature.url }}</a>
+    </div>
     {% endfor %}
 </div>
-{% endif %}
 
 {% if feature %}
 {% endif %}
 
 
-
+{% if paginate_list.paginator.num_pages > 1 %}
+  blah blah blah
+{% endif %}
 {% endblock %}

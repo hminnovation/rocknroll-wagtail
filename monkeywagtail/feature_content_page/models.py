@@ -1,14 +1,15 @@
 from django.db import models
+from django.db.models import Count
+from django.conf import settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wagtail.wagtailcore.models import Orderable, Page
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailcore.fields import StreamField
-#from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from modelcluster.fields import ParentalKey
 from wagtail.wagtailsearch import index
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel, MultiFieldPanel
 from monkeywagtail.core.blocks import StandardBlock
 from monkeywagtail.author.models import Author
-#from wagtail.wagtailsnippets.models import register_snippet
 
 
 class ArtistFeaturePageRelationship(Orderable, models.Model):
@@ -27,6 +28,7 @@ class ArtistFeaturePageRelationship(Orderable, models.Model):
         # We need this for the inlinepanel on the Feature Content Page to grab hold of
         FieldPanel('artist')
     ]
+
 
 class AuthorFeaturePageRelationship(Orderable, models.Model):
     # We get to define another m2m for authors since a page can have many authors
@@ -110,13 +112,13 @@ class FeatureContentPage(Page):
         # SnippetChooserPanel('artist'),
         FieldPanel('publication_date'),
         MultiFieldPanel(
-        [
-            ImageChooserPanel('image'),
-            FieldPanel('introduction'),
-            FieldPanel('listing_introduction'),
-        ],
-        heading="Introduction and listing image",
-        classname="collapsible"
+            [
+                ImageChooserPanel('image'),
+                FieldPanel('introduction'),
+                FieldPanel('listing_introduction'),
+            ],
+            heading="Introduction and listing image",
+            classname="collapsible"
         ),
         StreamFieldPanel('body'),
         InlinePanel('artist_feature_page_relationship', label="Artists"),
@@ -126,13 +128,106 @@ class FeatureContentPage(Page):
     @property
     def features_index(self):
         # I'm not convinced this is altogether necessary... but still we're going from feature_content_page -> feature_index_page
-        return self.get_ancestors().type(FeaturesIndexPage).last()
+        return self.get_ancestors().type(FeatureIndexPage).last()
 
-class FeaturesIndexPage(Page):
-    def get_context(self, request):
-        context = super(FeaturesIndexPage, self).get_context(request)
-        context['features'] = FeatureContentPage.objects.live().descendant_of(self)
-        return context
+    parent_page_types = [
+        'feature_content_page.FeatureIndexPage'
+        # app.model
+    ]
+
+    subpage_types = [
+    ]
+
+
+class FeatureIndexPage(Page):
+    listing_introduction = models.TextField(help_text='Text to describe this section. Will appear on other pages that reference this feature section', blank=True)
+    introduction = models.TextField(help_text='Text to describe this section. Will appear on the page', blank=True)
+    body = StreamField(StandardBlock(), blank=True, help_text="No good reason to have this here, but in case there's a feature section I can't think of")
+
+    search_fields = Page.search_fields + (
+        index.SearchField('listing_introduction'),
+        index.SearchField('body'),
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('listing_introduction'),
+        FieldPanel('introduction'),
+        StreamFieldPanel('body')
+    ]
+
+    parent_page_types = [
+        'home.HomePage'
+    ]
 
     # Defining what content type can sit under the parent
-    subpage_types = ['FeatureContentPage']
+    subpage_types = [
+        'FeatureContentPage'
+    ]
+
+## Index page context to return content
+## This works, but doens't paginate
+    def get_context(self, request):
+        context = super(FeatureIndexPage, self).get_context(request)
+        context['features'] = FeatureContentPage.objects.descendant_of(self).live().order_by('-publication_date')
+        return context
+
+# This also works, but doesn't paginate    
+#    @property
+#    def features(self):
+#        features = FeatureIndexPage.objects.live().descendant_of(self).order_by('-publication_date')
+#        return features
+#
+#    def get_context(self, request):
+#        features = self.features
+#
+#    # Pagination
+#        page = request.GET.get('page', 2)
+#        paginator = Paginator(features, getattr(settings, 'Features_per_page', 10))
+#
+#        try:
+#            features = paginator.page(page)
+#        except PageNotAnInteger:
+#            features = paginator.page(1)
+#        except EmptyPage:
+#            features = paginator.page(paginator.num_pages)
+#
+#        #show_all = True
+#
+#        context = super(FeatureIndexPage, self).get_context(request)
+#        context['features'] = FeatureContentPage.objects.descendant_of(self).live()
+#        return context
+
+
+
+# This doesn't work
+#    @property
+#    def features(self):
+#        # Get list of blog pages that are descendants of this page
+#        features = FeatureIndexPage.objects.live().descendant_of(self)
+#        features = features.order_by(
+#            '-first_published_at'
+#        )
+#        return features
+#
+#    def get_context(self, request, tag=None, category=None, author=None, *args,
+#                    **kwargs):
+#        context = super(FeatureIndexPage, self).get_context(
+#            request, *args, **kwargs)
+#        features = self.features
+#
+#        # Pagination
+#        page = request.GET.get('page')
+#        page_size = 10
+#        if hasattr(settings, 'FEATURES_PAGINATION_PER_PAGE'):
+#            page_size = settings.FEATURES_PAGINATION_PER_PAGE
+#
+#        if page_size is not None:
+#            paginator = Paginator(features, page_size)  # Show 10 features per page
+#            try:
+#                features = paginator.page(page)
+#            except PageNotAnInteger:
+#                features = paginator.page(1)
+#            except EmptyPage:
+#                features = paginator.page(paginator.num_pages)
+#
+#        return context

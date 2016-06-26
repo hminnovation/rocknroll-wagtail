@@ -100,19 +100,22 @@ class Album(ClusterableModel):
         ImageChooserPanel('image'),
         FieldPanel('release_date'),
         MultiFieldPanel(
-        [
-            InlinePanel('album_songs_relationship', label="Songs for this album", min_num=1),
-        ],
-        heading="Album songs",
-        classname="collapsible"
+            [
+                InlinePanel('album_songs_relationship', label="Songs for this album", min_num=1),
+            ],
+            heading="Album songs",
+            classname="collapsible"
         )
     ]
+
+    #@property
+    #def album_name(self):
+    #    return self.album_name
 
     def __str__(self):              # __unicode__ on Python 2
         # We're returning the string that populates the snippets screen. Obvs whatever field you choose
         # will come through as plain text
         return self.album_name
-
 
     class Meta:
     # We need to clarify the meta class else we get a issubclass() arg 1 error (which I don't really
@@ -121,8 +124,8 @@ class Album(ClusterableModel):
         verbose_name = "Album"
         verbose_name_plural = "Albums"
 
-#    def get_context(self, request):
-#        context = super(Album, self).get_context(request)
+    def get_context(self, request):
+           context = super(Album, self).get_context(request)
 #
 #        # Add extra variables and return the updated context
 #        return context

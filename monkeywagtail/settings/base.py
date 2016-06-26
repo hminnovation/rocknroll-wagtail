@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'wagtailerrorpages',
 
     'wagtail.contrib.wagtailsearchpromotions',
+    'wagtail.contrib.modeladmin',
+
     'wagtail.wagtailforms',
     'wagtail.wagtailredirects',
     'wagtail.wagtailembeds',
