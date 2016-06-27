@@ -9,6 +9,7 @@ from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from modelcluster.fields import ParentalKey
 from monkeywagtail.core.blocks import StandardBlock
 
+
 # Artist
 class ReviewArtistRelationship(models.Model):
     ArtistRelationship = ParentalKey(
@@ -25,6 +26,7 @@ class ReviewArtistRelationship(models.Model):
         SnippetChooserPanel('artist_name')
     ]
 
+
 # Album
 class ReviewAlbumRelationship(models.Model):
     AlbumRelationship = ParentalKey(
@@ -39,6 +41,23 @@ class ReviewAlbumRelationship(models.Model):
     )
     panels = [
         SnippetChooserPanel('album_name')
+    ]
+
+
+# Ugh, and the authors
+class ReviewAuthorRelationship(models.Model):
+    authorRelationship = ParentalKey(
+        'ReviewPage',
+        related_name='review_author_relationship'
+    )
+    author_name = models.ForeignKey(
+        'author.Author',
+        #app.class
+        related_name="+",
+        help_text='The author who wrote this'
+    )
+    panels = [
+        SnippetChooserPanel('author_name')
     ]
 
 
@@ -95,6 +114,13 @@ class ReviewPage(Page):
         ]
         return album_in_editor
 
+    @property
+    def author_in_editor(self):
+        author_in_editor = [
+            n.author for n in self.review_author_relationship.all()
+        ]
+        return author_in_editor
+
     def get_context(self, request):
         # This is display view - I think - though I'm less show about what it's *actually* doing
         context = super(ReviewPage, self).get_context(request)
@@ -114,7 +140,8 @@ class ReviewPage(Page):
         FieldPanel('rating'),
         FieldPanel('introduction'),
         FieldPanel('listing_introduction'),
-        StreamFieldPanel('body')
+        StreamFieldPanel('body'),
+        InlinePanel('review_author_relationship', label="Author", panels=None, min_num=1)
     ]
 
     parent_page_types = [
@@ -148,7 +175,7 @@ class ReviewIndexPage(Page):
 ## This works, but doens't paginate
     def get_context(self, request):
         context = super(ReviewIndexPage, self).get_context(request)
-        context['features'] = ReviewPage.objects.descendant_of(self).live().order_by('-publication_date')
+        context['reviews'] = ReviewPage.objects.descendant_of(self).live().order_by('-date')
         return context
 
 # Below is how we get children of reviews (i.e a review) on to the homepage
