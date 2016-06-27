@@ -1,7 +1,84 @@
 {% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
-{% block body_class %}template-{{ self.get_verbose_name|slugify }}{% endblock %}
-
-{% block content %}
-{{ all_entries }}
+{% block body_class %}template-{{ self.get_verbose_name|slugify }}
 {% endblock %}
+{% block content %}
+<main>
+<section class="featured_pages">
+     {% if page.featured_page_1 %}
+            <div>
+              <h2><a href="{{ page.featured_page_1.specific.url }}">{{ page.featured_page_1.title }}</a></h2>
+              {% if page.featured_page_1.specific.rating %}
+                <p>{{ page.featured_page_1.specific.rating }}</p>
+              {% endif %}
+              <p>{{ page.featured_page_1.specific.listing_introduction }}</p>
+            </div>
+    {% endif %}
+
+    {% if page.featured_page_2 %}
+            <div>
+
+              <h2><a href="{{ page.featured_page_2.specific.url }}">{{ page.featured_page_2.title }}</a></h2>
+              {% if page.featured_page_2.specific.rating %}
+                <p>{{ page.featured_page_2.specific.rating }}</p>
+              {% endif %}
+              <p>{{ page.featured_page_2.specific.listing_introduction }}</p>
+            </div>
+    {% endif %}
+
+    {% if page.featured_page_3 %}
+            <div>
+              <h2><a href="{{ page.featured_page_3.specific.url }}">{{ page.featured_page_3.title }}</a></h2>
+              {% if page.featured_page_3.specific.rating %}
+                <p>{{ page.featured_page_3.specific.rating }}</p>
+              {% endif %}
+              <p>{{ page.featured_page_3.specific.listing_introduction }}</p>
+            </div>
+    {% endif %}
+</section>
+
+<aside>
+    <h1>{{ page.site_description_title }}</h1>
+    <p>{{ page.site_description }}</p>
+</aside>
+
+{% if page.featured_section_1 %}
+<section class="{{ page.featured_section_1 }}">
+        <h3>{{ page.featured_section_1 }}</h3>
+        <ul>
+              {% for childpage in page.featured_section_1.specific.children|slice:"4" %}
+                <li><a href="{{childpage.url}}">{{childpage.title}}</a></li>
+              {% endfor %}
+        </ul>
+</section>
+{% endif %}
+
+{% if page.featured_section_2 %}
+<section class="{{ page.featured_section_2.title }}">
+     <h3>{{ page.featured_section_2 }}</h3>
+        <ul>
+              {% for childpage in page.featured_section_2.specific.children|slice:"4" %}
+                <li><a href="{{childpage.url}}">{{childpage.title}}</a></li>
+              {% endfor %}
+        </ul>
+</section>
+{% endif %}
+
+{% if page.featured_section_3 %}
+<section class="{{ page.featured_section_3.title }}">
+        <h3>{{ page.featured_section_3 }}</h3>
+        <ul>
+              {% for childpage in page.featured_section_3.specific.children|slice:"4" %}
+                <li><a href="{{childpage.url}}">{{childpage.title}}</a></li>
+              {% endfor %}
+        </ul>
+</section>
+{% endif %}
+
+<section class="wagtail_shoutout">
+    {{ page.advert_text }}
+    <a href="{{ page.advert_url }}" class="button">{{ page.advert_button }}</a>
+</section>
+</main>
+    {% endblock %}

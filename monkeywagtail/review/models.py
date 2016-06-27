@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import StreamField
+from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
@@ -52,9 +53,16 @@ class ReviewPage(Page):
         index.SearchField('body'),
     )
 
-    # Insert reference to album snippet here
-
     date = models.DateField("Post date")
+
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text='Image to be used where this review is listed'
+    )
 
     # Note the integerfield can't just have a max_value and min_value assigned, but needs to import the
     # validators from django. It frankly feels silly to do that, but that's what you have to do!
@@ -101,9 +109,44 @@ class ReviewPage(Page):
         # in the `From` statements at the top of the model
         InlinePanel('review_album_relationship', label="Album", panels=None, min_num=1, max_num=1),
         InlinePanel('review_artist_relationship', label="Arist", panels=None, min_num=1),
+        ImageChooserPanel('image'),
         FieldPanel('date'),
         FieldPanel('rating'),
         FieldPanel('introduction'),
         FieldPanel('listing_introduction'),
         StreamFieldPanel('body')
     ]
+
+    parent_page_types = [
+        'ReviewIndexPage'
+    ]
+
+
+class ReviewIndexPage(Page):
+    listing_introduction = models.TextField(help_text='Text to describe this section. Will appear on other pages that reference this feature section', blank=True)
+    introduction = models.TextField(help_text='Text to describe this section. Will appear on the page', blank=True)
+
+    search_fields = Page.search_fields + (
+        index.SearchField('listing_introduction'),
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('listing_introduction'),
+        FieldPanel('introduction')
+    ]
+
+    parent_page_types = [
+        'home.HomePage'
+    ]
+
+    # Defining what content type can sit under the parent
+    subpage_types = [
+        'ReviewPage'
+    ]
+
+## Index page context to return content
+## This works, but doens't paginate
+    def get_context(self, request):
+        context = super(ReviewIndexPage, self).get_context(request)
+        context['features'] = ReviewPage.objects.descendant_of(self).live().order_by('-publication_date')
+        return context
