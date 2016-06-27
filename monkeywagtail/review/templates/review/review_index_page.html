@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+
+{{ self.reviews }}
+<div class="row">
+    {% for review in reviews %}
+    <div class="row">
+          {% for artist in review.artists %}
+            <a href="{{ artist.url }}">{{ artist }}</a>{% endfor %}
+
+             {% for author in review.authors %}
+            <a href="{{ author.url }}">{{ author }}</a>{% endfor %}
+
+        {{ review.title }}
+        {{ review.listing_introduction }}
+        {% if review.image %}
+              {% image review.image width-100 as photo %}
+              <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+        {% endif %}
+        <a href="{{ review.url }}">{{ review.url }}</a>
+    </div>
+    {% endfor %}
+</div>
+
+{% if review %}
+{% endif %}
+
+
+{% if paginate_list.paginator.num_pages > 1 %}
+  blah blah blah
+{% endif %}
+{% endblock %}
