@@ -150,3 +150,8 @@ class ReviewIndexPage(Page):
         context = super(ReviewIndexPage, self).get_context(request)
         context['features'] = ReviewPage.objects.descendant_of(self).live().order_by('-publication_date')
         return context
+
+# Below is how we get children of reviews (i.e a review) on to the homepage
+    @property
+    def children(self):
+        return self.get_children().specific().live()

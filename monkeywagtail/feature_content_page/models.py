@@ -171,6 +171,10 @@ class FeatureIndexPage(Page):
         context['features'] = FeatureContentPage.objects.descendant_of(self).live().order_by('-publication_date')
         return context
 
+    @property
+    def children(self):
+        return self.get_children().specific().live()
+
 # This also works, but doesn't paginate    
 #    @property
 #    def features(self):
