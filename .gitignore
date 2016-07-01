@@ -8,3 +8,6 @@
 /.vagrant/
 /Vagrantfile.local
 /docs/_build/
+monkeywagtail/static/**/.*
+monkeywagtail/static/node_modules
+monkeywagtail/static/bower_components
