@@ -12,9 +12,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        {% compress css %}
-            <link rel="stylesheet" type="text/x-scss" href="{% static 'css/main.scss' %}">
-        {% endcompress %}
+        <link rel="stylesheet" href="static/css/app.css">
 
         {% block extra_css %}
 
@@ -26,7 +24,11 @@
 
         {% block header %}{% endblock %}
 
-        {% block content %}{% endblock %}
+        <div class="small-6 columns">
+        {% block content %}
+        
+        {% endblock %}
+        </div>
 
         {% compress js %}
             <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
@@ -34,6 +36,12 @@
 
         {% block extra_js %}
         {% endblock %}
+    {% block foundation-footer %}
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/what-input/what-input.js"></script>
+        <script src="bower_components/foundation-sites/dist/foundation.js"></script>
+        <script src="js/app.js"></script>
+    {% endblock %} 
     </body>
 </html>
 
