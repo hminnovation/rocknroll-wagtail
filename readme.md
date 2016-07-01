@@ -27,3 +27,26 @@ What's here at the moment
  - Vagrant configuration (using the [torchbox/wagtail](https://github.com/torchbox/vagrant-wagtail-base) base box)
  - Heroku configuration
  - Sphinx docs
+
+Installation locally
+--------------------
+```
+Git clone git@github.com:heymonkeyriot/rocknroll-wagtail.git
+Cd rocknrollwagtail
+Vagrant up
+Vagrant ssh
+pip install -r requirements.txt
+cd rocknrollwagtail/static
+npm install
+bower install
+gulp watch
+cd ../../
+dj makemigrations
+dj migrate
+dj createsuperuser --username username
+djrun
+```
+
+You should now be able to visit localhost:1234 and see the site
+
+TODO put `cd rocknrollwagtail/static && npm install && bower install` within vagrant provision file
