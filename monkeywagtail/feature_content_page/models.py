@@ -61,7 +61,7 @@ class FeatureContentPage(Page):
         index.SearchField('body'),
     )
 
-    publication_date = models.DateField("Post date", help_text='blah')
+    date = models.DateField("Post date", help_text='blah')
 
     image = models.ForeignKey(
         'wagtailimages.Image',
@@ -110,7 +110,7 @@ class FeatureContentPage(Page):
         # in the `From` statements at the top of the model
         # InlinePanel('artist_groups', label="Artist(s)"),
         # SnippetChooserPanel('artist'),
-        FieldPanel('publication_date'),
+        FieldPanel('date'),
         MultiFieldPanel(
             [
                 ImageChooserPanel('image'),

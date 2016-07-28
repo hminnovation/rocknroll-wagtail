@@ -13,6 +13,7 @@ class HomePage(Page):
     site_description_title = models.CharField(max_length=255, help_text='A title explaining this page.')
     site_description = models.TextField(blank=True, help_text='A brief explanation of this page.')
 
+    advert_title = models.TextField(blank=True)
     advert_text = models.TextField(blank=True)
     advert_button = models.CharField(max_length=35, blank=True)
     advert_url = models.URLField("External link for advert", blank=True)

@@ -1,0 +1,195 @@
+/* @TODO 
+ - [ ] Split into subfiles
+
+/* COLOURS */
+$custom-blue: #787684;
+$custom-black: #777;
+$custom-grey: #ccc;
+$custom-grey-light: #efefef;
+
+.row {
+    max-width: 78em;
+}
+
+/* LOGO AND TOP-BAR */
+.logo {
+    h1 {
+        a {
+            color: $custom-black;
+        }
+    }
+}
+
+.top-bar {
+    background-color: transparent;
+    border-top: 1px solid $custom-grey;
+    padding-bottom: 0px;
+}
+.top-bar-left {
+    a {
+        color: $custom-black;
+    }
+    li.menu-item {
+        border-right: 1px solid $custom-grey;
+        &:hover {
+            background-color: $custom-grey-light;
+            border-top: 1px solid $custom-grey;
+        }
+        &:last-child {
+            border-right: 0px;
+        }
+        &.has-submenu {
+            padding-right: 10px;
+        }
+    }
+}
+
+.dropdown.menu.medium-horizontal>li.is-dropdown-submenu-parent>a::after {
+                border-color: $custom-grey transparent transparent;
+                /* @TODO deal with the crazy specification on this item */
+    }
+
+/* HOMEPAGE */
+.featured_pages {
+    background-color: $custom-blue;
+    height: 75vh;
+    min-height: 500px;
+    color: $white;
+    margin-bottom: 30px;
+    .featured_text {
+        align-self: flex-end;
+        background: rgba(48,48,48,0);
+        background: linear-gradient(to bottom, rgba(48,48,48,0) 0%, rgba(48,48,48,0.33) 5%, $black 100%);
+        padding: 5px 30px 20px;
+        width: 100%;
+        h2 {
+            margin-bottom: 0;
+            a {
+                color: $white;
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
+    .featured_page_1 {
+        height: 500px;
+    }
+    .featured_page_2, .featured_page_3 {
+        height: 250px;
+    }
+    .featured_page_2_3 {
+        padding: 0;
+        margin: 0;
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 0;
+        }
+    }
+    .featured_page {
+        background-size: cover;
+        display: flex;
+        flex-direction: row;
+        padding: 0;
+    }
+}
+
+.homepage_description {
+    text-align: center;
+    > aside {
+        > h3 {
+            &::after {
+                content: "";
+                height: 1px;
+                width: 50%;
+                background-color: $custom-grey-light;
+                display: block;
+                margin: 10px auto 30px auto;
+            }
+        }
+    }
+}
+
+.feature_section_1_container {
+    margin-left: 0;
+    .feature_section_1_item {
+    display: flex;
+    border: 1px solid $custom-grey-light;
+    border-radius: 6px;
+    overflow: hidden;
+    .text {
+        margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+    > .text {
+        a {
+        color: $custom-black;
+        }
+    }
+    }
+}
+
+/* INLINE LIST */
+ul.inline-list {
+    margin-left: 0;
+    li {
+        float: left;
+        list-style: none;
+        margin-right: 10px;
+    }
+}
+
+.featured_section_2_container, .featured_section_3_container {
+    list-style: none;
+    .featured_section_2_item, .featured_section_3_item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $custom-grey-light;
+    border-radius: 6px;
+    overflow: hidden;
+        .text {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+    } 
+}
+
+.wagtail_shoutout {
+    padding: 20px 0;
+    border-top: 1px solid $custom-grey-light;
+    border-bottom: 3px solid $custom-grey-light;
+    > * {
+        margin-top: 10px;
+    }
+}
+
+/* RATINGS */
+.star_ratings_sprite {
+  background: url("../img/rating_stars_light.png") repeat-x;
+  font-size: 0;
+  height: 21px;
+  line-height: 0;
+  overflow: hidden;
+  text-indent: -999em;
+  width: 110px;
+  margin: 0 0 10px 0;
+  &_rating {
+    background: url("../img/rating_stars_light.png") repeat-x;
+    background-position: 0 100%;
+    float: left;
+    height: 21px;
+    display:block;
+  }
+}
+
+/* Footer */
+footer {
+    padding: 40px;
+    border-top: 1px solid $custom-grey;
+    margin-top: 20px;
+    .inline-list {
+        margin-left: auto;
+    }
+}

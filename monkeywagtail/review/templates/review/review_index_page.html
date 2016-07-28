@@ -20,6 +20,13 @@
               <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
         {% endif %}
         <a href="{{ review.url }}">{{ review.url }}</a>
+    {% for album in review.albums %}
+        <ul class="genre">
+            {% for genre in album.genre %}
+                <li>{{ genre }}</li>
+            {% endfor %}
+        </ul> 
+    {% endfor %}
     </div>
     {% endfor %}
 </div>

@@ -1,4 +1,4 @@
-{% load compress static wagtailuserbar %}
+{% load navigation_tags compress static wagtailuserbar %}
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -12,7 +12,9 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="static/css/app.css">
+
+        <link rel="stylesheet" href="{% static 'css/app.css' %}">
+        {# <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic|Bitter:400,700,400italic' rel='stylesheet' type='text/css'> #}
 
         {% block extra_css %}
 
@@ -22,25 +24,53 @@
     <body class="{% block body_class %}template-{{ self.get_verbose_name|slugify }}{% endblock %}">
         {% wagtailuserbar %}
 
-        {% block header %}{% endblock %}
+{% block header %}  
+<header>
+  <!-- logo -->
+<div class="row logo">
+    <div class="small-12 logo-text">
+        <h1><a href="/">Rock 'n' roll Wagtail</a></h1>
+    </div> 
+</div>
 
-        <div class="small-6 columns">
-        {% block content %}
-        
-        {% endblock %}
-        </div>
+<nav>
+{% block menu %}
+    {% get_site_root as site_root %}
+    {% top_menu parent=site_root calling_page=self %}
+{% endblock menu %}
+  </nav>
+</header>  
+  <!-- / logo -->
+{% endblock %}
 
+{% block breadcrumb %}
+  <div class="row">{% breadcrumbs %}</div>
+{% endblock breadcrumb %}
+
+{% block content %}        
+{% endblock %}
+
+{% block footer %}
+    <footer>
+        <ul class="small-8 small-centered columns inline-list">
+            <li>Made by <a href="://github.com/heymonkeyriot">Edd Baldry</a></li>
+            <li>With the very awesome <a href="//wagtail.io">Wagtail CMS</a></li>
+            <li>and Django</li>
+
+    </footer>        
+{% endblock footer %}
+       
         {% compress js %}
             <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
         {% endcompress %}
 
         {% block extra_js %}
         {% endblock %}
-    {% block foundation-footer %}
-        <script src="bower_components/jquery/dist/jquery.js"></script>
-        <script src="bower_components/what-input/what-input.js"></script>
-        <script src="bower_components/foundation-sites/dist/foundation.js"></script>
-        <script src="js/app.js"></script>
+    {% block foundation-components %}
+        <script src="{% static 'bower_components/jquery/dist/jquery.js' %}"></script>
+        <script src="{% static 'bower_components/what-input/what-input.js' %}"></script>
+        <script src="{% static 'bower_components/foundation-sites/dist/foundation.js' %}"></script>
+        <script src="{% static 'js/app.js' %}"></script>
     {% endblock %} 
     </body>
 </html>

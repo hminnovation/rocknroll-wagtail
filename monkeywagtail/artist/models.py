@@ -13,25 +13,21 @@ from modelcluster.fields import ParentalKey
 from monkeywagtail.genre.models import SubgenreClass
 
 
-class SubGenreClassRelationship(Orderable, models.Model):
-    # http://www.tivix.com/blog/working-wagtail-i-want-my-m2ms/
-    # This is the start of defining the m2m. The related name is the 'magic' that Wagtail
-    # hooks to. The model name (artist) within the app (artist) is a terrible naming convention
-    # that you should avoid. It's 'class.model'
-    page = ParentalKey(
-        'Artist', related_name='subgenre_artist_relationship'
+# Album
+class ArtistAlbumRelationship(models.Model):
+    AlbumRelationship = ParentalKey(
+        'Artist',
+        related_name='artist_album_relationship'
     )
-    subgenre = models.ForeignKey(
-        'genre.SubgenreClass',
-        related_name="+"
+    album = models.ForeignKey(
+        'album.Album',
+        #app.class
+        related_name="+",
+        help_text='The album being artisted'
     )
     panels = [
-        # We need this for the inlinepanel on the Feature Content Page to grab hold of
-        SnippetChooserPanel('subgenre')
+        SnippetChooserPanel('album')
     ]
-
-#class GenreTagRelationship(TaggedItemBase, GenreClass):
-#    content_object = ParentalKey('artist.Artist', related_name='genres')
 
 
 @register_snippet
@@ -71,13 +67,11 @@ class Artist(ClusterableModel):
     external_url = models.URLField(blank=True, null=True)
 
     @property
-    # We're returning artists for the FeatureContentPage class. Note the fact we're
-    # using `artist_feature_page_relationship` to grab them
-    def subgenres(self):
-        subgenres = [
-            n.subgenre for n in self.subgenre_artist_relationship.all()
+    def albums(self):
+        albums = [
+            n.album for n in self.artist_album_relationship.all()
         ]
-        return subgenres
+        return albums
 
     panels = [
         # The content panels are displaying the components of content we defined in the StandardPage class above
@@ -85,11 +79,10 @@ class Artist(ClusterableModel):
         # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
+        InlinePanel('artist_album_relationship', label="Album", panels=None),
         FieldPanel('artist_name'),
-        InlinePanel('subgenre_artist_relationship', label="Genres", panels=None, min_num=1),
         ImageChooserPanel('image'),
         FieldPanel('biography'),
-        #FieldPanel('tags'),
         FieldPanel('external_url')
     ]
 

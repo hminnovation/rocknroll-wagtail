@@ -1,0 +1,12 @@
+{% load navigation_tags %}
+
+{% for menu_item in Menu.menu_items_template %}
+    <p>
+        {{ menu_item }}
+        </a>
+    </p>
+{% endfor %}
+
+{{ menu }}
+
+{{Menu.menu_items_template }}{{ menu }}

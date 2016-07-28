@@ -49,4 +49,10 @@ djrun
 
 You should now be able to visit localhost:1234 and see the site
 
-TODO put `cd rocknrollwagtail/static && npm install && bower install` within vagrant provision file
+TODO 
+----------------------------
+
+ -[ ] Put `cd rocknrollwagtail/static && npm install && bower install` within vagrant provision file
+ -[ ] Fully inline comments the different models and templates
+ -[ ] Creating categorisation around bands
+ -[ ] Creating categorisation around genres / sub-genres

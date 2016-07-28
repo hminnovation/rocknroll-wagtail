@@ -7,6 +7,7 @@ from wagtail.wagtaildocs import urls as wagtaildocs_urls
 from wagtail.wagtailcore import urls as wagtail_urls
 
 from monkeywagtail.search import views as search_views
+#from monkeywagtail.album import views as album_views
 
 
 urlpatterns = [
@@ -17,6 +18,10 @@ urlpatterns = [
 
     url(r'^search/$', search_views.search, name='search'),
 
+    # ex: /albums/
+    #url(r'^$', album_views.album_index, name='index'),
+    # ex: /album/5/
+    #url(r'^(?P<album_id>[0-9]+)/$', album_views.album, name='detail'),
 ]
 
 

@@ -24,6 +24,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
+    'monkeywagtail.core',
     'monkeywagtail.home',
     'monkeywagtail.search',
     'monkeywagtail.standardpage',
@@ -37,7 +38,7 @@ INSTALLED_APPS = [
 
     'wagtailfontawesome',
     'wagtailerrorpages',
-    #'wagtailbettereditor',
+    'wagtailbettereditor',
 
     'wagtail.contrib.wagtailsearchpromotions',
     'wagtail.contrib.modeladmin',
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'compressor',
     'taggit',
+    'mathfilters',
 
     'django.contrib.admin',
     'django.contrib.auth',

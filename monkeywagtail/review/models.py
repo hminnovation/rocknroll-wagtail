@@ -16,14 +16,14 @@ class ReviewArtistRelationship(models.Model):
         'ReviewPage',
         related_name='review_artist_relationship'
     )
-    artist_name = models.ForeignKey(
+    artist = models.ForeignKey(
         'artist.Artist',
         #app.class
         related_name="+",
         help_text='The artist who made the album being reviewed'
     )
     panels = [
-        SnippetChooserPanel('artist_name')
+        SnippetChooserPanel('artist')
     ]
 
 
@@ -33,14 +33,14 @@ class ReviewAlbumRelationship(models.Model):
         'ReviewPage',
         related_name='review_album_relationship'
     )
-    album_name = models.ForeignKey(
+    album = models.ForeignKey(
         'album.Album',
         #app.class
         related_name="+",
         help_text='The album being reviewed'
     )
     panels = [
-        SnippetChooserPanel('album_name')
+        SnippetChooserPanel('album')
     ]
 
 
@@ -50,14 +50,14 @@ class ReviewAuthorRelationship(models.Model):
         'ReviewPage',
         related_name='review_author_relationship'
     )
-    author_name = models.ForeignKey(
+    author = models.ForeignKey(
         'author.Author',
         #app.class
         related_name="+",
         help_text='The author who wrote this'
     )
     panels = [
-        SnippetChooserPanel('author_name')
+        SnippetChooserPanel('author')
     ]
 
 
@@ -101,30 +101,31 @@ class ReviewPage(Page):
     body = StreamField(StandardBlock(), blank=True)
 
     @property
-    def artist_in_editor(self):
-        artist_in_editor = [
+    def artists(self):
+        artists = [
             n.artist for n in self.review_artist_relationship.all()
         ]
-        return artist_in_editor
+        return artists
 
     @property
-    def album_in_editor(self):
-        album_in_editor = [
+    def albums(self):
+        albums = [
             n.album for n in self.review_album_relationship.all()
         ]
-        return album_in_editor
+        return albums
 
     @property
-    def author_in_editor(self):
-        author_in_editor = [
+    def authors(self):
+        authors = [
             n.author for n in self.review_author_relationship.all()
         ]
-        return author_in_editor
+        return authors
 
     def get_context(self, request):
         # This is display view - I think - though I'm less show about what it's *actually* doing
         context = super(ReviewPage, self).get_context(request)
         context['children'] = Page.objects.live().in_menu().child_of(self)
+        #context['authors'] = self.research_groups_list
         return context
 
     content_panels = Page.content_panels + [
@@ -134,7 +135,6 @@ class ReviewPage(Page):
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
         InlinePanel('review_album_relationship', label="Album", panels=None, min_num=1, max_num=1),
-        InlinePanel('review_artist_relationship', label="Arist", panels=None, min_num=1),
         ImageChooserPanel('image'),
         FieldPanel('date'),
         FieldPanel('rating'),

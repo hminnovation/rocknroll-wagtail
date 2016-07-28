@@ -1,84 +1,213 @@
+{# @TODO Using a filter on the home-page model and this template would be much more efficient #}
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags mathfilters wagtailimages_tags %}
 
 {% block body_class %}template-{{ self.get_verbose_name|slugify }}
 {% endblock %}
 {% block content %}
-<main>
 <section class="featured_pages">
-     {% if page.featured_page_1 %}
-            <div>
-              <h2><a href="{{ page.featured_page_1.specific.url }}">{{ page.featured_page_1.title }}</a></h2>
+    <div class="full-width">
+    {% if page.featured_page_1 %}
+    {% image page.featured_page_1.specific.image width-750 as photo %}
+      <div class="small-12 medium-7 columns featured_page featured_page_1" style="background-image: url('{{ photo.url }}');">
+        <div class="featured_text">
+        <h2><a href="{{ page.featured_page_1.specific.url }}">{{ page.featured_page_1.title }}</a></h2>
+              {% for album in page.featured_page_1.specific.albums %}
+                <h3><em>{{ album.album_name }}</em> <span>by</span> {% for artist in album.album_artist %}{{ artist }}{% if not forloop.last %}, {% endif %}{% endfor %}</h3>
+              {% endfor %}
               {% if page.featured_page_1.specific.rating %}
-                <p>{{ page.featured_page_1.specific.rating }}</p>
+                  {% with width=page.featured_page_1.specific.rating %}
+                  <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+                  {% endwith %}
               {% endif %}
+
               <p>{{ page.featured_page_1.specific.listing_introduction }}</p>
-            </div>
+              
+              {% for album in page.featured_page_1.specific.albums %}
+                <ul class="genre">
+                  {% for genre in album.genre %}
+                      <li>{{ genre }}</li>
+                  {% endfor %}
+                      </ul> 
+              {% endfor %}
+        </div>
+      </div>
     {% endif %}
 
-    {% if page.featured_page_2 %}
-            <div>
-
-              <h2><a href="{{ page.featured_page_2.specific.url }}">{{ page.featured_page_2.title }}</a></h2>
+      <div class="small-12 medium-5 columns featured_page_2_3">
+        {% if page.featured_page_2 %}
+        {% image page.featured_page_2.specific.image width-750 as photo %}
+        <div class="featured_page_2 featured_page" style="background-image: url('{{ photo.url }}');">
+          <div class="featured_text">
+            <h2><a href="{{ page.featured_page_2.specific.url }}">{{ page.featured_page_2.title }}</a></h2>
+              {% for album in page.featured_page_2.specific.albums %}
+                <h3><em>{{ album.album_name }}</em> <span>by</span> {% for artist in album.album_artist %}{{ artist }}{% if not forloop.last %}, {% endif %}{% endfor %}</h3>
+              {% endfor %}
+              
               {% if page.featured_page_2.specific.rating %}
-                <p>{{ page.featured_page_2.specific.rating }}</p>
+                  {% with width=page.featured_page_2.specific.rating %}
+                  <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+                  {% endwith %}
               {% endif %}
-              <p>{{ page.featured_page_2.specific.listing_introduction }}</p>
-            </div>
-    {% endif %}
 
-    {% if page.featured_page_3 %}
-            <div>
-              <h2><a href="{{ page.featured_page_3.specific.url }}">{{ page.featured_page_3.title }}</a></h2>
+              <p>{{ page.featured_page_2.specific.listing_introduction }}</p>
+              
+              {% for album in page.featured_page_2.specific.albums %}
+                <ul class="genre">
+                  {% for genre in album.genre %}
+                      <li>{{ genre }}</li>
+                  {% endfor %}
+                      </ul> 
+              {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% if page.featured_page_3 %}
+        {% image page.featured_page_3.specific.image width-750 as photo %}
+        <div class="featured_page_3 featured_page" style="background-image: url('{{ photo.url }}');">
+          <div class="featured_text">
+        <h2><a href="{{ page.featured_page_3.specific.url }}">{{ page.featured_page_3.title }}</a></h2>
+              {% for album in page.featured_page_3.specific.albums %}
+                <h3><em>{{ album.album_name }}</em> <span>by</span> {% for artist in album.album_artist %}{{ artist }}{% if not forloop.last %}, {% endif %}{% endfor %}</h3>
+              {% endfor %}
+              
               {% if page.featured_page_3.specific.rating %}
-                <p>{{ page.featured_page_3.specific.rating }}</p>
+                  {% with width=page.featured_page_3.specific.rating %}
+                  <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+                  {% endwith %}
               {% endif %}
+
               <p>{{ page.featured_page_3.specific.listing_introduction }}</p>
-            </div>
-    {% endif %}
+              
+              {% for album in page.featured_page_3.specific.albums %}
+                <ul class="genre">
+                  {% for genre in album.genre %}
+                      <li>{{ genre }}</li>
+                  {% endfor %}
+                      </ul> 
+              {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+  </div>
+</div>
 </section>
 
-<aside>
-    <h1>{{ page.site_description_title }}</h1>
-    <p>{{ page.site_description }}</p>
-</aside>
+
+<div class="row">
+
+  <div class="homepage_description large-5 columns">
+        <aside>
+          <h3>{{ page.site_description_title }}</h3>
+          <p>{{ page.site_description }}</p>
+        </aside>
+  </div>
 
 {% if page.featured_section_1 %}
-<section class="{{ page.featured_section_1 }}">
-        <h3>{{ page.featured_section_1 }}</h3>
-        <ul>
-              {% for childpage in page.featured_section_1.specific.children|slice:"4" %}
-                <li><a href="{{childpage.url}}">{{childpage.title}}</a></li>
-              {% endfor %}
+{# {% for resource in resources %}
+        {% include "resources/elements/resource_card.html" with title=resource.resource_file.title image=resource.image categories=resource.categories other_author=resource.other_author pedsnet_author=resource.pedsnet_author publication=resource.publication publication_date=resource.publication_date  institutions=resource.institutions excerpt=resource.description url=resource.resource_file.url class=resource.importance|add:" "|add:resource.extension filetype=resource.filetype|add:" (."|add:resource.extension|add:")" date=resource.date filesize=resource.resource_file.file.size %}
+      {% endfor %} #}
+<section class="featured_section_1 {{ page.featured_section_1 }}">
+  <div class="large-6 columns end">
+    <h2>{{ page.featured_section_1 }}</h2>
+    <ul class="feature_section_1_container">
+      {% for childpage in page.featured_section_1.specific.children|slice:"4" %}
+
+    <a href="{{childpage.url}}">
+      <li class="feature_section_1_item">  
+      {% image childpage.image fill-150x150 %}
+        <div class="text">
+        <h3>{{childpage.title}}</a></h3>
+        {% for album in page.featured_section_1.specific.albums %}
+                <h4><em>{{ album.album_name }}</em> <span>by</span> {% for artist in album.album_artist %}{{ artist }}{% if not forloop.last %}, {% endif %}{% endfor %}</h4>
+        {% endfor %}
+        {% for artist in page.featured_section_1.specific.artist %}
+          {{ artist }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        <ul class="meta inline-list">
+          <li>
+          {% for author in childpage.authors %}
+          by: <a href="#">{{ author.author_name }}</a>
+          {% endfor %} 
+          </li>
+          <li>
+            {{ childpage.date }}
+          </li>
         </ul>
+          {% if childpage.specific.rating %}
+              {% with width=childpage.specific.rating %}
+                <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+              {% endwith %}
+          {% endif %}
+          {{ childpage.listing_introduction }}
+        </div>
+        </li>
+        {% endfor %}
+    </ul>
 </section>
 {% endif %}
+</div>
+
+<section class="row wagtail_shoutout text-center">
+    <h2>{{ page.advert_title }}</h2>
+    <p>{{ page.advert_text }}</p>
+    <a href="{{ page.advert_url }}" class="button">{{ page.advert_button }}</a>
+</section>
 
 {% if page.featured_section_2 %}
-<section class="{{ page.featured_section_2.title }}">
-     <h3>{{ page.featured_section_2 }}</h3>
-        <ul>
+<section class="featured_section_2 row {{ page.featured_section_2.title }}">
+    <h2>{{ page.featured_section_2 }}</h2>
+        <ul class="featured_section_2_container row small-up-2 medium-up-3 large-up-4">
               {% for childpage in page.featured_section_2.specific.children|slice:"4" %}
-                <li><a href="{{childpage.url}}">{{childpage.title}}</a></li>
+                <li class="featured_section_2_item column">
+                {% image childpage.image fill-350x150 %}
+                <div class="text">
+                  <h3><a href="{{childpage.url}}">{{childpage.title}}</a></h3>
+                  <ul class="meta inline-list">
+                    <li>
+                      {% for author in childpage.authors %}
+                        by: <a href="#">{{ author.author_name }}</a>
+                      {% endfor %} 
+                    </li>
+                    <li>
+                      {{ childpage.date }}
+                    </li>
+                  </ul>
+                {% if childpage.specific.rating %}
+                  {% with width=childpage.specific.rating %}
+                    <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+                  {% endwith %}
+                {% endif %}
+                <p>{{ childpage.listing_introduction }}</p>
+                </li></div>
               {% endfor %}
         </ul>
+</div>
 </section>
 {% endif %}
 
 {% if page.featured_section_3 %}
-<section class="{{ page.featured_section_3.title }}">
-        <h3>{{ page.featured_section_3 }}</h3>
-        <ul>
+<section class="featured_section_3 row {{ page.featured_section_3.title }}">
+<div class="row column news">
+    <h2>{{ page.featured_section_3 }}</h3>
+        <ul class="featured_section_3_container row small-up-3 medium-up-4">
               {% for childpage in page.featured_section_3.specific.children|slice:"4" %}
-                <li><a href="{{childpage.url}}">{{childpage.title}}</a></li>
+                <li class="featured_section_3_item column">
+                  <div class="text">
+                  <h3><a href="{{childpage.url}}">{{childpage.title}}</a></h3>
+                  {% if childpage.specific.rating %}
+                    {% with width=childpage.specific.rating %}
+                      <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+                    {% endwith %}
+                  {% endif %}
+                  <p>{{ childpage.listing_introduction }}</p>
+                </div>
+                </li>
               {% endfor %}
         </ul>
+</div>
 </section>
 {% endif %}
 
-<section class="wagtail_shoutout">
-    {{ page.advert_text }}
-    <a href="{{ page.advert_url }}" class="button">{{ page.advert_button }}</a>
-</section>
-</main>
-    {% endblock %}
+<main>
+{% endblock %}

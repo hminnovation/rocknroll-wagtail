@@ -10,6 +10,33 @@ from modelcluster.models import ClusterableModel
 from datetime import datetime
 
 
+class GenreClassAlbumRelationship(Orderable, models.Model):
+    page = ParentalKey(
+        'Album', related_name='genre_album_relationship'
+    )
+    genre = models.ForeignKey(
+        'genre.GenreClass',
+        related_name="+"
+    )
+    panels = [
+        SnippetChooserPanel('genre')
+    ]
+
+
+class SubGenreClassAlbumRelationship(Orderable, models.Model):
+    page = ParentalKey(
+        'Album', related_name='subgenre_album_relationship'
+    )
+    subgenre = models.ForeignKey(
+        'genre.SubgenreClass',
+        related_name="+"
+    )
+    panels = [
+        # We need this for the inlinepanel on the Feature Content Page to grab hold of
+        SnippetChooserPanel('subgenre')
+    ]
+
+
 class AlbumSongs(models.Model):
     album_song = models.CharField("Song name", max_length=255, blank=True)
     album_song_length = models.TimeField("Song length", blank=True)
@@ -44,20 +71,9 @@ class AlbumArtistRelationship(Orderable, models.Model):
 
 
 @register_snippet
-# A snippet is a way to create non-hierarchy content on Wagtail (http://docs.wagtail.io/en/v1.4.3/topics/snippets.html)
-# Wagtail 1.5 is likely to see these to either be deprecated, or at least used in very different ways
-# They are currently quite limited against standard page models in how editors can access them. The easiest way
-# to visualise that is probably to visit {whateverURLyouchose}/admin/snippets/author/author/
-# Note: the properties and panels are defined in exactly the same way as on a page model
-# TODO: The author and artist snippets are very close to identical (single change that the title property is artist_name
-# on one and author_name on the other)
 class Album(ClusterableModel):
-    """
-    The album snippet gives a way to add albums to a site and create a one-way relationship with content
-    """
 
     search_fields = Page.search_fields + (
-        # Defining what fields the search catches
         index.SearchField('artist_name'),
         index.SearchField('biography'),
     )
@@ -85,16 +101,25 @@ class Album(ClusterableModel):
     @property
     def album_artist(self):
         album_artist = [
-            n.album_artist for n in self.album_artist_relationship.all()
+            n.artist_name for n in self.album_artist_relationship.all()
         ]
         return album_artist
 
+    @property
+    def genre(self):
+        genres = [
+            n.genre for n in self.genre_album_relationship.all()
+        ]
+        return genres
+
+    @property
+    def subgenres(self):
+        subgenres = [
+            n.subgenre for n in self.subgenre_album_relationship.all()
+        ]
+        return subgenres
+
     panels = [
-        # The content panels are displaying the components of content we defined in the StandardPage class above
-        # If you add something to the class and want it to appear for the editor you have to define it here too
-        # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
-        # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
-        # in the `From` statements at the top of the model
         FieldPanel('album_name'),
         InlinePanel('album_artist_relationship', label="Arist(s)", panels=None, min_num=1),
         ImageChooserPanel('image'),
@@ -105,27 +130,79 @@ class Album(ClusterableModel):
             ],
             heading="Album songs",
             classname="collapsible"
-        )
+        ),
+        MultiFieldPanel(
+            [
+                InlinePanel('genre_album_relationship', label="Genre", panels=None, min_num=1, max_num=1),
+                InlinePanel('subgenre_album_relationship', label="sub-genres", panels=None, min_num=1),
+            ],
+            heading="Genres",
+            classname="collapsible"
+        ),
     ]
 
-    #@property
-    #def album_name(self):
-    #    return self.album_name
-
-    def __str__(self):              # __unicode__ on Python 2
-        # We're returning the string that populates the snippets screen. Obvs whatever field you choose
-        # will come through as plain text
+    def __str__(self):
         return self.album_name
 
+    def get_context(self, request):
+        context = super(Album, self).get_context(request)
+        return context
+
+    def artist(obj):
+        artist = ','.join([str(i) for i in obj.album_artist])
+        return artist
+
+    #artist.admin_order_field = 'album_artist_relationship'
+    #artist.admin_order_field = 'album_artist_relationship__artist_name'
+
     class Meta:
-    # We need to clarify the meta class else we get a issubclass() arg 1 error (which I don't really
-    # understand)
         ordering = ['album_name']
         verbose_name = "Album"
         verbose_name_plural = "Albums"
 
-    def get_context(self, request):
-           context = super(Album, self).get_context(request)
+    #@property
+    #def album_songs_two(self):
+    #    album_songs_two = AlbumSongs.objects.live()
+    #    return album_songs_two
+
+#Then on that same album model perhaps define the admin_order_field as:
+
+
+#That should allow you to add artist to your AlbumAdmin list_display + list_filter (+ search_fields) fields. 
+        #get_author.short_description = 'Author'
+        #get_author.admin_order_field = 'book__author'
+
+#    @property
+#    def sections(self):
+#        sections = []
+#        categories = PersonCategory.objects.all()
+#        for category in categories:
+#            # Get people for category
+#            people = self.people.filter(person_category_relationship__category__pk=category.pk)
+#            if people:
+#                sections.append({
+#                    "category": category,
+#                    "people": people
+#                })
+#        return sections
+
+
 #
 #        # Add extra variables and return the updated context
 #        return context
+#
+class AlbumIndexPage(Page):
+    parent_page_types = [
+        'home.HomePage'
+    ]
+
+    # Defining what content type can sit under the parent
+    subpage_types = [
+    ]
+
+## Index page context to return content
+## This works, but doens't paginate
+    def get_context(self, request):
+        context = super(Album, self).get_context(request)
+        context['Album'] = Album.objects.live().order_by('-date')
+        return context
