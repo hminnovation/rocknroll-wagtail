@@ -31,10 +31,10 @@ What's here at the moment
 Installation locally
 --------------------
 ```
-Git clone git@github.com:heymonkeyriot/rocknroll-wagtail.git
-Cd rocknrollwagtail
-Vagrant up
-Vagrant ssh
+git clone git@github.com:heymonkeyriot/rocknroll-wagtail.git
+cd rocknrollwagtail
+vagrant up
+vagrant ssh
 pip install -r requirements.txt
 cd rocknrollwagtail/static
 npm install
@@ -47,12 +47,12 @@ dj createsuperuser --username username
 djrun
 ```
 
-You should now be able to visit localhost:1234 and see the site
+You should now be able to visit http://localhost:1234 and see the site
 
 TODO 
 ----------------------------
 
- -[ ] Put `cd rocknrollwagtail/static && npm install && bower install` within vagrant provision file
- -[ ] Fully inline comments the different models and templates
- -[ ] Creating categorisation around bands
- -[ ] Creating categorisation around genres / sub-genres
+ - [ ] Put `cd rocknrollwagtail/static && npm install && bower install` within vagrant provision file
+ - [ ] Fully inline comments the different models and templates
+ - [ ] Creating categorisation around bands
+ - [ ] Creating categorisation around genres / sub-genres
