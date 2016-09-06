@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'monkeywagtail.genre',
     'monkeywagtail.author',
     'monkeywagtail.feature_content_page',
-    #'monkeywagtail.wagtailbettereditor.wagtailbettereditor',
+    # 'monkeywagtail.wagtailbettereditor.wagtailbettereditor',
 
     'wagtailfontawesome',
     'wagtailerrorpages',
@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'wagtail.wagtailsearch',
     'wagtail.wagtailadmin',
     'wagtail.wagtailcore',
+
+    'monkeywagtail.hallo_limit',
 
     'modelcluster',
     'compressor',
