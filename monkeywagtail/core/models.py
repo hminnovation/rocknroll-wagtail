@@ -61,14 +61,14 @@ class MenuMenuItemRelationship(Orderable, MenuItems):
     links_in_menu = ParentalKey('core.Menu', related_name='menu_items')
 
 
-#class MenuManager(models.Manager):
+# class MenuManager(models.Manager):
 #    def get_by_natural_key(self, name):
 #        return self.get(menu_name=name)
 
 
 @register_snippet
 class Menu(ClusterableModel):
-    #objects = MenuManager()
+    # objects = MenuManager()
     menu_name = models.CharField(max_length=255, null=False, blank=False)
 
     @property
@@ -86,3 +86,16 @@ Menu.panels = [
     FieldPanel('menu_name', classname='full title'),
     InlinePanel('menu_items', label="Menu Items", min_num=1, help_text='Set the menu items for the current menu.')
 ]
+
+
+# Related pages
+class RelatedPage(Orderable, models.Model):
+    page = models.ForeignKey('wagtailcore.Page', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+    class Meta:
+        abstract = True
+        ordering = ['sort_order']
+
+    panels = [
+        PageChooserPanel('page'),
+    ]

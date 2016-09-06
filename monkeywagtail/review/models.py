@@ -4,10 +4,16 @@ from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel, TabbedInterface, ObjectList, MultiFieldPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from modelcluster.fields import ParentalKey
-from monkeywagtail.core.blocks import StandardBlock
+from monkeywagtail.core.blocks import StandardBlock, SongStreamBlock
+from monkeywagtail.core.models import RelatedPage
+
+
+# Related page relationship
+class ReviewRelatedPageRelationship(RelatedPage):
+    source_page = ParentalKey('review.ReviewPage', related_name='related_pages')
 
 
 # Artist
@@ -18,7 +24,7 @@ class ReviewArtistRelationship(models.Model):
     )
     artist = models.ForeignKey(
         'artist.Artist',
-        #app.class
+        # app.class
         related_name="+",
         help_text='The artist who made the album being reviewed'
     )
@@ -35,7 +41,7 @@ class ReviewAlbumRelationship(models.Model):
     )
     album = models.ForeignKey(
         'album.Album',
-        #app.class
+        # app.class
         related_name="+",
         help_text='The album being reviewed'
     )
@@ -52,7 +58,7 @@ class ReviewAuthorRelationship(models.Model):
     )
     author = models.ForeignKey(
         'author.Author',
-        #app.class
+        # app.class
         related_name="+",
         help_text='The author who wrote this'
     )
@@ -72,7 +78,7 @@ class ReviewPage(Page):
         index.SearchField('body'),
     )
 
-    date = models.DateField("Post date")
+    date_release = models.DateField("Release date of album", null=True, blank=True)
 
     image = models.ForeignKey(
         'wagtailimages.Image',
@@ -100,6 +106,8 @@ class ReviewPage(Page):
     # the StreamField directly within the model, but this method aids consistency.
     body = StreamField(StandardBlock(), blank=True)
 
+    song_details = StreamField(SongStreamBlock(), verbose_name="Songs", blank=True)
+
     @property
     def artists(self):
         artists = [
@@ -125,24 +133,44 @@ class ReviewPage(Page):
         # This is display view - I think - though I'm less show about what it's *actually* doing
         context = super(ReviewPage, self).get_context(request)
         context['children'] = Page.objects.live().in_menu().child_of(self)
-        #context['authors'] = self.research_groups_list
+        # context['authors'] = self.research_groups_list
         return context
 
     content_panels = Page.content_panels + [
-        # The content panels are displaying the components of content we defined in the StandardPage class above
+        # The content panels are displaying the components of content we defined in the ReviewPage class above
         # If you add something to the class and want it to appear for the editor you have to define it here too
         # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
-        InlinePanel('review_album_relationship', label="Album", panels=None, min_num=1, max_num=1),
-        ImageChooserPanel('image'),
-        FieldPanel('date'),
+        InlinePanel('review_artist_relationship', label="Artist", min_num=1),
         FieldPanel('rating'),
-        FieldPanel('introduction'),
-        FieldPanel('listing_introduction'),
+        MultiFieldPanel(
+            [
+                FieldPanel('introduction'),
+                FieldPanel('listing_introduction'),
+            ],
+            heading="Introduction",
+            classname="collapsible"
+        ),
         StreamFieldPanel('body'),
-        InlinePanel('review_author_relationship', label="Author", panels=None, min_num=1)
+        InlinePanel('review_author_relationship', label="Author", panels=None, min_num=1),
+        InlinePanel('related_pages', label="Related pages", help_text="Other pages from across the site that relate to this review")
     ]
+
+    album_details = [
+        ImageChooserPanel('image'),
+        FieldPanel('date_release'),
+        StreamFieldPanel('song_details'),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading="Content"),
+        ObjectList(album_details, heading="Album details"),
+        ObjectList(Page.promote_panels, heading="Promote"),
+        ObjectList(Page.settings_panels, heading="Settings", classname="settings"),
+    ])
+
+    subpage_types = []
 
     parent_page_types = [
         'ReviewIndexPage'
@@ -171,11 +199,11 @@ class ReviewIndexPage(Page):
         'ReviewPage'
     ]
 
-## Index page context to return content
-## This works, but doens't paginate
+# Index page context to return content
+# This works, but doens't paginate
     def get_context(self, request):
         context = super(ReviewIndexPage, self).get_context(request)
-        context['reviews'] = ReviewPage.objects.descendant_of(self).live().order_by('-date')
+        context['reviews'] = ReviewPage.objects.descendant_of(self).live().order_by('-date_release')
         return context
 
 # Below is how we get children of reviews (i.e a review) on to the homepage
