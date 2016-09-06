@@ -47,11 +47,11 @@ class Artist(ClusterableModel):
     The author snippet gives a way to add authors to a site and create a one-way relationship with content
     """
 
-    search_fields = Page.search_fields + (
+    search_fields = Page.search_fields + [
         # Defining what fields the search catches
         index.SearchField('artist_name'),
         index.SearchField('biography'),
-    )
+    ]
 
     artist_name = models.CharField("The artist's name", blank=True, max_length=254)
 

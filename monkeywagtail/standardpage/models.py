@@ -13,11 +13,11 @@ class StandardPage(Page):
     on the site. Using StreamField it can allow for adaptable content
     """
 
-    search_fields = Page.search_fields + (
+    search_fields = Page.search_fields + [
         # Defining what fields the search catches
         index.SearchField('introduction'),
         index.SearchField('body'),
-    )
+    ]
 
     date = models.DateField("Post date")
 

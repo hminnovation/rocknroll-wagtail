@@ -73,10 +73,10 @@ class AlbumArtistRelationship(Orderable, models.Model):
 @register_snippet
 class Album(ClusterableModel):
 
-    search_fields = Page.search_fields + (
-        index.SearchField('artist_name'),
+    search_fields = Page.search_fields + [
+        index.SearchField('album_name'),
         index.SearchField('biography'),
-    )
+    ]
 
     album_name = models.CharField("The album's name", blank=True, max_length=254)
 

@@ -55,11 +55,11 @@ class FeatureContentPage(Page):
     # TODO This almost entirely duplicates StandardPage class. They should be referencing something
     # to reduce the duplication
 
-    search_fields = Page.search_fields + (
+    search_fields = Page.search_fields + [
         # Defining what fields the search catches
         index.SearchField('introduction'),
         index.SearchField('body'),
-    )
+    ]
 
     date = models.DateField("Post date", help_text='blah')
 
@@ -144,10 +144,10 @@ class FeatureIndexPage(Page):
     introduction = models.TextField(help_text='Text to describe this section. Will appear on the page', blank=True)
     body = StreamField(StandardBlock(), blank=True, help_text="No good reason to have this here, but in case there's a feature section I can't think of")
 
-    search_fields = Page.search_fields + (
+    search_fields = Page.search_fields + [
         index.SearchField('listing_introduction'),
         index.SearchField('body'),
-    )
+    ]
 
     content_panels = Page.content_panels + [
         FieldPanel('listing_introduction'),
@@ -164,8 +164,8 @@ class FeatureIndexPage(Page):
         'FeatureContentPage'
     ]
 
-## Index page context to return content
-## This works, but doens't paginate
+    # Index page context to return content
+    # This works, but doens't paginate
     def get_context(self, request):
         context = super(FeatureIndexPage, self).get_context(request)
         context['features'] = FeatureContentPage.objects.descendant_of(self).live().order_by('-publication_date')
@@ -175,7 +175,7 @@ class FeatureIndexPage(Page):
     def children(self):
         return self.get_children().specific().live()
 
-# This also works, but doesn't paginate    
+# This also works, but doesn't paginate
 #    @property
 #    def features(self):
 #        features = FeatureIndexPage.objects.live().descendant_of(self).order_by('-publication_date')
@@ -199,39 +199,4 @@ class FeatureIndexPage(Page):
 #
 #        context = super(FeatureIndexPage, self).get_context(request)
 #        context['features'] = FeatureContentPage.objects.descendant_of(self).live()
-#        return context
-
-
-
-# This doesn't work
-#    @property
-#    def features(self):
-#        # Get list of blog pages that are descendants of this page
-#        features = FeatureIndexPage.objects.live().descendant_of(self)
-#        features = features.order_by(
-#            '-first_published_at'
-#        )
-#        return features
-#
-#    def get_context(self, request, tag=None, category=None, author=None, *args,
-#                    **kwargs):
-#        context = super(FeatureIndexPage, self).get_context(
-#            request, *args, **kwargs)
-#        features = self.features
-#
-#        # Pagination
-#        page = request.GET.get('page')
-#        page_size = 10
-#        if hasattr(settings, 'FEATURES_PAGINATION_PER_PAGE'):
-#            page_size = settings.FEATURES_PAGINATION_PER_PAGE
-#
-#        if page_size is not None:
-#            paginator = Paginator(features, page_size)  # Show 10 features per page
-#            try:
-#                features = paginator.page(page)
-#            except PageNotAnInteger:
-#                features = paginator.page(1)
-#            except EmptyPage:
-#                features = paginator.page(paginator.num_pages)
-#
 #        return context

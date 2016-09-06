@@ -18,11 +18,11 @@ class Author(models.Model):
     The author snippet gives a way to add authors to a site and create a one-way relationship with content
     """
 
-    search_fields = Page.search_fields + (
+    search_fields = Page.search_fields + [
         # Defining what fields the search catches
         index.SearchField('author_name'),
         index.SearchField('biography'),
-    )
+    ]
 
     author_name = models.CharField("The author's name", blank=True, max_length=254)
 

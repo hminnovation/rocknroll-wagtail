@@ -72,11 +72,11 @@ class ReviewPage(Page):
     This is a page for an album review
     """
 
-    search_fields = Page.search_fields + (
+    search_fields = Page.search_fields + [
         # Defining what fields the search catches
         index.SearchField('introduction'),
         index.SearchField('body'),
-    )
+    ]
 
     date_release = models.DateField("Release date of album", null=True, blank=True)
 
@@ -181,9 +181,9 @@ class ReviewIndexPage(Page):
     listing_introduction = models.TextField(help_text='Text to describe this section. Will appear on other pages that reference this feature section', blank=True)
     introduction = models.TextField(help_text='Text to describe this section. Will appear on the page', blank=True)
 
-    search_fields = Page.search_fields + (
+    search_fields = Page.search_fields + [
         index.SearchField('listing_introduction'),
-    )
+    ]
 
     content_panels = Page.content_panels + [
         FieldPanel('listing_introduction'),
