@@ -9,11 +9,11 @@ from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from modelcluster.models import ClusterableModel
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
-#from taggit.models import TaggedItemBase
+# from taggit.models import TaggedItemBase
 from monkeywagtail.genre.models import SubgenreClass
 
 
-# Album
+# Artist Album relationship
 class ArtistAlbumRelationship(models.Model):
     AlbumRelationship = ParentalKey(
         'Artist',
@@ -21,7 +21,7 @@ class ArtistAlbumRelationship(models.Model):
     )
     album = models.ForeignKey(
         'album.Album',
-        #app.class
+        # app.class
         related_name="+",
         help_text='The album being artisted'
     )
@@ -38,6 +38,10 @@ class ArtistAlbumRelationship(models.Model):
 # Note: the properties and panels are defined in exactly the same way as on a page model
 # TODO: The author and artist snippets are very close to identical (single change that the title property is artist_name
 # on one and author_name on the other)
+#
+# Note we could make our life easier here by not using a snippet. A page model would
+# be easier to template and easier to filter. However, it we created a page model we
+# wouldn't be able to have it under multiple genres...except we would
 class Artist(ClusterableModel):
     """
     The author snippet gives a way to add authors to a site and create a one-way relationship with content
@@ -51,7 +55,7 @@ class Artist(ClusterableModel):
 
     artist_name = models.CharField("The artist's name", blank=True, max_length=254)
 
-    image = models.ForeignKey(
+    profile_image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
         blank=True,
@@ -59,7 +63,9 @@ class Artist(ClusterableModel):
         related_name='+'
     )
 
-    #tags = ClusterTaggableManager(through=GenreTagRelationship, blank=True)
+    date_formed = models.DateField("Date the artist started", blank=True, null=True)
+
+    # tags = ClusterTaggableManager(through=GenreTagRelationship, blank=True)
 
     # Note below that standard blocks use 'help_text' for supplementary text rather than 'label' as with StreamField
     biography = RichTextField(blank=True, help_text="Short biography about the user")
@@ -81,18 +87,35 @@ class Artist(ClusterableModel):
         # in the `From` statements at the top of the model
         InlinePanel('artist_album_relationship', label="Album", panels=None),
         FieldPanel('artist_name'),
-        ImageChooserPanel('image'),
+        ImageChooserPanel('profile_image'),
         FieldPanel('biography'),
+        FieldPanel('date_formed'),
         FieldPanel('external_url')
     ]
 
-    def __str__(self):              # __unicode__ on Python 2
+    def __str__(self):
         # We're returning the string that populates the snippets screen. Note it returns as plain-text
         return self.artist_name
 
+    @property
+    def age(self):
+        if self.date_formed:
+            today = date.today()
+            delta = relativedelta(today, self.date_formed)
+            return str(delta.years)
+
+    @property
+    def artist_image(self):
+        # fail silently if there is no profile pic or the rendition file can't
+        # be found. Note @richbrennan worked out how to do this...
+        try:
+            return self.profile_image.get_rendition('fill-50x50').img_tag()
+        except:
+            return ''
+
         class Meta:
-        # We need to clarify the meta class else we get a issubclass() arg 1 error (which I don't really
-        # understand)
+            # We need to clarify the meta class else we get a issubclass() arg 1 error (which I don't really
+            # understand)
             ordering = ['artist_name']
             verbose_name = "Artist"
             verbose_name_plural = "Artists"
