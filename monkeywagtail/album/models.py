@@ -61,7 +61,7 @@ class AlbumArtistRelationship(Orderable, models.Model):
     )
     artist_name = models.ForeignKey(
         'artist.Artist',
-        #app.class
+        # app.class
         related_name="+",
         help_text='The artist(s) who made this album'
     )
@@ -152,25 +152,25 @@ class Album(ClusterableModel):
         artist = ','.join([str(i) for i in obj.album_artist])
         return artist
 
-    #artist.admin_order_field = 'album_artist_relationship'
-    #artist.admin_order_field = 'album_artist_relationship__artist_name'
+    # artist.admin_order_field = 'album_artist_relationship'
+    # artist.admin_order_field = 'album_artist_relationship__artist_name'
 
     class Meta:
         ordering = ['album_name']
         verbose_name = "Album"
         verbose_name_plural = "Albums"
 
-    #@property
-    #def album_songs_two(self):
+    # @property
+    # def album_songs_two(self):
     #    album_songs_two = AlbumSongs.objects.live()
     #    return album_songs_two
 
-#Then on that same album model perhaps define the admin_order_field as:
+    # Then on that same album model perhaps define the admin_order_field as:
 
 
-#That should allow you to add artist to your AlbumAdmin list_display + list_filter (+ search_fields) fields. 
-        #get_author.short_description = 'Author'
-        #get_author.admin_order_field = 'book__author'
+# That should allow you to add artist to your AlbumAdmin list_display + list_filter (+ search_fields) fields.
+        # get_author.short_description = 'Author'
+        # get_author.admin_order_field = 'book__author'
 
 #    @property
 #    def sections(self):
@@ -200,8 +200,8 @@ class AlbumIndexPage(Page):
     subpage_types = [
     ]
 
-## Index page context to return content
-## This works, but doens't paginate
+# Index page context to return content
+# This works, but doens't paginate
     def get_context(self, request):
         context = super(Album, self).get_context(request)
         context['Album'] = Album.objects.live().order_by('-date')
