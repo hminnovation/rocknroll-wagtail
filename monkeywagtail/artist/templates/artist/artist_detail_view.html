@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+    <h2>Artists</h2>
+    <ul>
+        {% for artist in object_list %}
+            <li>{{ artist.artist_name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
