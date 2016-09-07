@@ -80,7 +80,7 @@ class Artist(ClusterableModel):
 
     @property
     def url(self):
-        return '/artist/' + self.slug
+        return '/artists/' + self.slug
 
     @property
     def albums(self):
