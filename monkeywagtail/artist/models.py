@@ -47,13 +47,19 @@ class Artist(ClusterableModel):
     The author snippet gives a way to add authors to a site and create a one-way relationship with content
     """
 
+    title = models.CharField("The artist's name", blank=True, max_length=254)
+
+    slug = models.SlugField(
+        allow_unicode=True,
+        max_length=255,
+        help_text="The name of the page as it will appear in URLs e.g http://domain.com/blog/[my-slug]/",
+    )
+
     search_fields = Page.search_fields + [
         # Defining what fields the search catches
-        index.SearchField('artist_name'),
+        index.SearchField('title'),
         index.SearchField('biography'),
     ]
-
-    artist_name = models.CharField("The artist's name", blank=True, max_length=254)
 
     profile_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -73,6 +79,10 @@ class Artist(ClusterableModel):
     external_url = models.URLField(blank=True, null=True)
 
     @property
+    def url(self):
+        return '/artist/' + self.slug
+
+    @property
     def albums(self):
         albums = [
             n.album for n in self.artist_album_relationship.all()
@@ -85,8 +95,9 @@ class Artist(ClusterableModel):
         # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
+        FieldPanel('title'),
+        FieldPanel('slug'),
         InlinePanel('artist_album_relationship', label="Album", panels=None),
-        FieldPanel('artist_name'),
         ImageChooserPanel('profile_image'),
         FieldPanel('biography'),
         FieldPanel('date_formed'),
@@ -95,7 +106,7 @@ class Artist(ClusterableModel):
 
     def __str__(self):
         # We're returning the string that populates the snippets screen. Note it returns as plain-text
-        return self.artist_name
+        return self.title
 
     @property
     def age(self):
@@ -116,7 +127,7 @@ class Artist(ClusterableModel):
         class Meta:
             # We need to clarify the meta class else we get a issubclass() arg 1 error (which I don't really
             # understand)
-            ordering = ['artist_name']
+            ordering = ['title']
             verbose_name = "Artist"
             verbose_name_plural = "Artists"
 

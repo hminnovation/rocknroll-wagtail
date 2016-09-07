@@ -124,7 +124,7 @@
   "fields": {
     "sort_order": 0,
     "ArtistRelationship": 1,
-    "artist_name": 1
+    "title": 1
   }
 },
 {
@@ -133,7 +133,7 @@
   "fields": {
     "sort_order": 0,
     "ArtistRelationship": 2,
-    "artist_name": 1
+    "title": 1
   }
 },
 {
@@ -142,7 +142,7 @@
   "fields": {
     "sort_order": 1,
     "ArtistRelationship": 2,
-    "artist_name": 1
+    "title": 1
   }
 },
 {
@@ -167,7 +167,7 @@
   "model": "artist.artist",
   "pk": 1,
   "fields": {
-    "artist_name": "Fugazi",
+    "title": "Fugazi",
     "image": null,
     "biography": "",
     "external_url": ""
@@ -2653,7 +2653,7 @@
     "submitted_for_moderation": false,
     "created_at": "2016-06-26T20:54:52.369Z",
     "user": 1,
-    "content_json": "{\"slug\": \"review\", \"rating\": 5, \"latest_revision_created_at\": null, \"pk\": 9, \"has_unpublished_changes\": false, \"path\": \"0001000200030001\", \"introduction\": \"Review introduction\", \"first_published_at\": null, \"listing_introduction\": \"listing introduction\", \"review_artist_relationship\": [{\"pk\": 1, \"artist_name\": 1, \"ArtistRelationship\": 9}], \"show_in_menus\": false, \"body\": \"[]\", \"review_album_relationship\": [{\"pk\": 1, \"album_name\": 1, \"AlbumRelationship\": 9}], \"go_live_at\": null, \"locked\": false, \"live\": true, \"url_path\": \"/homepage/reviews/review/\", \"owner\": 1, \"numchild\": 0, \"seo_title\": \"\", \"date\": \"2016-06-01\", \"depth\": 4, \"content_type\": 9, \"title\": \"This is a review\", \"search_description\": \"\", \"expire_at\": null, \"expired\": false}",
+    "content_json": "{\"slug\": \"review\", \"rating\": 5, \"latest_revision_created_at\": null, \"pk\": 9, \"has_unpublished_changes\": false, \"path\": \"0001000200030001\", \"introduction\": \"Review introduction\", \"first_published_at\": null, \"listing_introduction\": \"listing introduction\", \"review_artist_relationship\": [{\"pk\": 1, \"title\": 1, \"ArtistRelationship\": 9}], \"show_in_menus\": false, \"body\": \"[]\", \"review_album_relationship\": [{\"pk\": 1, \"album_name\": 1, \"AlbumRelationship\": 9}], \"go_live_at\": null, \"locked\": false, \"live\": true, \"url_path\": \"/homepage/reviews/review/\", \"owner\": 1, \"numchild\": 0, \"seo_title\": \"\", \"date\": \"2016-06-01\", \"depth\": 4, \"content_type\": 9, \"title\": \"This is a review\", \"search_description\": \"\", \"expire_at\": null, \"expired\": false}",
     "approved_go_live_at": null
   }
 },
@@ -2701,7 +2701,7 @@
     "submitted_for_moderation": false,
     "created_at": "2016-06-27T00:58:18.914Z",
     "user": 1,
-    "content_json": "{\"content_type\": 9, \"locked\": false, \"image\": null, \"search_description\": \"\", \"listing_introduction\": \"listing introduction\", \"latest_revision_created_at\": \"2016-06-26T20:54:52.369Z\", \"body\": \"[{\\\"value\\\": \\\"<p>This is the body of a lion</p>\\\", \\\"type\\\": \\\"paragraph\\\"}]\", \"review_artist_relationship\": [{\"artist_name\": 1, \"pk\": 1, \"ArtistRelationship\": 9}], \"live\": true, \"path\": \"0001000200030001\", \"expire_at\": null, \"first_published_at\": \"2016-06-26T20:54:52.420Z\", \"pk\": 9, \"rating\": 5, \"review_author_relationship\": [{\"authorRelationship\": 9, \"author_name\": 1, \"pk\": null}], \"date\": \"2016-06-01\", \"depth\": 4, \"numchild\": 0, \"review_album_relationship\": [{\"AlbumRelationship\": 9, \"pk\": 1, \"album_name\": 1}], \"url_path\": \"/homepage/reviews/review/\", \"introduction\": \"Review introduction\", \"show_in_menus\": false, \"go_live_at\": null, \"expired\": false, \"seo_title\": \"\", \"slug\": \"review\", \"owner\": 1, \"has_unpublished_changes\": false, \"title\": \"This is a review\"}",
+    "content_json": "{\"content_type\": 9, \"locked\": false, \"image\": null, \"search_description\": \"\", \"listing_introduction\": \"listing introduction\", \"latest_revision_created_at\": \"2016-06-26T20:54:52.369Z\", \"body\": \"[{\\\"value\\\": \\\"<p>This is the body of a lion</p>\\\", \\\"type\\\": \\\"paragraph\\\"}]\", \"review_artist_relationship\": [{\"title\": 1, \"pk\": 1, \"ArtistRelationship\": 9}], \"live\": true, \"path\": \"0001000200030001\", \"expire_at\": null, \"first_published_at\": \"2016-06-26T20:54:52.420Z\", \"pk\": 9, \"rating\": 5, \"review_author_relationship\": [{\"authorRelationship\": 9, \"author_name\": 1, \"pk\": null}], \"date\": \"2016-06-01\", \"depth\": 4, \"numchild\": 0, \"review_album_relationship\": [{\"AlbumRelationship\": 9, \"pk\": 1, \"album_name\": 1}], \"url_path\": \"/homepage/reviews/review/\", \"introduction\": \"Review introduction\", \"show_in_menus\": false, \"go_live_at\": null, \"expired\": false, \"seo_title\": \"\", \"slug\": \"review\", \"owner\": 1, \"has_unpublished_changes\": false, \"title\": \"This is a review\"}",
     "approved_go_live_at": null
   }
 },
@@ -2713,7 +2713,7 @@
     "submitted_for_moderation": false,
     "created_at": "2016-06-27T01:02:14.922Z",
     "user": 1,
-    "content_json": "{\"content_type\": 9, \"locked\": false, \"image\": 1, \"search_description\": \"\", \"listing_introduction\": \"listing introduction\", \"latest_revision_created_at\": \"2016-06-27T00:58:18.914Z\", \"body\": \"[{\\\"value\\\": \\\"<p>This is the body of a lion</p>\\\", \\\"type\\\": \\\"paragraph\\\"}]\", \"review_artist_relationship\": [{\"artist_name\": 1, \"pk\": 1, \"ArtistRelationship\": 9}], \"live\": true, \"path\": \"0001000200030001\", \"expire_at\": null, \"first_published_at\": \"2016-06-26T20:54:52.420Z\", \"pk\": 9, \"rating\": 5, \"review_author_relationship\": [{\"authorRelationship\": 9, \"author_name\": 1, \"pk\": 1}], \"date\": \"2016-06-01\", \"depth\": 4, \"numchild\": 0, \"review_album_relationship\": [{\"AlbumRelationship\": 9, \"pk\": 1, \"album_name\": 1}], \"url_path\": \"/homepage/reviews/review/\", \"introduction\": \"Review introduction\", \"show_in_menus\": false, \"go_live_at\": null, \"expired\": false, \"seo_title\": \"\", \"slug\": \"review\", \"owner\": 1, \"has_unpublished_changes\": false, \"title\": \"This is a review\"}",
+    "content_json": "{\"content_type\": 9, \"locked\": false, \"image\": 1, \"search_description\": \"\", \"listing_introduction\": \"listing introduction\", \"latest_revision_created_at\": \"2016-06-27T00:58:18.914Z\", \"body\": \"[{\\\"value\\\": \\\"<p>This is the body of a lion</p>\\\", \\\"type\\\": \\\"paragraph\\\"}]\", \"review_artist_relationship\": [{\"title\": 1, \"pk\": 1, \"ArtistRelationship\": 9}], \"live\": true, \"path\": \"0001000200030001\", \"expire_at\": null, \"first_published_at\": \"2016-06-26T20:54:52.420Z\", \"pk\": 9, \"rating\": 5, \"review_author_relationship\": [{\"authorRelationship\": 9, \"author_name\": 1, \"pk\": 1}], \"date\": \"2016-06-01\", \"depth\": 4, \"numchild\": 0, \"review_album_relationship\": [{\"AlbumRelationship\": 9, \"pk\": 1, \"album_name\": 1}], \"url_path\": \"/homepage/reviews/review/\", \"introduction\": \"Review introduction\", \"show_in_menus\": false, \"go_live_at\": null, \"expired\": false, \"seo_title\": \"\", \"slug\": \"review\", \"owner\": 1, \"has_unpublished_changes\": false, \"title\": \"This is a review\"}",
     "approved_go_live_at": null
   }
 },
@@ -2737,7 +2737,7 @@
     "submitted_for_moderation": false,
     "created_at": "2016-06-28T13:04:18.843Z",
     "user": 1,
-    "content_json": "{\"numchild\": 0, \"url_path\": \"/homepage/reviews/review/\", \"locked\": false, \"go_live_at\": null, \"search_description\": \"\", \"review_author_relationship\": [{\"authorRelationship\": 9, \"pk\": 1, \"author\": 1}], \"review_artist_relationship\": [{\"pk\": 1, \"ArtistRelationship\": 9, \"artist_name\": 1}], \"rating\": 5, \"expire_at\": null, \"show_in_menus\": false, \"depth\": 4, \"date\": \"2016-06-01\", \"slug\": \"review\", \"first_published_at\": \"2016-06-26T20:54:52.420Z\", \"has_unpublished_changes\": false, \"owner\": 1, \"listing_introduction\": \"listing introduction\", \"expired\": false, \"introduction\": \"Review introduction\", \"live\": true, \"review_album_relationship\": [{\"album_name\": 1, \"pk\": 1, \"AlbumRelationship\": 9}], \"path\": \"0001000200030001\", \"content_type\": 9, \"seo_title\": \"\", \"pk\": 9, \"title\": \"This is a review\", \"body\": \"[{\\\"value\\\": \\\"<p>This is the body of a lion</p>\\\", \\\"type\\\": \\\"paragraph\\\"}]\", \"image\": 1, \"latest_revision_created_at\": \"2016-06-27T01:02:14.922Z\"}",
+    "content_json": "{\"numchild\": 0, \"url_path\": \"/homepage/reviews/review/\", \"locked\": false, \"go_live_at\": null, \"search_description\": \"\", \"review_author_relationship\": [{\"authorRelationship\": 9, \"pk\": 1, \"author\": 1}], \"review_artist_relationship\": [{\"pk\": 1, \"ArtistRelationship\": 9, \"title\": 1}], \"rating\": 5, \"expire_at\": null, \"show_in_menus\": false, \"depth\": 4, \"date\": \"2016-06-01\", \"slug\": \"review\", \"first_published_at\": \"2016-06-26T20:54:52.420Z\", \"has_unpublished_changes\": false, \"owner\": 1, \"listing_introduction\": \"listing introduction\", \"expired\": false, \"introduction\": \"Review introduction\", \"live\": true, \"review_album_relationship\": [{\"album_name\": 1, \"pk\": 1, \"AlbumRelationship\": 9}], \"path\": \"0001000200030001\", \"content_type\": 9, \"seo_title\": \"\", \"pk\": 9, \"title\": \"This is a review\", \"body\": \"[{\\\"value\\\": \\\"<p>This is the body of a lion</p>\\\", \\\"type\\\": \\\"paragraph\\\"}]\", \"image\": 1, \"latest_revision_created_at\": \"2016-06-27T01:02:14.922Z\"}",
     "approved_go_live_at": null
   }
 },

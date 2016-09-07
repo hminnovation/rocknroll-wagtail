@@ -1,6 +1,7 @@
 from django.conf.urls import url
-from artist.views import ArtistDetailView
+from . import views
 
 urlpatterns = [
-    url(r'^artists/(?P<pk>[0-9]+)/$', AuthorDetailView.as_view(), name='author-detail'),
+    url(r'^artists/', views.artist_list),
+    url(r'^artist/(?P<slug>[-\w]+)/$', views.artist_detail),
 ]

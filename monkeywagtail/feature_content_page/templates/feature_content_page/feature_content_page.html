@@ -8,7 +8,7 @@
         {{ author.author_name }}
     </p>
 {% endfor %}
-        
+
         {% image page.image width-400 %}
 
 <p><strong>{{ page.introduction }}</strong></p>
@@ -19,10 +19,10 @@
 {% for artist in page.artists %}
     {% comment %}
         Artist has been placed into the page by the authors @property.
-        We get content from it by model.property e.g. artist.artist_name
+        We get content from it by model.property e.g. artist.title
     {% endcomment %}
     <p>
-            <a href="#">{{ artist.artist_name }}</a>
+            <a href="#">{{ artist.title }}</a>
     </p>
 {% endfor %}
 

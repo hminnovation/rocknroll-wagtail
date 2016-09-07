@@ -1,17 +1,16 @@
-from django.views.generic import DetailView
-from django.utils import timezone
-from artist.models import Artist
+from django.shortcuts import render, get_object_or_404
+from .models import Artist
 
 
-class ArtistDetailView(DetailView):
+def artist_list(request):
+    artists = Artist.objects.all()
+    return render(request, 'artist/artist_list.html', {
+        'artists': artists,
+    })
 
-    queryset = Artist.objects.all()
 
-    def get_object(self):
-        # Call the superclass
-        object = super(ArtistDetailView, self).get_object()
-        # Record the last accessed date
-        object.last_accessed = timezone.now()
-        object.save()
-        # Return the object
-        return object
+def artist_detail(request, slug):
+    artist = get_object_or_404(Artist, slug=slug)
+    return render(request, 'artist/artist_detail.html', {
+        'artist': artist,
+    })

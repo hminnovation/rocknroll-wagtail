@@ -7,21 +7,15 @@ from wagtail.wagtaildocs import urls as wagtaildocs_urls
 from wagtail.wagtailcore import urls as wagtail_urls
 
 from monkeywagtail.search import views as search_views
-#from monkeywagtail.album import views as album_views
+from monkeywagtail.artist import urls as artist_urls
 
 
 urlpatterns = [
     url(r'^django-admin/', include(admin.site.urls)),
-
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
-
     url(r'^search/$', search_views.search, name='search'),
-
-    # ex: /albums/
-    #url(r'^$', album_views.album_index, name='index'),
-    # ex: /album/5/
-    #url(r'^(?P<album_id>[0-9]+)/$', album_views.album, name='detail'),
+    url(r'', include(artist_urls)),
 ]
 
 
