@@ -1,15 +1,16 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register)
-from .models import GenreClass
+from .models import Genre
 
 
 class GenreAdmin(ModelAdmin):
-    model = GenreClass
+    model = Genre
     menu_label = 'Genres'  # ditch this to use verbose_name_plural from model
     menu_icon = 'fa-list-alt'  # change as required
+    menu_order = 300
     add_to_settings_menu = False  # or True to add your model to the Settings sub-menu
-    list_display = ('genre', 'description')
-    search_fields = ('genre',)
+    list_display = ('title', 'description')
+    search_fields = ('title',)
 
 
 # class GenreAdminGroup(ModelAdminGroup):

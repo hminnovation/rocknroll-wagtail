@@ -31,7 +31,7 @@ class SubgenreClass(ClusterableModel):
 # This, calls _all_ of the fields from the snippet above, but not the actual content
 # It's because we don't have the next
 class SubGenreRelationship(Orderable, SubgenreClass):
-        subgenre_in_editor = ParentalKey('GenreClass', related_name='sub_genre_relationship')
+        subgenre_in_editor = ParentalKey('Genre', related_name='sub_genre_relationship')
 
 
 # A snippet is a way to create non-hierarchy content on Wagtail (http://docs.wagtail.io/en/v1.4.3/topics/snippets.html)
@@ -39,12 +39,12 @@ class SubGenreRelationship(Orderable, SubgenreClass):
 # They are currently quite limited against standard page models in how editors can access them. The easiest way
 # to visualise that is probably to visit {whateverURLyouchose}/admin/snippets/author/author/
 # Note: the properties and panels are defined in exactly the same way as on a page model
-class GenreClass(ClusterableModel):
+class Genre(ClusterableModel):
     """
     You've gotta define a genre right
     """
 
-    genre = models.CharField("The genre", max_length=254, help_text='The genre. Something high level e.g. pop, metal, punk etc')
+    title = models.CharField("The genre", max_length=254, help_text='The genre. Something high level e.g. pop, metal, punk etc')
 
     slug = models.SlugField(
         allow_unicode=True,
@@ -54,13 +54,17 @@ class GenreClass(ClusterableModel):
 
     genre_description = RichTextField(blank=True, help_text='A description of the genre')
 
+    @property
+    def url(self):
+        return '/genres/' + self.slug
+
     panels = [
         # The content panels are displaying the components of content we defined in the StandardPage class above
         # If you add something to the class and want it to appear for the editor you have to define it here too
         # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
-        FieldPanel('genre'),
+        FieldPanel('title'),
         FieldPanel('slug'),
         FieldPanel('genre_description'),
         InlinePanel('sub_genre_relationship', label="Subgenre", help_text="Note: this subgenres will populate the sub-genre snippet", min_num=1)
@@ -69,7 +73,7 @@ class GenreClass(ClusterableModel):
     def __str__(self):              # __unicode__ on Python 2
         # We're returning the string that populates the snippets screen. Obvs whatever field you choose
         # will come through as plain text
-        return self.genre
+        return self.title
 
     @property
     def description(self):
@@ -80,5 +84,13 @@ class GenreClass(ClusterableModel):
             return ''
 
     class Meta:
+        ordering = ['title']
         verbose_name = "Genre"
         verbose_name_plural = "Genres"
+
+    def get_context(self, request):
+        context = super(Genre, self).get_context(request)
+
+        # Add extra variables and return the updated context
+        # context['artists'] = artist.objects.child_of(self).live()
+        return context

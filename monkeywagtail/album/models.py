@@ -15,7 +15,7 @@ class GenreClassAlbumRelationship(Orderable, models.Model):
         'Album', related_name='genre_album_relationship'
     )
     genre = models.ForeignKey(
-        'genre.GenreClass',
+        'genre.Genre',
         related_name="+"
     )
     panels = [

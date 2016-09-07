@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+    <h2>genres</h2>
+    <ul>
+        {% for genre in genres %}
+            <li><a href="{{ genre.url }}">{{ genre.title }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -8,6 +8,7 @@ from wagtail.wagtailcore import urls as wagtail_urls
 
 from monkeywagtail.search import views as search_views
 from monkeywagtail.artist import urls as artist_urls
+from monkeywagtail.genre import urls as genre_urls
 
 
 urlpatterns = [
@@ -16,6 +17,7 @@ urlpatterns = [
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^search/$', search_views.search, name='search'),
     url(r'', include(artist_urls)),
+    url(r'', include(genre_urls)),
 ]
 
 
