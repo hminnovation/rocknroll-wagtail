@@ -14,3 +14,7 @@ def artist_detail(request, slug):
     return render(request, 'artist/artist_detail.html', {
         'artist': artist,
     })
+
+
+# def get_artist_url(self):
+#     return reverse("artists:index", kwargs={"pk": self.object.pk})

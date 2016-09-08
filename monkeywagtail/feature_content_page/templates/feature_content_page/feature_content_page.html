@@ -18,11 +18,19 @@
 
 {% for artist in page.artists %}
     {% comment %}
-        Artist has been placed into the page by the authors @property.
-        We get content from it by model.property e.g. artist.title
+    Artist has been placed into the page by the authors @property.
+    We get content from it by model.property e.g. `artist.title`
+
+    But wait... with the URL all we have is the slug. How to get /artists/
+    We do this with the eosoterically named reverse resolution of URLs
+    c/f https://docs.djangoproject.com/en/1.10/topics/http/urls/#reverse-resolution-of-urls
+
+    Have a look in artist/urls.py and you'll see that the artists list
+    has `name=artists`. You need that there for Django to know how to resolve
+    the URL and you'll hit annoying 404s.
     {% endcomment %}
     <p>
-            <a href="artists/{{ artist.slug }}">{{ artist.title }}</a>
+            <a href="{% url 'artists' %}{{ artist.slug}}">{{ artist.title }}</a>
     </p>
 {% endfor %}
 

@@ -18,18 +18,22 @@ class SubgenreClass(ClusterableModel):
         FieldPanel('description')
     ]
 
-    def __str__(self):              # __unicode__ on Python 2
-        # We're returning the string that populates the snippets screen. Obvs whatever field you choose
-        # will come through as plain text
-        return self.subgenre
+# We're going to need to define the subgenres title to call w/in modeladmin but I think
+# that needs to happen within the Genre model
+#
+# def __str__(self):              # __unicode__ on Python 2
+#     # We're returning the string that populates the snippets screen. Obvs whatever field you choose
+#     # will come through as plain text
+#     return self.subgenre
 
-    class Meta:
-        verbose_name = "Subgenre"
-        verbose_name_plural = "Subgenres"
+#    class Meta:
+#        verbose_name = "Subgenre"
+#        verbose_name_plural = "Subgenres"
 
 
-# This, calls _all_ of the fields from the snippet above, but not the actual content
-# It's because we don't have the next
+# This, calls _all_ of the fields from the model above and builds a one way relationship
+# The inline panel that's placed within the genre class will populate the SubgenreClass
+# fields
 class SubGenreRelationship(Orderable, SubgenreClass):
         subgenre_in_editor = ParentalKey('Genre', related_name='sub_genre_relationship')
 
