@@ -3,4 +3,16 @@
 
 {% block content %}
     <h2>{{ genre.title }}</h2>
+    {{ genre.description|richtext }}
+
+{% for foo in genre.sub_genres %}
+    {% comment %}
+    Okay, so we've got subgenres coming in from the genre model (line 62). Unlike the artist model though it's only grabbing the title (not _all_ subgenre attributes). We can grab another attribute by doing for example `n.description`. But that isn't terribly useful.
+
+    I think the issue is that I need to define a property within the sub-genre class itself that returns all of it's attributes?
+    {% endcomment %}
+    <p>
+            {{ foo }}
+    </p>
+{% endfor %}
 {% endblock %}

@@ -58,6 +58,13 @@ class Genre(ClusterableModel):
     def url(self):
         return '/genres/' + self.slug
 
+    @property
+    def sub_genres(self):
+        sub_genres = [
+            n.subgenre for n in self.sub_genre_relationship.all()
+        ]
+        return sub_genres
+
     panels = [
         # The content panels are displaying the components of content we defined in the StandardPage class above
         # If you add something to the class and want it to appear for the editor you have to define it here too
