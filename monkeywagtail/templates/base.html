@@ -47,8 +47,12 @@
   <div class="row">{% breadcrumbs %}</div>
 {% endblock breadcrumb %}
 
-{% block content %}        
-{% endblock %}
+<div class="row">
+    <div class="small-12 medium-8 columns">
+    {% block content %}        
+    {% endblock %}
+    </div>
+</div>  
 
 {% block footer %}
     <footer>

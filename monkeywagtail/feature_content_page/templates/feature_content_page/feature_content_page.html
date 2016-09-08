@@ -31,6 +31,7 @@
     {% endcomment %}
     <p>
             <a href="{% url 'artists' %}{{ artist.slug}}">{{ artist.title }}</a>
+            {{ artist.artist_image }}
     </p>
 {% endfor %}
 

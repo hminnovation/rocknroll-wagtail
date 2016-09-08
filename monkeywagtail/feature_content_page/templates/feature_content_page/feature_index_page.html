@@ -2,31 +2,45 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-abc
-
+<h1>Features</h1>
 {{ self.features }}
-<div class="row">
-    {% for feature in features %}
-    <div class="row">
-          {% for artist in feature.artists %}
-            <a href="{{ artist.url }}">{{ artist }}</a>{% endfor %}
-
-             {% for author in feature.authors %}
-            <a href="{{ author.url }}">{{ author }}</a>{% endfor %}
-
-        {{ feature.title }}
-        {{ feature.listing_introduction }}
-        {% if feature.image %}
-              {% image feature.image width-100 as photo %}
+  {% for feature in features %}
+    <div class="feature row">
+    {% if feature.image %}
+      <div class="small-12 medium-4 columns">
+              {% image feature.image width-400 as photo %}
               <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
-        {% endif %}
-        <a href="{{ feature.url }}">{{ feature.url }}</a>
-    </div>
-    {% endfor %}
-</div>
+      </div>
+    {% endif %}
+      <div class="small-12 medium-8 columns">
+        <h2><a href="{{ feature.url }}">{{ feature.title }}</a></h2>
+            <div class="clearfix">
+              {% if feature.artists %}
+                <ul class="inline-list">
+                  {% for artist in feature.artists %}
+                    <li class="artist"><a href="{{ artist.url }}">{{ artist }}</a></li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
 
-{% if feature %}
-{% endif %}
+              {% if feature.authors %}
+                <ul class="inline-list">
+                  {% for author in feature.authors %}
+                    <li class="author"><a href="{{ author.url }}">{{ author }}</a></li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          
+          {% if feature.feature_listing_introduction %}
+            <p>{{ feature.listing_introduction }}</p>
+          {% else %}
+            <p>{{ feature.introduction }}</p>
+          {% endif %}
+          <a href="{{ feature.url }}">Read more</a>
+      </div>
+    </div>
+  {% endfor %}
 
 
 {% if paginate_list.paginator.num_pages > 1 %}
