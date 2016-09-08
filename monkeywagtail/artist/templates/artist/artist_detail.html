@@ -3,4 +3,15 @@
 
 {% block content %}
     <h2>{{ artist.title }}</h2>
+    {{ artist.artist_image }}
+    <p>{{ artist.description }}</p>
+
+{% comment %}
+We want to get the feature content here that has been tagged with this artist
+Absolutely no idea...
+{% endcomment %}
+
+{{ artist.all }}
+abc
+
 {% endblock %}

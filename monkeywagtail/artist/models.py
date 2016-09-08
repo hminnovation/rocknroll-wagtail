@@ -109,6 +109,11 @@ class Artist(ClusterableModel):
         return self.title
 
     @property
+    def all(self, request):
+        # we're trying to get everything in to a single property. Not working!... maybe go read the docs?
+        return Artist.objects.get_queryset()
+
+    @property
     def age(self):
         if self.date_formed:
             today = date.today()

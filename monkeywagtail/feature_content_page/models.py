@@ -168,9 +168,10 @@ class FeatureIndexPage(Page):
     # This works, but doens't paginate
     def get_context(self, request):
         context = super(FeatureIndexPage, self).get_context(request)
-        context['features'] = FeatureContentPage.objects.descendant_of(self).live().order_by('-publication_date')
+        context['features'] = FeatureContentPage.objects.descendant_of(self).live().order_by('-date')
         return context
 
+    # This is neccessary for the homepage to get the children of the index page
     @property
     def children(self):
         return self.get_children().specific().live()

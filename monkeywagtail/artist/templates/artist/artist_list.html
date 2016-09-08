@@ -4,8 +4,12 @@
 {% block content %}
     <h2>Artists</h2>
     <ul>
+    {% if artists %}
         {% for artist in artists %}
             <li><a href="{{ artist.url }}">{{ artist.title }}</a></li>
         {% endfor %}
+     {% else %}
+     <p>You've not added any bands yet</p>
+     {% endif %}
     </ul>
 {% endblock %}
