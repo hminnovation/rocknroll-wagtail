@@ -21,8 +21,7 @@ class ArtistFeaturePageRelationship(Orderable, models.Model):
         'FeatureContentPage', related_name='artist_feature_page_relationship'
     )
     artist = models.ForeignKey(
-        'artist.artist',
-        related_name="+"
+        'artist.artist'
     )
     panels = [
         # We need this for the inlinepanel on the Feature Content Page to grab hold of
