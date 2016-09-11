@@ -35,7 +35,7 @@ class SubgenreClass(ClusterableModel):
 # The inline panel that's placed within the genre class will populate the SubgenreClass
 # fields
 class SubGenreRelationship(Orderable, SubgenreClass):
-        subgenre_in_editor = ParentalKey('Genre', related_name='sub_genre_relationship')
+        subgenre_in_editor = ParentalKey('GenreClass', related_name='sub_genre_relationship')
 
 
 # A snippet is a way to create non-hierarchy content on Wagtail (http://docs.wagtail.io/en/v1.4.3/topics/snippets.html)
@@ -43,7 +43,7 @@ class SubGenreRelationship(Orderable, SubgenreClass):
 # They are currently quite limited against standard page models in how editors can access them. The easiest way
 # to visualise that is probably to visit {whateverURLyouchose}/admin/snippets/author/author/
 # Note: the properties and panels are defined in exactly the same way as on a page model
-class Genre(ClusterableModel):
+class GenreClass(ClusterableModel):
     """
     You've gotta define a genre right
     """

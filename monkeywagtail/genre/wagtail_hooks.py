@@ -1,10 +1,10 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, modeladmin_register)
-from .models import Genre
+from .models import GenreClass
 
 
 class GenreAdmin(ModelAdmin):
-    model = Genre
+    model = GenreClass
     menu_label = 'Genres'  # ditch this to use verbose_name_plural from model
     menu_icon = 'fa-list-alt'  # change as required
     menu_order = 300
