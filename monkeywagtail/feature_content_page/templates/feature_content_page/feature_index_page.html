@@ -3,7 +3,6 @@
 
 {% block content %}
 <h1>Features</h1>
-{{ self.features }}
   {% for feature in features %}
     <div class="feature row">
     {% if feature.image %}
@@ -43,7 +42,10 @@
   {% endfor %}
 
 
-{% if paginate_list.paginator.num_pages > 1 %}
-  blah blah blah
+{% if features.paginator.count > 1 %}
+        {% include "includes/pagination.html" with subpages=features %}
+        {% comment %} We use an include for the pagination to introduce consistency
+           across the site. The `features` comes from the property that we
+           defined in the FeatureContentPageIndex class {% endcomment %}
 {% endif %}
 {% endblock %}

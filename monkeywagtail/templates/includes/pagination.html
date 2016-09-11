@@ -1,0 +1,15 @@
+<nav role="navigation" aria-label="Pagination">
+    <ul class="pagination">
+        {% if subpages.has_previous %}
+            <li><a href="?page={{ subpages.previous_page_number }}{% if search_query %}&amp;query={{ search_query|urlencode }}{% endif %}{% if extra_url_params %}&amp;{{ extra_url_params }}{% endif %}" class="previous">previous</a></li>
+        {% endif %}
+
+        <li class="current">
+            {{ subpages.number }}/{{ subpages.paginator.num_pages }}
+        </li>
+
+        {% if subpages.has_next %}
+            <li><a href="?page={{ subpages.next_page_number }}{% if search_query %}&amp;query={{ search_query|urlencode }}{% endif %}{% if extra_url_params %}&amp;{{ extra_url_params }}{% endif %}" class="next">next</a></li>
+        {% endif %}
+    </ul>
+</nav>

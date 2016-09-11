@@ -205,3 +205,7 @@ WAGTAILSEARCH_BACKENDS = {
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "monkey"
+
+# Pagination
+
+DEFAULT_PER_PAGE = 2

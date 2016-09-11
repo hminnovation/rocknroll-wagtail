@@ -163,40 +163,27 @@ class FeatureIndexPage(Page):
         'FeatureContentPage'
     ]
 
-    # Index page context to return content
-    # This works, but doens't paginate
+    @property
+    def features(self):
+        return self.get_children().specific().live().descendant_of(self).order_by('-first_published_at')
+        # We want to use `date` but think we need to define date within the filter?
+
     def get_context(self, request):
-        context = super(FeatureIndexPage, self).get_context(request)
-        context['features'] = FeatureContentPage.objects.descendant_of(self).live().order_by('-date')
+        page_number = request.GET.get('page')
+        paginator = Paginator(self.features, settings.DEFAULT_PER_PAGE)
+        try:
+            features = paginator.page(page_number)
+        except PageNotAnInteger:
+            features = paginator.page(1)
+        except EmptyPage:
+            features = paginator.page(paginator.num_pages)
+
+        context = super().get_context(request)
+        context.update(features=features)
+
         return context
 
     # This is neccessary for the homepage to get the children of the index page
     @property
     def children(self):
         return self.get_children().specific().live()
-
-# This also works, but doesn't paginate
-#    @property
-#    def features(self):
-#        features = FeatureIndexPage.objects.live().descendant_of(self).order_by('-publication_date')
-#        return features
-#
-#    def get_context(self, request):
-#        features = self.features
-#
-#    # Pagination
-#        page = request.GET.get('page', 2)
-#        paginator = Paginator(features, getattr(settings, 'Features_per_page', 10))
-#
-#        try:
-#            features = paginator.page(page)
-#        except PageNotAnInteger:
-#            features = paginator.page(1)
-#        except EmptyPage:
-#            features = paginator.page(paginator.num_pages)
-#
-#        #show_all = True
-#
-#        context = super(FeatureIndexPage, self).get_context(request)
-#        context['features'] = FeatureContentPage.objects.descendant_of(self).live()
-#        return context
