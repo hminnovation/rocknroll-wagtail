@@ -13,4 +13,10 @@
     <p>Ain't no authors in this town</p>
     
     {% endif %}
+
+{% if authors.paginator.count > 1 %}
+asfbi
+        {% include "includes/pagination.html" with subpages=authors %}
+        {% comment %} We use an include for the pagination to introduce consistency across the site. The `authors` comes from the property that we defined in the Author class {% endcomment %}
+{% endif %}
 {% endblock %}

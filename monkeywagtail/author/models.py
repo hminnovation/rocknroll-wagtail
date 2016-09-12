@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailcore.fields import RichTextField
@@ -80,3 +82,32 @@ class Author(models.Model):
             return self.image.get_rendition('fill-150x150').img_tag()
         except:
             return ''
+
+    @property
+    def image_listing_small(self):
+        return self.image.get_rendition('fill-50x50').img_tag()
+        # @TODO Give a more attractive verbose name (e.g. image)
+        # @TODO work out whether this is actually okay to do
+        # It feels repetitive to have to define every image size
+
+    @property
+    # @TODO work out how to paginate a non-page model :)
+    # below doesn't work!
+    def authors(self):
+        return Author.objects.all()
+        # need to use `.filter()`?
+
+    def get_context(self, request):
+        page_number = request.GET.get('page')
+        paginator = Paginator(self.authors, settings.DEFAULT_PER_PAGE)
+        try:
+            authors = paginator.page(page_number)
+        except PageNotAnInteger:
+            authors = paginator.page(1)
+        except EmptyPage:
+            authors = paginator.page(paginator.num_pages)
+
+        context = super().get_context(request)
+        context.update(authors=authors)
+
+        return context
