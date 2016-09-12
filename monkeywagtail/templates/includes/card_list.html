@@ -1,0 +1,13 @@
+{% for object in list %}
+<li class="column">
+	{{ object.image_listing }}
+	<a href="{{ object.url }}">{{ object.title }}</a>
+</li>
+{% endfor %}
+
+{% comment %}
+An include is a way we can neatly put patterns (such as a card list)
+into a separate file to help update things in only one place.
+
+`object` and `list` are changed by the include statement on the filter that calls this include. e.g. on author_list.html we say that object=author and list=authors.
+{% endcomment %}
