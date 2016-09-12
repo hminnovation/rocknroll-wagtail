@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+    <h2>{{ author.title }}</h2>
+    {{ author.image_listing }}
+    {{ author.biography|richtext }}
+    <a href="{{ author.external_url }}">{{ author.title }} website</a>
+
+   	<h3>Features</h3>
+   	<p>- include card listing -</p>
+   	<h3>Reviews</h3>
+   	<p>- include card listing -</p>
+
+{% endblock %}

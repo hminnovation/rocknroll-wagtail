@@ -3,7 +3,7 @@ from wagtail.wagtailcore.models import Page
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailsearch import index
-from wagtail.wagtailadmin.edit_handlers import FieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel
 from wagtail.wagtailsnippets.models import register_snippet
 
 
@@ -20,11 +20,17 @@ class Author(models.Model):
 
     search_fields = Page.search_fields + [
         # Defining what fields the search catches
-        index.SearchField('author_name'),
+        index.SearchField('title'),
         index.SearchField('biography'),
     ]
 
-    author_name = models.CharField("The author's name", blank=True, max_length=254)
+    title = models.CharField("The author's name", blank=True, max_length=254)
+
+    slug = models.SlugField(
+        allow_unicode=True,
+        max_length=255,
+        help_text="The name of the page as it will appear in URLs e.g http://domain.com/blog/[my-slug]/",
+    )
 
     image = models.ForeignKey(
         'wagtailimages.Image',
@@ -39,13 +45,23 @@ class Author(models.Model):
 
     external_url = models.URLField(blank=True, null=True)
 
+    @property
+    def url(self):
+        return '/authors/' + self.slug
+
     panels = [
         # The content panels are displaying the components of content we defined in the StandardPage class above
         # If you add something to the class and want it to appear for the editor you have to define it here too
         # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
-        FieldPanel('author_name'),
+        MultiFieldPanel(
+            [
+                FieldPanel('title'),
+                FieldPanel('slug'),
+            ],
+            heading="Title"
+        ),
         ImageChooserPanel('image'),
         FieldPanel('biography'),
         FieldPanel('external_url')
@@ -54,4 +70,13 @@ class Author(models.Model):
     def __str__(self):              # __unicode__ on Python 2
         # We're returning the string that populates the snippets screen. Obvs whatever field you choose
         # will come through as plain text
-        return self.author_name
+        return self.title
+
+    @property
+    def image_listing(self):
+        # fail silently if there is no profile pic or the rendition file can't
+        # be found. Note @richbrennan worked out how to do this...
+        try:
+            return self.image.get_rendition('fill-150x150').img_tag()
+        except:
+            return ''
