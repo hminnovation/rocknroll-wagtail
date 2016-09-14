@@ -2,7 +2,7 @@ from django.db import models
 from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Orderable
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -10,14 +10,26 @@ from modelcluster.models import ClusterableModel
 
 class SubgenreClass(ClusterableModel):
 
-    subgenre = models.CharField(max_length=255, help_text="Be as esoteric as you'd like")
+    title = models.CharField(max_length=255, help_text="Be as esoteric as you'd like")
     description = models.TextField(blank=True, help_text='A description of the sub-genre')
+    slug = models.SlugField(
+        allow_unicode=True,
+        max_length=255,
+        help_text="The name of the page as it will appear in URLs e.g http://domain.com/blog/[my-slug]/",
+    )
+    # We need to use a SlugField because we need the slug to be unique
 
     panels = [
-        FieldPanel('subgenre'),
-        FieldPanel('description')
+        MultiFieldPanel([
+            FieldPanel('title'),
+            FieldPanel('slug'),
+            FieldPanel('description')
+        ], heading="Title", classname="collapsible")
     ]
 
+    @property
+    def subgenre_url(self):
+        return self.slug
 # We're going to need to define the subgenres title to call w/in modeladmin but I think
 # that needs to happen within the Genre model
 #
@@ -59,15 +71,9 @@ class GenreClass(ClusterableModel):
     genre_description = RichTextField(blank=True, help_text='A description of the genre')
 
     @property
+    # https://docs.python.org/3/library/functions.html#property
     def url(self):
         return '/genres/' + self.slug
-
-    @property
-    def sub_genres(self):
-        sub_genres = [
-            n.subgenre for n in self.sub_genre_relationship.all()
-        ]
-        return sub_genres
 
     panels = [
         # The content panels are displaying the components of content we defined in the StandardPage class above
@@ -99,8 +105,17 @@ class GenreClass(ClusterableModel):
         verbose_name = "Genre"
         verbose_name_plural = "Genres"
 
+    def genre(self):
+        return self.GenreClass.all()
+
+    # Defining all of the subgenre relationships
+    # This allows us to get the title, slug etc in the
+    # template view.
+    def subgenres(self):
+        return self.sub_genre_relationship.all()
+
     def get_context(self, request):
-        context = super(Genre, self).get_context(request)
+        context = super(GenreClass, self).get_context(request)
 
         # Add extra variables and return the updated context
         # context['artists'] = artist.objects.child_of(self).live()

@@ -5,6 +5,22 @@
     <h2>{{ genre.title }}</h2>
     {{ genre.description|richtext }}
 
+
+<!-- {% for foo in genre.sub_genre_slug %}
+{{ foo }}
+{% endfor %}
+
+{% for foo in genre.sub_genre_title %}
+{{ foo }}
+{% endfor %}
+
+{% for foo in genre.sub_genre_description %}
+{{ foo }}
+{% endfor %} -->
+
+{% for foo in genre.subgenres %}
+<li><a href="{{ foo.slug }}">{{ foo.title }}</a> {{ foo.description }}</li>
+{% endfor %}
 {% for foo in genre.sub_genres %}
     {% comment %}
     Okay, so we've got subgenres coming in from the genre model (line 62). Unlike the artist model though it's only grabbing the title (not _all_ subgenre attributes). We can grab another attribute by doing for example `n.description`. But that isn't terribly useful.
@@ -13,6 +29,7 @@
     {% endcomment %}
     <p>
             {{ foo }}
+            {{ foo.url }}
     </p>
 {% endfor %}
 {% endblock %}
