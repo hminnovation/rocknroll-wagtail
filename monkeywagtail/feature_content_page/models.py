@@ -21,7 +21,12 @@ class ArtistFeaturePageRelationship(Orderable, models.Model):
         'FeatureContentPage', related_name='artist_feature_page_relationship'
     )
     artist = models.ForeignKey(
-        'artist.artist'
+        'artist.artist',
+        related_name='artist_related'
+        # If a related name is set here you can use it on relations
+        # otherwise you use the lowercase model name with `_set` e.g.
+        # artistfeaturepagerelationship_set
+        # c/f https://docs.djangoproject.com/en/1.10/topics/db/queries/#following-relationships-backward
     )
     panels = [
         # We need this for the inlinepanel on the Feature Content Page to grab hold of
@@ -169,6 +174,8 @@ class FeatureIndexPage(Page):
         # We want to use `date` but think we need to define date within the filter?
 
     def get_context(self, request):
+        # http://docs.wagtail.io/en/v1.2/topics/pages.html#customising-template-context
+        # It can only be used on page models. Which is a pain.
         page_number = request.GET.get('page')
         paginator = Paginator(self.features, settings.DEFAULT_PER_PAGE)
         try:

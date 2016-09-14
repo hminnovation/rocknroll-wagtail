@@ -135,10 +135,3 @@ class Artist(ClusterableModel):
             ordering = ['title']
             verbose_name = "Artist"
             verbose_name_plural = "Artists"
-
-    def get_context(self, request):
-        context = super(Artist, self).get_context(request)
-
-        # Add extra variables and return the updated context
-        # context['artists'] = artist.objects.child_of(self).live()
-        return context

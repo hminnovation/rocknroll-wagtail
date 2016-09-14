@@ -11,11 +11,17 @@ We want to get the feature content here that has been tagged with this artist
 Absolutely no idea...
 {% endcomment %}
 
-{{ artist.all }}
-abc
+<!-- {{ artist.all }} -->
 
-{% for foo in article %}
-{{ artist.title }}
+{{artist.artist_feature_page_relationship}}
+
+<h3>Features</h3>
+{% for feature in article %}
+	<li><a href="{{feature.url}}">{{ feature.title }}</a></li>
 {% endfor %}
+
+{% comment %}
+We get the relate features from our views.py file
+{% endcomment %}
 
 {% endblock %}
