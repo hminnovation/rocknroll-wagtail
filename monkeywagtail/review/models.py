@@ -78,7 +78,9 @@ class ReviewPage(Page):
         index.SearchField('body'),
     ]
 
-    date_release = models.DateField("Release date of album", null=True, blank=True)
+    date_release = models.DateField("Release date of album")
+    # We need this to be mandatory as we need to filter off the date
+    # Though should it be coming from the albums app?
 
     image = models.ForeignKey(
         'wagtailimages.Image',

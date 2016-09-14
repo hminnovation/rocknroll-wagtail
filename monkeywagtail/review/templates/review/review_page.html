@@ -4,16 +4,19 @@
 {% block content %}
 <article>
 
-<header class="row"><h1>{{ page.title }}</h1>
+<header class="row">
+    <h1>
+    {% for artist in page.artists %}{{ artist }}{% endfor %}
+    </h1>
         <h2 class="subheadline">{% for album in page.albums %}{{ album.album_name }} <span>by</span> {% for artist in album.album_artist %}{{ artist }}{% if not forloop.last %}, {% endif %}{% endfor %}</h2>{% endfor %}
 </header>
 
 <div class="row">
 <aside class="meta small-12 medium-3 columns">
     Review by <ul class="authors">{% for author in page.authors %}
-        <li>{{ author.author_name }}{% if not forloop.last %}, {% endif %}</li>
+        <li><a href="{% url 'authors' %}{{ author.slug}}">{{ author.author_name }}{% if not forloop.last %}, {% endif %}</li>
     {% endfor %}
-    <p>Reviewed {{ page.date }}</p>
+    <p>Released {{ page.date_release }}</p>
     <p>{{ self.rating }}</p>
     {% for album in page.albums %}
         <ul class="genre">
