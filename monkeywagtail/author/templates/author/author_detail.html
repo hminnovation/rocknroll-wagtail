@@ -7,9 +7,25 @@
     {{ author.biography|richtext }}
     <a href="{{ author.external_url }}">{{ author.title }} website</a>
 
+
+	{% comment %}
+		This would probably be better as a separate include?
+	{% endcomment %}
    	<h3>Features</h3>
-   	<p>- include card listing -</p>
+   	{% if article %}
+   		{% for object in article %}
+			<li><a href="{{object.url}}">{{ object.title }}</a></li>
+		{% endfor %}
+	{% else %}
+	<p>Sorry, this author hasn't written any featured articles yet</p>
+   	{% endif %}
    	<h3>Reviews</h3>
-   	<p>- include card listing -</p>
+   	{% if review %}
+   		{% for object in review %}
+   			<li><a href="{{object.url}}">{{ object.title }}</a></li>
+   		{% endfor %}
+   	{% else %}
+   		<p>Sorry this author hasn't written any reviews yet.</p>
+   	{% endif %}
 
 {% endblock %}

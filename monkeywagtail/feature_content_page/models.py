@@ -43,7 +43,7 @@ class AuthorFeaturePageRelationship(Orderable, models.Model):
     )
     author = models.ForeignKey(
         'author.author',
-        related_name="+"
+        related_name="author_feature_page_relationship"
     )
     panels = [
         # We need this for the inlinepanel on the Feature Content Page to grab hold of
