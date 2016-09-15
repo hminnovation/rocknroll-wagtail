@@ -18,14 +18,14 @@ class ReviewRelatedPageRelationship(RelatedPage):
 
 # Artist
 class ReviewArtistRelationship(models.Model):
-    ArtistRelationship = ParentalKey(
+    page = ParentalKey(
         'ReviewPage',
         related_name='review_artist_relationship'
     )
     artist = models.ForeignKey(
         'artist.Artist',
         # app.class
-        related_name="+",
+        related_name="artist_review_relationship",
         help_text='The artist who made the album being reviewed'
     )
     panels = [

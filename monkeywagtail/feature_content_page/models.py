@@ -22,7 +22,7 @@ class ArtistFeaturePageRelationship(Orderable, models.Model):
     )
     artist = models.ForeignKey(
         'artist.artist',
-        related_name='artist_related'
+        related_name='feature_page_artist_relationship'
         # If a related name is set here you can use it on relations
         # otherwise you use the lowercase model name with `_set` e.g.
         # artistfeaturepagerelationship_set

@@ -15,11 +15,15 @@ def artist_detail(request, slug):
     # artists = Artist.objects.get
     # articles = artist.artist_related.all()
     # Line 14 - 16 can be deleted. Random ideas that didn't do what I wanted them to...
-    articles = set(
-            p.page for p in artist.artist_related.select_related('page').all() if p.page.live
-        )
+    articles = set(p.page for p in artist.feature_page_artist_relationship.select_related('page').all() if p.page.live)
+    reviews = set(p.page for p in artist.artist_review_relationship.select_related('page').all() if p.page.live)
+    # We use `page` because the parental key name is key on line 21 of review/models.py
+    #
+    # We use `p` because I want to. You just need to use a variable that can be passed through
+    #
     # This works by getting pages into a list we can loop through on the template
     # It's `{classname}.{related_name}.select_related('page').all()`
+    # Not entirely sure what `set` does other than to reverse order chronology
     #
     # Turn below in to useful thoughts... (what didn't work)
     # If no relatedname on `artist_feature_page_relationship` is set then
@@ -34,4 +38,5 @@ def artist_detail(request, slug):
     return render(request, 'artist/artist_detail.html', {
          'artist': artist,
          'article': articles,
+         'review': reviews,
     })

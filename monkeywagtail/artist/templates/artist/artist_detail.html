@@ -16,9 +16,16 @@ Absolutely no idea...
 {{artist.artist_feature_page_relationship}}
 
 <h3>Features</h3>
-{% for feature in article %}
-	<li><a href="{{feature.url}}">{{ feature.title }}</a></li>
+{% for object in article %}
+	<li><a href="{{object.url}}">{{ object.title }}</a></li>
 {% endfor %}
+
+{% if review %}
+	<h3>Reviews</h3>
+	{% for object in review  %}
+		<li><a href="{{object.url}}">{{ object.title }}</a>
+	{% endfor %}
+{% endif %}
 
 {% comment %}
 We get the relate features from our views.py file
