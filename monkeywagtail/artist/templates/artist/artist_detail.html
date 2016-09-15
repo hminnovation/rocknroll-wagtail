@@ -4,16 +4,13 @@
 {% block content %}
     <h2>{{ artist.title }}</h2>
     {{ artist.artist_image }}
-    <p>{{ artist.description }}</p>
+    <p>{{ artist.biography|richtext }}</p>
 
 {% comment %}
 We want to get the feature content here that has been tagged with this artist
 Absolutely no idea...
 {% endcomment %}
 
-<!-- {{ artist.all }} -->
-
-{{artist.artist_feature_page_relationship}}
 
 <h3>Features</h3>
 {% for object in article %}

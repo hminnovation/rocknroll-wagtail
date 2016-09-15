@@ -52,14 +52,14 @@ class ReviewAlbumRelationship(models.Model):
 
 # Ugh, and the authors
 class ReviewAuthorRelationship(models.Model):
-    authorRelationship = ParentalKey(
+    page = ParentalKey(
         'ReviewPage',
         related_name='review_author_relationship'
     )
     author = models.ForeignKey(
         'author.Author',
         # app.class
-        related_name="+",
+        related_name="author_review_relationship",
         help_text='The author who wrote this'
     )
     panels = [

@@ -18,11 +18,11 @@ class ArtistFeaturePageRelationship(Orderable, models.Model):
     # hooks to. The model name (artist) within the app (artist) is a terrible naming convention
     # that you should avoid. It's 'class.model'
     page = ParentalKey(
-        'FeatureContentPage', related_name='artist_feature_page_relationship'
+        'FeatureContentPage', related_name='feature_page_artist_relationship'
     )
     artist = models.ForeignKey(
         'artist.artist',
-        related_name='feature_page_artist_relationship'
+        related_name='artist_feature_page_relationship'
         # If a related name is set here you can use it on relations
         # otherwise you use the lowercase model name with `_set` e.g.
         # artistfeaturepagerelationship_set
@@ -39,7 +39,7 @@ class AuthorFeaturePageRelationship(Orderable, models.Model):
     # and authors can obviously have many pages. You will see that the modelname and appname
     # are once again identical because I'm not very good at this game!
     page = ParentalKey(
-        'FeatureContentPage', related_name='author_feature_page_relationship'
+        'FeatureContentPage', related_name='feature_page_author_relationship'
     )
     author = models.ForeignKey(
         'author.author',
@@ -94,7 +94,7 @@ class FeatureContentPage(Page):
     # using `artist_feature_page_relationship` to grab them
     def artists(self):
         artists = [
-            n.artist for n in self.artist_feature_page_relationship.all()
+            n.artist for n in self.feature_page_artist_relationship.all()
         ]
         return artists
 
@@ -102,7 +102,7 @@ class FeatureContentPage(Page):
     # Now the authors get pulled in
     def authors(self):
         authors = [
-            n.author for n in self.author_feature_page_relationship.all()
+            n.author for n in self.feature_page_author_relationship.all()
         ]
         return authors
 
@@ -125,8 +125,8 @@ class FeatureContentPage(Page):
             classname="collapsible"
         ),
         StreamFieldPanel('body'),
-        InlinePanel('artist_feature_page_relationship', label="Artists"),
-        InlinePanel('author_feature_page_relationship', label="Authors", help_text='something'),
+        InlinePanel('feature_page_artist_relationship', label="Artists"),
+        InlinePanel('feature_page_author_relationship', label="Authors", help_text='something'),
     ]
 
     @property
