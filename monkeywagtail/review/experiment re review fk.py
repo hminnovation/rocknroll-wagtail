@@ -1,3 +1,6 @@
+# Will give the error 
+# 'ReviewAlbumRelationshipForm' object has no attribute 'formsets'
+
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from wagtail.wagtailcore.models import Page, Orderable
@@ -16,6 +19,7 @@ from monkeywagtail.album.models import Album
 class ReviewRelatedPageRelationship(RelatedPage):
     source_page = ParentalKey('review.ReviewPage', related_name='related_pages')
 
+
 # Artist
 class ReviewArtistRelationship(models.Model):
     page = ParentalKey(
@@ -32,21 +36,13 @@ class ReviewArtistRelationship(models.Model):
         SnippetChooserPanel('artist')
     ]
 
+
 # Album
-class ReviewAlbumRelationship(models.Model):
-    pages = ParentalKey(
+class ReviewAlbumRelationship(Orderable, Album):
+    AlbumRelationship = ParentalKey(
         'ReviewPage',
         related_name='review_album_relationship'
     )
-    album = models.ForeignKey(
-        'album.Album',
-        # app.class
-        related_name="album_review_relationship",
-        help_text='The album being reviewed'
-    )
-    panels = [
-        SnippetChooserPanel('album')
-    ]
 
 
 # Ugh, and the authors
@@ -105,7 +101,7 @@ class ReviewPage(Page):
     # Note below we're calling StreamField from another location. The `StandardBlock` class is a shared
     # asset across the site. It is defined in core > blocks.py. It is just as 'correct' to define
     # the StreamField directly within the model, but this method aids consistency.
-    body = StreamField(StandardBlock(), blank=True, verbose_name="Review body")
+    body = StreamField(StandardBlock(), blank=True)
 
     song_details = StreamField(SongStreamBlock(), verbose_name="Songs", blank=True)
 
@@ -143,14 +139,8 @@ class ReviewPage(Page):
         # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
-        MultiFieldPanel([
-            InlinePanel('review_album_relationship', label="Album", min_num=1, max_num=1),
-            InlinePanel('review_artist_relationship', label="Artist", min_num=1),
-        ], heading="Album details"),
-        InlinePanel('related_pages', label="Related pages", help_text="Other pages from across the site that relate to this review")
-    ]
-
-    review_panels = [
+        InlinePanel('review_artist_relationship', label="Artist", min_num=1),
+        InlinePanel('review_album_relationship', label="album", min_num=1),
         FieldPanel('rating'),
         MultiFieldPanel(
             [
@@ -161,11 +151,19 @@ class ReviewPage(Page):
             classname="collapsible"
         ),
         StreamFieldPanel('body'),
+        InlinePanel('review_author_relationship', label="Author", panels=None, min_num=1),
+        InlinePanel('related_pages', label="Related pages", help_text="Other pages from across the site that relate to this review")
+    ]
+
+    album_details = [
+        ImageChooserPanel('image'),
+        FieldPanel('date_release'),
+        StreamFieldPanel('song_details'),
     ]
 
     edit_handler = TabbedInterface([
-        ObjectList(content_panels, heading="Album details"),
-        ObjectList(review_panels, heading="Review"),
+        ObjectList(content_panels, heading="Content"),
+        ObjectList(album_details, heading="Album details"),
         ObjectList(Page.promote_panels, heading="Promote"),
         ObjectList(Page.settings_panels, heading="Settings", classname="settings"),
     ])

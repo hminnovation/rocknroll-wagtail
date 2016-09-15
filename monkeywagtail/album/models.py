@@ -2,9 +2,11 @@ from django.db import models
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
+from wagtail.wagtailcore.fields import StreamField
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
+from monkeywagtail.core.blocks import SongStreamBlock
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from datetime import datetime
@@ -38,6 +40,7 @@ class SubGenreClassAlbumRelationship(Orderable, models.Model):
 
 
 class AlbumSongs(models.Model):
+    # Candidate for deletion. Removed from album model panel.
     album_song = models.CharField("Song name", max_length=255, blank=True)
     album_song_length = models.TimeField("Song length", blank=True)
 
@@ -51,10 +54,12 @@ class AlbumSongs(models.Model):
 
 
 class AlbumSongsRelationship(Orderable, AlbumSongs):
+    # Candidate for deletion.  Removed from album model panel.
     album_songs = ParentalKey('album', related_name='album_songs_relationship')
 
 
 class AlbumArtistRelationship(Orderable, models.Model):
+    # Candidate for deletion.  Removed from album model panel.
     ArtistRelationship = ParentalKey(
         'Album',
         related_name='album_artist_relationship'
@@ -91,6 +96,8 @@ class Album(ClusterableModel):
 
     release_date = models.DateField()
 
+    song_details = StreamField(SongStreamBlock(), verbose_name="Songs", blank=True)
+
     @property
     def album_songs_in_editor(self):
         album_songs_in_editor = [
@@ -126,19 +133,20 @@ class Album(ClusterableModel):
         FieldPanel('release_date'),
         MultiFieldPanel(
             [
-                InlinePanel('album_songs_relationship', label="Songs for this album", min_num=1),
-            ],
-            heading="Album songs",
-            classname="collapsible"
-        ),
-        MultiFieldPanel(
-            [
                 InlinePanel('genre_album_relationship', label="Genre", panels=None, min_num=1, max_num=1),
                 InlinePanel('subgenre_album_relationship', label="sub-genres", panels=None, min_num=1),
             ],
             heading="Genres",
             classname="collapsible"
         ),
+        StreamFieldPanel('song_details'),
+        # MultiFieldPanel(
+        #     [
+        #         InlinePanel('album_songs_relationship', label="Songs for this album", min_num=1),
+        #     ],
+        #     heading="Album songs",
+        #     classname="collapsible"
+        # ),
     ]
 
     def __str__(self):
