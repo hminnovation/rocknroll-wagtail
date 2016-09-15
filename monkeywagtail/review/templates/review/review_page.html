@@ -14,7 +14,7 @@
 <div class="row">
 <aside class="meta small-12 medium-3 columns">
     Review by <ul class="authors">{% for author in page.authors %}
-        <li><a href="{% url 'authors' %}{{ author.slug}}">{{ author.author_name }}{% if not forloop.last %}, {% endif %}</li>
+        <li><a href="{% url 'authors' %}{{ author.slug}}">{{ author.title }}</a>{% if not forloop.last %}, {% endif %}</li>
     {% endfor %}
     <p>Released {{ page.date_release }}</p>
     <p>{{ self.rating }}</p>
