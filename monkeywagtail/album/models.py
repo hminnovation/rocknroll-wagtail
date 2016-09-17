@@ -16,12 +16,12 @@ class GenreClassAlbumRelationship(Orderable, models.Model):
     page = ParentalKey(
         'Album', related_name='genre_album_relationship'
     )
-    genre = models.ForeignKey(
+    genres = models.ForeignKey(
         'genre.GenreClass',
         related_name="+"
     )
     panels = [
-        SnippetChooserPanel('genre')
+        FieldPanel('genres')
     ]
 
 
@@ -35,31 +35,11 @@ class SubGenreClassAlbumRelationship(Orderable, models.Model):
     )
     panels = [
         # We need this for the inlinepanel on the Feature Content Page to grab hold of
-        SnippetChooserPanel('subgenre')
+        FieldPanel('subgenre')
     ]
-
-
-class AlbumSongs(models.Model):
-    # Candidate for deletion. Removed from album model panel.
-    album_song = models.CharField("Song name", max_length=255, blank=True)
-    album_song_length = models.TimeField("Song length", blank=True)
-
-    panels = [
-        FieldPanel('album_song'),
-        FieldPanel('album_song_length')
-    ]
-
-    class Meta:
-        abstract = True
-
-
-class AlbumSongsRelationship(Orderable, AlbumSongs):
-    # Candidate for deletion.  Removed from album model panel.
-    album_songs = ParentalKey('album', related_name='album_songs_relationship')
 
 
 class AlbumArtistRelationship(Orderable, models.Model):
-    # Candidate for deletion.  Removed from album model panel.
     ArtistRelationship = ParentalKey(
         'Album',
         related_name='album_artist_relationship'
@@ -99,13 +79,6 @@ class Album(ClusterableModel):
     song_details = StreamField(SongStreamBlock(), verbose_name="Songs", blank=True)
 
     @property
-    def album_songs_in_editor(self):
-        album_songs_in_editor = [
-            n.album_song for n in self.album_songs_relationship.all()
-        ]
-        return album_songs_in_editor
-
-    @property
     def album_artist(self):
         album_artist = [
             n.artist_name for n in self.album_artist_relationship.all()
@@ -140,13 +113,6 @@ class Album(ClusterableModel):
             classname="collapsible"
         ),
         StreamFieldPanel('song_details'),
-        # MultiFieldPanel(
-        #     [
-        #         InlinePanel('album_songs_relationship', label="Songs for this album", min_num=1),
-        #     ],
-        #     heading="Album songs",
-        #     classname="collapsible"
-        # ),
     ]
 
     def __str__(self):
@@ -156,12 +122,25 @@ class Album(ClusterableModel):
         context = super(Album, self).get_context(request)
         return context
 
+
     def artist(obj):
         artist = ','.join([str(i) for i in obj.album_artist])
         return artist
 
-    # artist.admin_order_field = 'album_artist_relationship'
-    # artist.admin_order_field = 'album_artist_relationship__artist_name'
+    artist.admin_order_field = 'album_artist_relationship__artist_name'
+
+
+    # def upper_case_name(obj):
+    # return ("%s %s" % (obj.first_name, obj.last_name)).upper()
+    # upper_case_name.short_description = 'Name'
+    # self.signature_set.all()
+    #
+    # We can't iterate over the genre object because we're not returning all items
+    # def genre(obj):
+    #     genre = (obj.genre)
+    #     return genre
+
+    artist.admin_order_field = 'genre_album_relationship__genre'
 
     class Meta:
         ordering = ['album_name']
@@ -199,6 +178,8 @@ class Album(ClusterableModel):
 #        # Add extra variables and return the updated context
 #        return context
 #
+
+# This needs to be deleted. We're using views.py to give the list and detail pages
 class AlbumIndexPage(Page):
     parent_page_types = [
         'home.HomePage'

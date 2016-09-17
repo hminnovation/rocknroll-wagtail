@@ -16,22 +16,6 @@ from monkeywagtail.album.models import Album
 class ReviewRelatedPageRelationship(RelatedPage):
     source_page = ParentalKey('review.ReviewPage', related_name='related_pages')
 
-# Artist
-class ReviewArtistRelationship(models.Model):
-    page = ParentalKey(
-        'ReviewPage',
-        related_name='review_artist_relationship'
-    )
-    artist = models.ForeignKey(
-        'artist.Artist',
-        # app.class
-        related_name="artist_review_relationship",
-        help_text='The artist who made the album being reviewed'
-    )
-    panels = [
-        SnippetChooserPanel('artist')
-    ]
-
 # Album
 class ReviewAlbumRelationship(models.Model):
     pages = ParentalKey(
@@ -107,15 +91,6 @@ class ReviewPage(Page):
     # the StreamField directly within the model, but this method aids consistency.
     body = StreamField(StandardBlock(), blank=True, verbose_name="Review body")
 
-    song_details = StreamField(SongStreamBlock(), verbose_name="Songs", blank=True)
-
-    @property
-    def artists(self):
-        artists = [
-            n.artist for n in self.review_artist_relationship.all()
-        ]
-        return artists
-
     @property
     def albums(self):
         albums = [
@@ -143,10 +118,8 @@ class ReviewPage(Page):
         # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
-        MultiFieldPanel([
-            InlinePanel('review_album_relationship', label="Album", min_num=1, max_num=1),
-            InlinePanel('review_artist_relationship', label="Artist", min_num=1),
-        ], heading="Album details"),
+        InlinePanel('review_album_relationship', label="Album", min_num=1, max_num=1),
+        # InlinePanel('review_artist_relationship', label="Artist", min_num=1),
         InlinePanel('related_pages', label="Related pages", help_text="Other pages from across the site that relate to this review")
     ]
 
@@ -164,7 +137,7 @@ class ReviewPage(Page):
     ]
 
     edit_handler = TabbedInterface([
-        ObjectList(content_panels, heading="Album details"),
+        ObjectList(content_panels, heading="Album details", classname="content"),
         ObjectList(review_panels, heading="Review"),
         ObjectList(Page.promote_panels, heading="Promote"),
         ObjectList(Page.settings_panels, heading="Settings", classname="settings"),

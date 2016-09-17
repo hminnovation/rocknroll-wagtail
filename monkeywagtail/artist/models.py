@@ -13,23 +13,6 @@ from modelcluster.fields import ParentalKey
 from monkeywagtail.genre.models import SubgenreClass
 
 
-# Artist Album relationship
-class ArtistAlbumRelationship(models.Model):
-    AlbumRelationship = ParentalKey(
-        'Artist',
-        related_name='artist_album_relationship'
-    )
-    album = models.ForeignKey(
-        'album.Album',
-        # app.class
-        related_name="+",
-        help_text='The album being artisted'
-    )
-    panels = [
-        SnippetChooserPanel('album')
-    ]
-
-
 @register_snippet
 # A snippet is a way to create non-hierarchy content on Wagtail (http://docs.wagtail.io/en/v1.4.3/topics/snippets.html)
 # Wagtail 1.5 is likely to see these to either be deprecated, or at least used in very different ways
@@ -82,13 +65,6 @@ class Artist(ClusterableModel):
     def url(self):
         return '/artists/' + self.slug
 
-    @property
-    def albums(self):
-        albums = [
-            n.album for n in self.artist_album_relationship.all()
-        ]
-        return albums
-
     panels = [
         # The content panels are displaying the components of content we defined in the StandardPage class above
         # If you add something to the class and want it to appear for the editor you have to define it here too
@@ -97,7 +73,6 @@ class Artist(ClusterableModel):
         # in the `From` statements at the top of the model
         FieldPanel('title'),
         FieldPanel('slug'),
-        InlinePanel('artist_album_relationship', label="Album", panels=None),
         ImageChooserPanel('profile_image'),
         FieldPanel('biography'),
         FieldPanel('date_formed'),

@@ -38,7 +38,7 @@ INSTALLED_APPS = [
 
     'wagtailfontawesome',
     'wagtailerrorpages',
-    'wagtailbettereditor',
+    # 'wagtailbettereditor',
 
     'wagtail.contrib.wagtailsearchpromotions',
     'wagtail.contrib.modeladmin',

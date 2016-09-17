@@ -19,6 +19,10 @@ class SubgenreClass(ClusterableModel):
     )
     # We need to use a SlugField because we need the slug to be unique
 
+    @property
+    def subgenre_url(self):
+        return self.slug
+
     panels = [
         MultiFieldPanel([
             FieldPanel('title'),
@@ -27,20 +31,14 @@ class SubgenreClass(ClusterableModel):
         ], heading="Title", classname="collapsible")
     ]
 
-    @property
-    def subgenre_url(self):
-        return self.slug
-# We're going to need to define the subgenres title to call w/in modeladmin but I think
-# that needs to happen within the Genre model
-#
-# def __str__(self):              # __unicode__ on Python 2
-#     # We're returning the string that populates the snippets screen. Obvs whatever field you choose
-#     # will come through as plain text
-#     return self.subgenre
+    # Even though there's no admin screen for subgenres we still need to return the title
+    # for it to populate the inlinepanel on the album screen
+    def __str__(self):
+        return self.title
 
-#    class Meta:
-#        verbose_name = "Subgenre"
-#        verbose_name_plural = "Subgenres"
+        class Meta:
+            verbose_name = "Subgenre"
+            verbose_name_plural = "Subgenres"
 
 
 # This, calls _all_ of the fields from the model above and builds a one way relationship
