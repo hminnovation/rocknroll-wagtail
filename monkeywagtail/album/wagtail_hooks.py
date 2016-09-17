@@ -10,10 +10,10 @@ class AlbumAdmin(ModelAdmin):
     menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
     add_to_settings_menu = False  # True will add your model to the Settings sub-menu
 
-    list_display = ('artist', 'album_name', 'release_date',)
+    list_display = ('artist', 'album_name', 'release_date', 'genre')
     list_filter = ('album_artist_relationship__artist_name', 
-    	'genre_album_relationship__genres', 'release_date',)
-    search_fields = ('artist', 'album_name', 'release_date',)
+    	'album_genre_relationship__genres', 'release_date',)
+    search_fields = ('album_artist_relationship__artist_name', 'album_name', 'release_date',)
 
 
 modeladmin_register(AlbumAdmin)

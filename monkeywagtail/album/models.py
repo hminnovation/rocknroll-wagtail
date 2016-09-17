@@ -14,7 +14,7 @@ from datetime import datetime
 
 class GenreClassAlbumRelationship(Orderable, models.Model):
     page = ParentalKey(
-        'Album', related_name='genre_album_relationship'
+        'Album', related_name='album_genre_relationship'
     )
     genres = models.ForeignKey(
         'genre.GenreClass',
@@ -27,7 +27,7 @@ class GenreClassAlbumRelationship(Orderable, models.Model):
 
 class SubGenreClassAlbumRelationship(Orderable, models.Model):
     page = ParentalKey(
-        'Album', related_name='subgenre_album_relationship'
+        'Album', related_name='album_subgenre_relationship'
     )
     subgenre = models.ForeignKey(
         'genre.SubgenreClass',
@@ -88,14 +88,14 @@ class Album(ClusterableModel):
     @property
     def genre(self):
         genres = [
-            n.genre for n in self.genre_album_relationship.all()
+            n.genre for n in self.album_genre_relationship.all()
         ]
         return genres
 
     @property
     def subgenres(self):
         subgenres = [
-            n.subgenre for n in self.subgenre_album_relationship.all()
+            n.subgenre for n in self.album_subgenre_relationship.all()
         ]
         return subgenres
 
@@ -106,8 +106,8 @@ class Album(ClusterableModel):
         FieldPanel('release_date'),
         MultiFieldPanel(
             [
-                InlinePanel('genre_album_relationship', label="Genre", panels=None, min_num=1, max_num=1),
-                InlinePanel('subgenre_album_relationship', label="sub-genres", panels=None, min_num=1),
+                InlinePanel('album_genre_relationship', label="Genre", panels=None, min_num=1, max_num=1),
+                InlinePanel('album_subgenre_relationship', label="sub-genres", panels=None, min_num=1),
             ],
             heading="Genres",
             classname="collapsible"
@@ -129,18 +129,18 @@ class Album(ClusterableModel):
 
     artist.admin_order_field = 'album_artist_relationship__artist_name'
 
+    def genre(obj):
+        genre = ','.join([
+                    str(n.genres) for n in obj.album_genre_relationship.all()
+                    # We need to call `genres` because it's what we call the fk
+                    # This also just feels like a very odd duplication of the
+                    # callable we're making on line 89.
+                    # We need to call this BOTH for the list_display and list_filter
+                    # to work (and I don't know why *_o)
+            ])
+        return genre
 
-    # def upper_case_name(obj):
-    # return ("%s %s" % (obj.first_name, obj.last_name)).upper()
-    # upper_case_name.short_description = 'Name'
-    # self.signature_set.all()
-    #
-    # We can't iterate over the genre object because we're not returning all items
-    # def genre(obj):
-    #     genre = (obj.genre)
-    #     return genre
-
-    artist.admin_order_field = 'genre_album_relationship__genre'
+        artist.admin_order_field = 'album_genre_relationship__genre'
 
     class Meta:
         ordering = ['album_name']
