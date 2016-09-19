@@ -3,7 +3,7 @@ Rock n roll wagtail
 
 ![No Wagtail playing](https://github.com/heymonkeyriot/rocknroll-wagtail-cookiecutter/blob/master/wagtail%20rock%20n%20roll.jpg)
 
-**Status**: Currently very much a work in progress. Models are working, but there aren't any templates!
+Status: Work in progress
 
 ### A Wagtail project for cut 'n' paste pulling apart
 
@@ -48,6 +48,12 @@ djrun
 ```
 
 You should now be able to visit http://localhost:1234 and see the site
+
+Changelog
+----------
+**06/07/16** Currently very much a work in progress. Models are working, but there aren't any templates!
+
+**19/09/16** Models have all been re-written based on better understanding them. Starting on templating, with aim to finish end of September.
 
 TODO 
 ----------------------------
