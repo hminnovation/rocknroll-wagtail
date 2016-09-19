@@ -8,8 +8,9 @@ libsass==0.8.3
 Pillow==3.0.0
 wagtailfontawesome==1.0.5 #This allows us to use FontAwesome icons for the admin area e.g. with StreamField
 wagtailerrorpages>=1.1.0 #This gives us a better 404
+# wagtailblocks_cards>=2.0.1 #We use this for the menus
 django-mathfilters==0.4.0 #We need this to do maths to get the star ratings
-# wagtailbettereditor==1.0.2
+wagtailbettereditor==1.0.2
 
 # Production dependencies
 dj-database-url==0.3.0

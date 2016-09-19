@@ -1,110 +1,127 @@
-from wagtail.wagtailcore import blocks
-from wagtail.wagtailimages.blocks import ImageChooserBlock
-# from wagtail.wagtaildocs.blocks import DocumentChooserBlock
-# from wagtail.wagtailembeds.blocks import EmbedBlock
+from django.db import models
 from django.utils.encoding import force_text
 from django.utils.html import format_html_join, mark_safe
-# from wagtailblocks_cards.blocks import CardsBlock
+from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.wagtaildocs.blocks import DocumentChooserBlock
+# from wagtail.wagtailembeds.blocks import EmbedBlock
+from wagtail.wagtailcore.models import Page
+from wagtailblocks_cards.blocks import CardsBlock
+from wagtail.wagtailcore.blocks import (
+    StructBlock,
+    TextBlock,
+    StreamBlock,
+    RichTextBlock,
+    CharBlock,
+    TimeBlock,
+    URLBlock,
+    ChoiceBlock,
+    ListBlock,
+    PageChooserBlock
+)
+# Note, you could import _all_ the blocks by using `from wagtail.wagtailcore 
+# import blocks`. But it's a bad idea to import everything.
 
 
-# class CardBlock(blocks.StructBlock):
-# @TODO decide if this actually needs to be here.
-#    image = ImageChooserBlock(required=False)
-#    title = blocks.CharBlock()
-#    body = blocks.TextBlock()
-#    cta_page = blocks.PageChooserBlock(required=False)
-
-
-class SongStreamBlock(blocks.StreamBlock):
+class SongStreamBlock(StreamBlock):
     # Title name. Time.
-    SongBlock = blocks.StructBlock([
-        ('album_song', blocks.CharBlock(blank=True, required=False, label='e.g. Waiting Room')),
-        ('album_song_length', blocks.TimeBlock(blank=True, required=False)),
+    SongBlock = StructBlock([
+        ('album_song', CharBlock(blank=True, required=False, label='e.g. Waiting Room')),
+        ('album_song_length', TimeBlock(blank=True, required=False)),
     ], title="Song", icon="fa-music", template="blocks/songstreamblock.html")
 
 
-class StreamBlock(blocks.StreamBlock):
-    paragraph = blocks.RichTextBlock(
+class SimplifiedBlock(StreamBlock):
+    paragraph = RichTextBlock(
         icon="pilcrow",
         template="blocks/paragraph.html"
     )
-    header = blocks.CharBlock(
+    header = CharBlock(
         classname="title",
         icon="fa-header",
         template="blocks/h3.html"
     )
-    image = blocks.StructBlock([
+    image = StructBlock([
         ('image', ImageChooserBlock()),
-        ('caption', blocks.CharBlock(blank=True, required=False)),
-        ('style', blocks.ChoiceBlock(choices=[
+        ('caption', CharBlock(blank=True, required=False)),
+        ('style', ChoiceBlock(choices=[
             ('', 'Select an image size'),
             ('full', 'Full-width'),
             ('half', 'Half-width')
         ], required=False))
     ], icon="image", template="blocks/image.html")
-    blockquote = blocks.StructBlock([
-        ('text', blocks.TextBlock()),
-        ('attribute_name', blocks.CharBlock(blank=True, required=False, label='e.g. Guy Picciotto')),
-        ('attribute_group', blocks.CharBlock(blank=True, required=False, label='e.g. Fugazi')),
+    blockquote = StructBlock([
+        ('text', TextBlock()),
+        ('attribute_name', CharBlock(blank=True, required=False, label='e.g. Guy Picciotto')),
+        ('attribute_group', CharBlock(blank=True, required=False, label='e.g. Fugazi')),
     ], icon="openquote", template="blocks/blockquote.html")
 
 
-class StandardBlock(blocks.StreamBlock):
+class StandardBlock(StreamBlock):
     # This class was originally writted by Alex Gleason (@alexgleason)
-    paragraph = blocks.RichTextBlock(
+    paragraph = RichTextBlock(
         icon="pilcrow",
         template="blocks/paragraph.html"
     )
-    h1 = blocks.CharBlock(
+    h1 = CharBlock(
         classname="title",
         icon="fa-header",
         template="blocks/h1.html"
     )
-    h2 = blocks.CharBlock(
+    h2 = CharBlock(
         classname="title",
         icon="fa-header",
         template="blocks/h2.html"
     )
-    h3 = blocks.CharBlock(
+    h3 = CharBlock(
         classname="title",
         icon="fa-header",
         template="blocks/h3.html"
     )
-    h4 = blocks.CharBlock(
+    h4 = CharBlock(
         classname="title",
         icon="fa-header",
         template="blocks/h4.html"
     )
-    image = blocks.StructBlock([
+    image = StructBlock([
         ('image', ImageChooserBlock()),
-        ('caption', blocks.CharBlock(blank=True, required=False)),
-        ('style', blocks.ChoiceBlock(choices=[
+        ('caption', CharBlock(blank=True, required=False)),
+        ('style', ChoiceBlock(choices=[
             ('', 'Select an image size'),
             ('full', 'Full-width'),
             ('half', 'Half-width')
         ], required=False))
     ], icon="image", template="blocks/image.html")
-    blockquote = blocks.StructBlock([
-        ('text', blocks.TextBlock()),
-        ('attribute_name', blocks.CharBlock(blank=True, required=False, label='e.g. Guy Picciotto')),
-        ('attribute_group', blocks.CharBlock(blank=True, required=False, label='e.g. Fugazi')),
+    blockquote = StructBlock([
+        ('text', TextBlock()),
+        ('attribute_name', CharBlock(blank=True, required=False, 
+            label='e.g. Guy Picciotto')),
+        ('attribute_group', CharBlock(blank=True, required=False, 
+            label='e.g. Fugazi')),
     ], icon="openquote", template="blocks/blockquote.html")
 
-#    def render_basic(self, value):
-#        headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
 
-#        blocks = []
-#        for i, child in enumerate(value):
-#            childtype = child.block_type
-#            childtext = force_text(child)
-#            try:
-#                nextchildtype = value[i+1].block_type
-#                if childtype in headings and nextchildtype in bgs:
-#                    childtext = '<div class="match-bg">{0}</div>'.format(
-#                        force_text(child))
-#                    childtext = mark_safe(childtext)
-#            except IndexError:
-#                pass
-#            blocks.append((childtext, childtype))
+class ChildMenuBlock(StructBlock):
+    link = StructBlock([
+        ('link_text', CharBlock()),
+        ('internal_link', PageChooserBlock(blank=True, required=False, 
+            icon='fa-link')),
+        ('external_link', URLBlock(blank=True, required=False, icon='fa-link'))
+    ], icon="link")
+# The above will give a StructBlock of content (e.g. the same fields will always
+# be accessible to the user) to create child menu items
 
-#        return format_html_join('\n', '{0}', blocks)
+class ParentMenuBlock(StructBlock):
+    parent_link_text = CharBlock()
+    parent_internal_link = PageChooserBlock(blank=True, required=False, 
+           icon='fa-link')
+    parent_external_link = URLBlock(blank=True, required=False, icon='fa-link')
+    child_link = CardsBlock(ChildMenuBlock())
+# The parent menu block is very similar to the child except that we have includ-
+# ed the `ChildMenuBlock` within a `CardsBlock` wrapper. This uses the 
+# wagtailblocks_cards module to style them as a card in the UI to make it slight-
+# ly easier to visual lots of child menu items at once.
+
+
+class MenuBlock(StreamBlock):
+    menu_item = ParentMenuBlock(icon='fa-link')
+# We then wrap both the parent and child menu blocks within a StreamField block

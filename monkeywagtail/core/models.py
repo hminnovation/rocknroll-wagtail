@@ -2,11 +2,12 @@ from django.db import models
 from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Orderable
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
+from monkeywagtail.core.blocks import ChildMenuBlock, ParentMenuBlock, MenuBlock
 
 
 # We're cheating here. Slightly. Wagtail comes with the built-in functionality of `show-in-menu`
@@ -87,6 +88,15 @@ Menu.panels = [
     InlinePanel('menu_items', label="Menu Items", min_num=1, help_text='Set the menu items for the current menu.')
 ]
 
+
+class Menus(ClusterableModel):
+    title = models.CharField(max_length=255, null=False, blank=False, verbose_name='Menu title')
+    menu = StreamField(MenuBlock(), verbose_name="Menus", blank=True)
+
+    panels = [
+        FieldPanel('title'),
+        StreamFieldPanel('menu'),
+    ]
 
 # Related pages
 class RelatedPage(Orderable, models.Model):
