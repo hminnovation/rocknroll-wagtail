@@ -18,15 +18,15 @@ from wagtail.wagtailcore.blocks import (
     ListBlock,
     PageChooserBlock
 )
-# Note, you could import _all_ the blocks by using `from wagtail.wagtailcore 
+# Note, you could import _all_ the blocks by using `from wagtail.wagtailcore
 # import blocks`. But it's a bad idea to import everything.
 
 
 class SongStreamBlock(StreamBlock):
     # Title name. Time.
     SongBlock = StructBlock([
-        ('album_song', CharBlock(blank=True, required=False, 
-            label='e.g. Waiting Room')),
+        ('album_song', CharBlock(
+            blank=True, required=False, label='e.g. Waiting Room')),
         ('album_song_length', TimeBlock(blank=True, required=False)),
     ], title="Song", icon="fa-music", template="blocks/songstreamblock.html")
 
@@ -94,20 +94,25 @@ class StandardBlock(StreamBlock):
     ], icon="image", template="blocks/image.html")
     blockquote = StructBlock([
         ('text', TextBlock()),
-        ('attribute_name', CharBlock(blank=True, required=False, 
-            label='e.g. Guy Picciotto')),
-        ('attribute_group', CharBlock(blank=True, required=False, 
-            label='e.g. Fugazi')),
+        ('attribute_name', CharBlock(
+            blank=True, required=False, label='e.g. Guy Picciotto')),
+        ('attribute_group', CharBlock(
+            blank=True, required=False, label='e.g. Fugazi')),
     ], icon="openquote", template="blocks/blockquote.html")
 
 
 class ChildMenuBlock(StructBlock):
-    link = StructBlock([
-        ('link_text', CharBlock()),
-        ('internal_link', PageChooserBlock(blank=True, required=False, 
-            icon='fa-link')),
-        ('external_link', URLBlock(blank=True, required=False, icon='fa-link'))
-    ], icon="link")
+    link_text = CharBlock()
+    internal_link = PageChooserBlock(
+        blank=True, required=False, icon='fa-link')
+    external_link = URLBlock(blank=True, required=False, icon='fa-link')
+    # Below: old StreamField version. @TODO delete.
+    # link = StructBlock([
+    #     ('link_text', CharBlock()),
+    #     ('internal_link', PageChooserBlock(
+    #         blank=True, required=False, icon='fa-link')),
+    #     ('external_link', URLBlock(blank=True, required=False, icon='fa-link'))
+    # ], icon="link")
 
     class Meta:
         template = 'blocks/menuitem_child.html'
@@ -115,10 +120,11 @@ class ChildMenuBlock(StructBlock):
 # The above will give a StructBlock of content (e.g. the same fields will always
 # be accessible to the user) to create child menu items
 
+
 class ParentMenuBlock(StructBlock):
     parent_link_text = CharBlock()
-    parent_internal_link = PageChooserBlock(blank=True, required=False, 
-           icon='fa-link')
+    parent_internal_link = PageChooserBlock(
+        blank=True, required=False, icon='fa-link')
     parent_external_link = URLBlock(blank=True, required=False, icon='fa-link')
     child_link = CardsBlock(ChildMenuBlock())
 
@@ -127,7 +133,7 @@ class ParentMenuBlock(StructBlock):
         help_text = 'abc'
 
 # The parent menu block is very similar to the child except that we have includ-
-# ed the `ChildMenuBlock` within a `CardsBlock` wrapper. This uses the 
+# ed the `ChildMenuBlock` within a `CardsBlock` wrapper. This uses the
 # wagtailblocks_cards module to style them as a card in the UI to make it slight-
 # ly easier to visual lots of child menu items at once.
 
