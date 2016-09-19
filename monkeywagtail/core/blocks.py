@@ -105,7 +105,11 @@ class ChildMenuBlock(StructBlock):
     link_text = CharBlock()
     internal_link = PageChooserBlock(
         blank=True, required=False, icon='fa-link')
-    external_link = URLBlock(blank=True, required=False, icon='fa-link')
+    external_link = CharBlock(blank=True, required=False, icon='fa-link')
+    # Above: Note we don't use a URLBlock because we need to use arbitrary
+    # strings for internal links (e.g. /artists). This is probably a terrible
+    # idea and there's likely a better solution, but this works...
+    #
     # Below: old StreamField version. @TODO delete.
     # link = StructBlock([
     #     ('link_text', CharBlock()),
@@ -125,7 +129,7 @@ class ParentMenuBlock(StructBlock):
     parent_link_text = CharBlock()
     parent_internal_link = PageChooserBlock(
         blank=True, required=False, icon='fa-link')
-    parent_external_link = URLBlock(blank=True, required=False, icon='fa-link')
+    parent_external_link = CharBlock(blank=True, required=False, icon='fa-link')
     child_link = CardsBlock(ChildMenuBlock())
 
     class Meta:
