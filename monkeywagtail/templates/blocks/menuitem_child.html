@@ -1,0 +1,13 @@
+{% load wagtailimages_tags %}
+
+  <ul>
+      <li>
+      {% if self.internal_link %}
+      	<a href="{{ self.internal_link}}">
+      	{% elif %}
+      	<a href="{{ self.external_link}}">
+      	{% else %}
+      {% endif %}
+      {{ self.link_text }}
+      </a></li>
+  </ul>

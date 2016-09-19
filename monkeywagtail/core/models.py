@@ -35,7 +35,7 @@ from monkeywagtail.core.blocks import ChildMenuBlock, ParentMenuBlock, MenuBlock
 # simple-orderable-menus-wagtail/
 
 
-class Menus(ClusterableModel):
+class MainMenu(ClusterableModel):
     title = models.CharField(max_length=255, null=False, blank=False, 
         verbose_name='Menu title')
     menu = StreamField(MenuBlock(), verbose_name="Menus", blank=True)
@@ -49,8 +49,28 @@ class Menus(ClusterableModel):
         return self.title
 
     class Meta:
-        verbose_name = "Navigation menu"
+        verbose_name = "Main navigation"
+        verbose_name_plural = "Main navigation"
 
+class FooterMenu(ClusterableModel):
+    title = models.CharField(max_length=255, null=False, blank=False, 
+        verbose_name='Menu title')
+    menu = StreamField(MenuBlock(), verbose_name="Menus", blank=True)
+
+    panels = [
+        FieldPanel('title'),
+        StreamFieldPanel('menu'),
+    ]
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Footer menu"
+
+# @TODO work out if there's a way to return context using a title name rather
+# than class name e.g. 'primarynav': {random_title}.objects.order_by('order'),
+# that way we could just have a single menu class
 
 # Related pages
 class RelatedPage(Orderable, models.Model):

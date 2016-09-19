@@ -1,6 +1,6 @@
 from django import template
 from wagtail.wagtailcore.models import Page
-from monkeywagtail.core.models import Menu, MenuItems
+from monkeywagtail.core.models import MainMenu
 
 register = template.Library()
 
@@ -96,5 +96,14 @@ def standard_index_listing(context, calling_page):
     return {
         'pages': pages,
         # required by the pageurl tag that we want to use within this template
+        'request': context['request'],
+    }
+
+# Main menu model
+# @TODO find docs re: .inclusion_tag
+@register.inclusion_tag('tags/mainmenu.html', takes_context=True)
+def mainmenu(context):
+    return {
+        'mainmenu': MainMenu.objects.all(),
         'request': context['request'],
     }

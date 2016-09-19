@@ -108,6 +108,10 @@ class ChildMenuBlock(StructBlock):
             icon='fa-link')),
         ('external_link', URLBlock(blank=True, required=False, icon='fa-link'))
     ], icon="link")
+
+    class Meta:
+        template = 'blocks/menuitem_child.html'
+        help_text = 'abc'
 # The above will give a StructBlock of content (e.g. the same fields will always
 # be accessible to the user) to create child menu items
 
@@ -117,6 +121,11 @@ class ParentMenuBlock(StructBlock):
            icon='fa-link')
     parent_external_link = URLBlock(blank=True, required=False, icon='fa-link')
     child_link = CardsBlock(ChildMenuBlock())
+
+    class Meta:
+        template = 'blocks/menuitem_parent.html'
+        help_text = 'abc'
+
 # The parent menu block is very similar to the child except that we have includ-
 # ed the `ChildMenuBlock` within a `CardsBlock` wrapper. This uses the 
 # wagtailblocks_cards module to style them as a card in the UI to make it slight-
