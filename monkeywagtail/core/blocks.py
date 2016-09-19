@@ -25,7 +25,8 @@ from wagtail.wagtailcore.blocks import (
 class SongStreamBlock(StreamBlock):
     # Title name. Time.
     SongBlock = StructBlock([
-        ('album_song', CharBlock(blank=True, required=False, label='e.g. Waiting Room')),
+        ('album_song', CharBlock(blank=True, required=False, 
+            label='e.g. Waiting Room')),
         ('album_song_length', TimeBlock(blank=True, required=False)),
     ], title="Song", icon="fa-music", template="blocks/songstreamblock.html")
 
