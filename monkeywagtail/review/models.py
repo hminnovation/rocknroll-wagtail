@@ -7,7 +7,7 @@ from wagtail.wagtailsearch import index
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel, TabbedInterface, ObjectList, MultiFieldPanel
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from modelcluster.fields import ParentalKey
-from monkeywagtail.core.blocks import StandardBlock, SongStreamBlock
+from monkeywagtail.core.blocks import StandardBlock, SongStreamBlock, SimplifiedBlock
 from monkeywagtail.core.models import RelatedPage
 from monkeywagtail.album.models import Album
 
@@ -89,7 +89,7 @@ class ReviewPage(Page):
     # Note below we're calling StreamField from another location. The `StandardBlock` class is a shared
     # asset across the site. It is defined in core > blocks.py. It is just as 'correct' to define
     # the StreamField directly within the model, but this method aids consistency.
-    body = StreamField(StandardBlock(), blank=True, verbose_name="Review body")
+    body = StreamField(SimplifiedBlock(), blank=True, verbose_name="Review body")
 
     @property
     def albums(self):

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     'wagtailfontawesome',
     'wagtailerrorpages',
+    'wagtailblocks_cards',
     # 'wagtailbettereditor',
 
     'wagtail.contrib.wagtailsearchpromotions',

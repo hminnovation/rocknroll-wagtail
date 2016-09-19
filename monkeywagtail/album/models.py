@@ -6,7 +6,7 @@ from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
-from monkeywagtail.core.blocks import SongStreamBlock
+from monkeywagtail.core.blocks import SongStreamBlock, SimplifiedBlock
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from datetime import datetime
@@ -132,9 +132,10 @@ class Album(ClusterableModel):
     def genre(obj):
         genre = ','.join([
                     str(n.genres) for n in obj.album_genre_relationship.all()
-                    # We need to call `genres` because it's what we call the fk
+                    # We need to call `genres` because it's what we called the fk
                     # This also just feels like a very odd duplication of the
                     # callable we're making on line 89.
+                    #
                     # We need to call this BOTH for the list_display and list_filter
                     # to work (and I don't know why *_o)
             ])
