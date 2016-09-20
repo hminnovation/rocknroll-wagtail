@@ -1,20 +1,21 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import StreamField
-from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel, TabbedInterface, ObjectList, MultiFieldPanel
+from wagtail.wagtailadmin.edit_handlers import (
+    FieldPanel, StreamFieldPanel, InlinePanel, TabbedInterface, ObjectList,
+    MultiFieldPanel)
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from modelcluster.fields import ParentalKey
-from monkeywagtail.core.blocks import StandardBlock, SongStreamBlock, SimplifiedBlock
+from monkeywagtail.core.blocks import SimplifiedBlock
 from monkeywagtail.core.models import RelatedPage
-from monkeywagtail.album.models import Album
 
 
 # Related page relationship
 class ReviewRelatedPageRelationship(RelatedPage):
     source_page = ParentalKey('review.ReviewPage', related_name='related_pages')
+
 
 # Album
 class ReviewAlbumRelationship(models.Model):
@@ -33,7 +34,7 @@ class ReviewAlbumRelationship(models.Model):
     ]
 
 
-# Ugh, and the authors
+# And the authors
 class ReviewAuthorRelationship(models.Model):
     page = ParentalKey(
         'ReviewPage',
@@ -74,42 +75,39 @@ class ReviewPage(Page):
         help_text='Image to be used where this review is listed'
     )
 
-    # Note the integerfield can't just have a max_value and min_value assigned, but needs to import the
-    # validators from django. It frankly feels silly to do that, but that's what you have to do!
-    rating = models.IntegerField("Album rating", validators=[MinValueValidator(0), MaxValueValidator(5)], help_text="Your rating needs to be between 0 - 5")
+    # Note the integerfield can't just have a max_value and min_value assigned,
+    # but needs to import the validators from django. It frankly feels silly to
+    # do that, but that's what you have to do!
+    rating = models.IntegerField("Album rating", validators=[
+        MinValueValidator(0), MaxValueValidator(5)],
+        help_text="Your rating needs to be between 0 - 5")
 
-    # Note below that standard blocks use 'help_text' for supplementary text rather than 'label' as with StreamField
-    introduction = models.TextField(blank=True, help_text="Text to show at the review page")
+    # Note below that standard blocks use 'help_text' for supplementary text
+    # rather than 'label' as with StreamField
+    introduction = models.TextField(
+        blank=True, help_text="Text to show at the review page")
 
     # Using CharField for little reason other than showing a different input type
-    # Wagtail allows you to use any field type Django follows, so you can use anything from
+    # Wagtail allows you to use any field type Django follows, so you can use
+    # anything from
     # https://docs.djangoproject.com/en/1.9/ref/models/fields/#field-types
-    listing_introduction = models.CharField(max_length=250, blank=True, help_text="Text shown on review, and other, listing pages, if empty will show 'Introduction' field content")
+    listing_introduction = models.CharField(
+        max_length=250, blank=True,
+        help_text="Text shown on review, and other, listing pages, if empty will show 'Introduction' field content"
+        )
 
-    # Note below we're calling StreamField from another location. The `StandardBlock` class is a shared
-    # asset across the site. It is defined in core > blocks.py. It is just as 'correct' to define
-    # the StreamField directly within the model, but this method aids consistency.
+    # Note below we're calling StreamField from another location. The
+    # `SimplifiedBlock` class is a shared asset across the site. It is defined
+    # in core > blocks.py. It is just as 'correct' to define the StreamField
+    # directly within the model, but this method aids consistency.
     body = StreamField(SimplifiedBlock(), blank=True, verbose_name="Review body")
 
-    @property
-    def albums(self):
-        albums = [
-            n.album for n in self.review_album_relationship.all()
-        ]
-        return albums
-
-    @property
-    def authors(self):
-        authors = [
-            n.author for n in self.review_author_relationship.all()
-        ]
-        return authors
-
     def get_context(self, request):
-        # This is display view - I think - though I'm less show about what it's *actually* doing
+        # @TODO. Work out if we actually do need/want to return this?
+        # We're not allowing reviews to be nested under reviews so feels
+        # unnecessary
         context = super(ReviewPage, self).get_context(request)
         context['children'] = Page.objects.live().in_menu().child_of(self)
-        # context['authors'] = self.research_groups_list
         return context
 
     content_panels = Page.content_panels + [
@@ -118,9 +116,11 @@ class ReviewPage(Page):
         # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
         # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
         # in the `From` statements at the top of the model
-        InlinePanel('review_album_relationship', label="Album", min_num=1, max_num=1),
-        # InlinePanel('review_artist_relationship', label="Artist", min_num=1),
-        InlinePanel('related_pages', label="Related pages", help_text="Other pages from across the site that relate to this review")
+        InlinePanel('review_album_relationship', label="Album", min_num=1,
+                    max_num=1),
+        InlinePanel(
+            'related_pages', label="Related pages",
+            help_text="Other pages from across the site that relate to this review")
     ]
 
     review_panels = [
@@ -134,6 +134,7 @@ class ReviewPage(Page):
             classname="collapsible"
         ),
         StreamFieldPanel('body'),
+        InlinePanel('review_author_relationship', label="Author", min_num=1),
     ]
 
     edit_handler = TabbedInterface([
@@ -151,8 +152,12 @@ class ReviewPage(Page):
 
 
 class ReviewIndexPage(Page):
-    listing_introduction = models.TextField(help_text='Text to describe this section. Will appear on other pages that reference this feature section', blank=True)
-    introduction = models.TextField(help_text='Text to describe this section. Will appear on the page', blank=True)
+    listing_introduction = models.TextField(
+        help_text='Text to describe this section. Will appear on other pages that reference this feature section',
+        blank=True)
+    introduction = models.TextField(
+        help_text='Text to describe this section. Will appear on the page',
+        blank=True)
 
     search_fields = Page.search_fields + [
         index.SearchField('listing_introduction'),

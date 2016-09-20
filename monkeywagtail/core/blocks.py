@@ -1,10 +1,5 @@
-from django.db import models
-from django.utils.encoding import force_text
-from django.utils.html import format_html_join, mark_safe
 from wagtail.wagtailimages.blocks import ImageChooserBlock
-from wagtail.wagtaildocs.blocks import DocumentChooserBlock
-# from wagtail.wagtailembeds.blocks import EmbedBlock
-from wagtail.wagtailcore.models import Page
+from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtailblocks_cards.blocks import CardsBlock
 from wagtail.wagtailcore.blocks import (
     StructBlock,
@@ -13,9 +8,7 @@ from wagtail.wagtailcore.blocks import (
     RichTextBlock,
     CharBlock,
     TimeBlock,
-    URLBlock,
     ChoiceBlock,
-    ListBlock,
     PageChooserBlock
 )
 # Note, you could import _all_ the blocks by using `from wagtail.wagtailcore
@@ -52,9 +45,14 @@ class SimplifiedBlock(StreamBlock):
     ], icon="image", template="blocks/image.html")
     blockquote = StructBlock([
         ('text', TextBlock()),
-        ('attribute_name', CharBlock(blank=True, required=False, label='e.g. Guy Picciotto')),
-        ('attribute_group', CharBlock(blank=True, required=False, label='e.g. Fugazi')),
+        ('attribute_name', CharBlock(
+            blank=True, required=False, label='e.g. Guy Picciotto')),
+        ('attribute_group', CharBlock(
+            blank=True, required=False, label='e.g. Fugazi')),
     ], icon="openquote", template="blocks/blockquote.html")
+    embed = EmbedBlock(
+        help_text='Insert an embed URL e.g https://www.youtube.com/embed/SGJFWirQ3ks',
+        template="blocks/embed.html")
 
 
 class StandardBlock(StreamBlock):
@@ -109,18 +107,9 @@ class ChildMenuBlock(StructBlock):
     # Above: Note we don't use a URLBlock because we need to use arbitrary
     # strings for internal links (e.g. /artists). This is probably a terrible
     # idea and there's likely a better solution, but this works...
-    #
-    # Below: old StreamField version. @TODO delete.
-    # link = StructBlock([
-    #     ('link_text', CharBlock()),
-    #     ('internal_link', PageChooserBlock(
-    #         blank=True, required=False, icon='fa-link')),
-    #     ('external_link', URLBlock(blank=True, required=False, icon='fa-link'))
-    # ], icon="link")
 
     class Meta:
         template = 'blocks/menuitem_child.html'
-        help_text = 'abc'
 # The above will give a StructBlock of content (e.g. the same fields will always
 # be accessible to the user) to create child menu items
 
@@ -134,7 +123,7 @@ class ParentMenuBlock(StructBlock):
 
     class Meta:
         template = 'blocks/menuitem_parent.html'
-        help_text = 'abc'
+        # help_text = 'abc' (just to note that you can have help_text here)
 
 # The parent menu block is very similar to the child except that we have includ-
 # ed the `ChildMenuBlock` within a `CardsBlock` wrapper. This uses the

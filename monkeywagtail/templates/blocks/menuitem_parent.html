@@ -20,3 +20,13 @@
       {% endif %}
   </ul>
   {% endif %}
+
+{% comment %}
+  This template was called by core/blocks.py and is populating base.html thanks
+  to the context being called at core/templatetags/navigation_tags.py
+
+  The child items are are a structblock within a structblock. Since they're a
+  group of objects we need to populate them with a loop tag.
+
+  See `menuitem_child.html` for notes on the conditionals.
+{% endcomment %}

@@ -12,3 +12,20 @@
         {{ self.link_text }}
       </a></li>
     {% endif %}
+
+{% comment %}
+  This template was called by core/blocks.py and is populating base.html thanks
+  to the context being called at core/templatetags/navigation_tags.py
+  
+  On line 3 we check to see if there's either an internal or external link. If
+  none then we don't show a child item.
+
+  On line 5 we see if there's an internal link, if there is this will show even
+  if there's an external link. If there's no internal link the template looks
+  for an external one.
+
+  Once we've looped through all of those we get the `self.link_text`
+
+  If of interest there are docs at
+  https://docs.djangoproject.com/en/1.10/ref/templates/builtins/#if
+{% endcomment %}

@@ -34,12 +34,10 @@ INSTALLED_APPS = [
     'monkeywagtail.genre',
     'monkeywagtail.author',
     'monkeywagtail.feature_content_page',
-    # 'monkeywagtail.wagtailbettereditor.wagtailbettereditor',
 
     'wagtailfontawesome',
     'wagtailerrorpages',
     'wagtailblocks_cards',
-    # 'wagtailbettereditor',
 
     'wagtail.contrib.wagtailsearchpromotions',
     'wagtail.contrib.modeladmin',

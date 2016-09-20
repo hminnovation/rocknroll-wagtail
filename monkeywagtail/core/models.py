@@ -1,13 +1,10 @@
 from django.db import models
-from wagtail.wagtailcore.fields import StreamField, RichTextField
+from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore.models import Orderable
-from wagtail.wagtailcore import blocks
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
-from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
-from wagtail.wagtailsnippets.models import register_snippet
-from modelcluster.fields import ParentalKey
+from wagtail.wagtailadmin.edit_handlers import (
+    FieldPanel, PageChooserPanel, StreamFieldPanel)
 from modelcluster.models import ClusterableModel
-from monkeywagtail.core.blocks import ChildMenuBlock, ParentMenuBlock, MenuBlock
+from monkeywagtail.core.blocks import MenuBlock
 
 
 # MENUS
@@ -37,8 +34,11 @@ from monkeywagtail.core.blocks import ChildMenuBlock, ParentMenuBlock, MenuBlock
 
 
 class MainMenu(ClusterableModel):
+    # We return the context (e.g access the content) for this model in `core/
+    # templatetags/navigation_tags.py`
     title = models.CharField(
-        max_length=255, null=False, blank=False, verbose_name='Menu title')
+        max_length=255, verbose_name='Menu title')
+    # Need CharField above to be mandatory as used to populate UI admin screen
     menu = StreamField(MenuBlock(), verbose_name="Menus", blank=True)
 
     panels = [
