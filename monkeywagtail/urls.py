@@ -10,6 +10,7 @@ from monkeywagtail.search import views as search_views
 from monkeywagtail.artist import urls as artist_urls
 from monkeywagtail.genre import urls as genre_urls
 from monkeywagtail.author import urls as author_urls
+from monkeywagtail.album import urls as album_urls
 
 
 urlpatterns = [
@@ -20,6 +21,7 @@ urlpatterns = [
     url(r'', include(artist_urls)),
     url(r'', include(genre_urls)),
     url(r'', include(author_urls)),
+    url(r'', include(album_urls)),
 ]
 
 

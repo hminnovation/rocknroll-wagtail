@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+    <h2>Albums</h2>
+    <ul>
+    {% if albums %}
+        {% for album in albums %}
+            <li><a href="{{ album.url }}">{{ album.title }}</a></li>
+        {% endfor %}
+     {% else %}
+     <p>Damn. You ain't added any albums yet</p>
+     {% endif %}
+    </ul>
+{% endblock %}

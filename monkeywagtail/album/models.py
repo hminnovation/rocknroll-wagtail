@@ -70,11 +70,17 @@ class AlbumArtistRelationship(Orderable, models.Model):
 class Album(ClusterableModel):
 
     search_fields = Page.search_fields + [
-        index.SearchField('album_name'),
+        index.SearchField('title'),
         index.SearchField('biography'),
     ]
 
-    album_name = models.CharField("The album's name", blank=True, max_length=254)
+    title = models.CharField("The album's name", blank=True, max_length=254)
+
+    slug = models.SlugField(
+        allow_unicode=True,
+        max_length=255,
+        help_text="The name of the page as it will appear in URLs e.g http://domain.com/blog/[my-slug]/",
+    )
 
     image = models.ForeignKey(
         'wagtailimages.Image',
@@ -90,8 +96,13 @@ class Album(ClusterableModel):
     song_details = StreamField(
         SongStreamBlock(), verbose_name="Songs", blank=True)
 
+    @property
+    def url(self):
+        return '/albums/' + self.slug
+
     panels = [
-        FieldPanel('album_name'),
+        FieldPanel('title'),
+        FieldPanel('slug'),
         InlinePanel(
             'album_artist_relationship', label="Arist(s)", panels=None, min_num=1),
         ImageChooserPanel('image'),
@@ -112,29 +123,32 @@ class Album(ClusterableModel):
     ]
 
     def __str__(self):
-        return self.album_name
+        return self.title
 
-    def get_context(self, request):
-        context = super(Album, self).get_context(request)
-        return context
+    def all(self, request):
+        return Album.objects.get_queryset()
+        # Still don't know how this works...
 
     def artist(obj):
-        artist = ','.join([str(i) for i in obj.album_artist])
+        artist = ','.join([str(i.artist_name) for i in obj.album_artist_relationship.all()])
         return artist
+        # Note that we call `artist_name` because it's what we called the
+        # ForeignKey on line 58 where we defined the relationship between
+        # the album and artist in `AlbumArtistRelationship`
 
     artist.admin_order_field = 'album_artist_relationship__artist_name'
 
     def genre(obj):
         genre = ','.join([
                     str(n.genres) for n in obj.album_genre_relationship.all()
-                    # We need to call `genres` because it's what we called the fk
             ])
         return genre
+        # Again note we call `genres` because it's what we called the fk
 
         genre.admin_order_field = 'album_genre_relationship__genre'
 
     class Meta:
-        ordering = ['album_name']
+        ordering = ['title']
         verbose_name = "Album"
         verbose_name_plural = "Albums"
 
@@ -159,8 +173,14 @@ class Album(ClusterableModel):
 #         return context
 #
 # We're taking a Django approach with this app though and using views.py and
-# urls.py where we're using a ListView and a DetailView. For more info on that
+# urls.py to create a ListView and a DetailView. For more info on that
 # have a look in album/views.py
+#
+# Personally I think _Django by Example_ (http://djangobyexample.com/) gives the
+# best intro to using generic models. A simple tutorial is also here
+# http://www.gregaker.net/2012/apr/20/how-does-djangos-class-based-listview-work/
+# or you can reference the Django docs at
+# https://docs.djangoproject.com/en/1.10/topics/class-based-views/generic-display/
 #
 #
 # Many-to-many relationships (cont...)

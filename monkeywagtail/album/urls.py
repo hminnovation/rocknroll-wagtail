@@ -2,8 +2,11 @@ from django.conf.urls import url
 
 from . import views
 
+# @TODO
+# Decide if we _really_ do want to allow albums be directly
+# accessible...
 app_name = 'album'
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
+    url(r'^albums/$', views.album_list, name='albums'),
+    # url(r'^albums/(?P<slug>[-\w]+)/$', views.album_detail(), name='album'),
 ]

@@ -11,10 +11,6 @@ def artist_list(request):
 
 def artist_detail(request, slug):
     artist = get_object_or_404(Artist, slug=slug)
-    # features = FeatureContentPage.objects.get
-    # artists = Artist.objects.get
-    # articles = artist.artist_related.all()
-    # Line 14 - 16 can be deleted. Random ideas that didn't do what I wanted them to...
     articles = set(p.page for p in artist.artist_feature_page_relationship.select_related('page').all() if p.page.live)
     reviews = set(p.page for p in artist.artist_review_relationship.select_related('page').all() if p.page.live)
     # We use `page` because the parental key name is key on line 21 of review/models.py

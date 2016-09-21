@@ -30,7 +30,7 @@ class Artist(ClusterableModel):
     The author snippet gives a way to add authors to a site and create a one-way relationship with content
     """
 
-    title = models.CharField("The artist's name", blank=True, max_length=254)
+    title = models.CharField("The artist's name", max_length=254)
 
     slug = models.SlugField(
         allow_unicode=True,
