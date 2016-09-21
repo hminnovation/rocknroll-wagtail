@@ -8,5 +8,5 @@ from . import views
 app_name = 'album'
 urlpatterns = [
     url(r'^albums/$', views.album_list, name='albums'),
-    # url(r'^albums/(?P<slug>[-\w]+)/$', views.album_detail(), name='album'),
+    url(r'^albums/(?P<slug>[-\w]+)/$', views.album_detail),
 ]

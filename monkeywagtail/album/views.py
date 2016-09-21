@@ -12,11 +12,11 @@ def album_list(request):
     })
 
 
-# def album_detail(request, slug):
-#     album = get_object_or_404(Album, slug=slug)
-#     return render(request, 'album/album_detail.html', {
-#          'album': album,
-#     })
+def album_detail(request, slug):
+    album = get_object_or_404(Album, slug=slug)
+    return render(request, 'album/album_detail.html', {
+        'album': album,
+    })
 
 
 # Below is an example of how you might want to articulate the view using Django's
