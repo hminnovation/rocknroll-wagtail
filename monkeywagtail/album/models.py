@@ -130,7 +130,9 @@ class Album(ClusterableModel):
         # Still don't know how this works...
 
     def artist(obj):
-        artist = ','.join([str(i.artist_name) for i in obj.album_artist_relationship.all()])
+        artist = ','.join([
+            str(i.artist_name) for i in obj.album_artist_relationship.all()
+            ])
         return artist
         # Note that we call `artist_name` because it's what we called the
         # ForeignKey on line 58 where we defined the relationship between
@@ -186,3 +188,6 @@ class Album(ClusterableModel):
 # Many-to-many relationships (cont...)
 # ------------------------------------
 # @TODO write the docs on this :)
+# Whilst you're waiting on that you can look at @alexgleason's pretty excellent
+# gist that annotates the relationships
+# https://gist.github.com/alexgleason/09b1802b004babd74e96

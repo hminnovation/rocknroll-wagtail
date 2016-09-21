@@ -1,5 +1,5 @@
 from wagtail.contrib.modeladmin.options import (
-    ModelAdmin, ModelAdminGroup, modeladmin_register)
+    ModelAdmin, modeladmin_register)
 from .models import Album
 
 
@@ -12,12 +12,20 @@ class AlbumAdmin(ModelAdmin):
 
     list_display = ('artist', 'title', 'release_date', 'genre')
     list_filter = (
-        'album_artist_relationship__artist_name', 'album_genre_relationship__genres', 'release_date',)
-    search_fields = ('album_artist_relationship__artist_name', 'title', 'release_date',)
+        'album_artist_relationship__artist_name',
+        'album_genre_relationship__genres',
+        'release_date',)
+    search_fields = (
+        'album_artist_relationship__artist_name',
+        'title',
+        'release_date',)
 
 
 modeladmin_register(AlbumAdmin)
 
+# Artist vs album_artist_relationship__artist_name
+# ------------------------------------------------
+#
 # You'll notice in list_display that we can use 'artist' whilst in list_filter
 # we need to use 'album_artist_relationship__artist_name' to get the same info
 # e.g. the name of the artist.
@@ -26,13 +34,15 @@ modeladmin_register(AlbumAdmin)
 # recognise.
 #
 # List_display
-# Deeply over-simplifying it list_display needs a field on the model, an attribute
+# Deeply over-simplifying but: list_display needs a field on the model, an attribute
 # or a callable. Using `album_artist_relationship` would work to the extent that
 # it wouldn't give an error but would display 'album.AlbumArtistRelationship.None'
+# which is almost certainly _not_ what you're looking for.
 #
-# On the album model we defined a callable that accepted one parameter for the
-# model instance. In this case the name of the artist.
-# list_display docs http://tinyurl.com/gm6o3co
+# On the album model we defined a callable (def artist(obj):) that accepted one
+# parameter for the model instance. In this case the name of the artist. This
+# allows us to call 'artist' in the list_display
+# list_display Django docs http://tinyurl.com/gm6o3co
 #
 # List_filter
 # By contrast list_filter needs to be a specific field. In our case, because of
@@ -40,4 +50,4 @@ modeladmin_register(AlbumAdmin)
 # Field names in list_filter can also span relations using the reverse
 # relationship (__) lookup. 'album_artist_relationship__artist_name' will let us
 # get the artist's name, and as importantly, filter on it.
-# list_filter docs are at http://tinyurl.com/z58c54n
+# list_filter Django docs are at http://tinyurl.com/z58c54n

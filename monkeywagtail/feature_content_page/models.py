@@ -77,21 +77,35 @@ class FeatureContentPage(Page):
     )
 
     # Note below that standard blocks use 'help_text' for supplementary text rather than 'label' as with StreamField
-    introduction = models.TextField(blank=True, help_text="Text to show at the top of the individual page")
+    introduction = models.TextField(
+        blank=True,
+        help_text="Text to show at the top of the individual page")
 
     # Using CharField for little reason other than showing a different input type
     # Wagtail allows you to use any field type Django follows, so you can use anything from
     # https://docs.djangoproject.com/en/1.9/ref/models/fields/#field-types
-    listing_introduction = models.CharField(max_length=250, blank=True, help_text="Text shown on listing pages, if empty will show 'Introduction' field content")
+    listing_introduction = models.CharField(
+        max_length=250,
+        blank=True,
+        help_text="Text shown on listing pages, if empty will show 'Introduction' field content")
 
-    # Note below we're calling StreamField from another location. The `StandardBlock` class is a shared
-    # asset across the site. It is defined in core > blocks.py. It is just as 'correct' to define
-    # the StreamField directly within the model, but this method aids consistency.
-    body = StreamField(StandardBlock(), help_text="Blah blah blah", blank=True)
+    # Note below we're calling StreamField from another location. The
+    # `StandardBlock` class is a shared asset across the site. It is defined in
+    # core > blocks.py. It is just as 'correct' to define the StreamField
+    # directly within the model, but this method aids consistency.
+    body = StreamField(
+        StandardBlock(),
+        help_text="Blah blah blah",
+        blank=True
+        )
 
     @property
-    # We're returning artists for the FeatureContentPage class. Note the fact we're
-    # using `artist_feature_page_relationship` to grab them
+    # We're returning artists for the FeatureContentPage class. Note the fact we
+    # use the related name `artist_feature_page_relationship` to grab them
+    #
+    # @TODO Unconvinced you need these. Would only be if you wanted to define
+    # further categorisation using `artists` and `authors` that you're defining
+    # here
     def artists(self):
         artists = [
             n.artist for n in self.feature_page_artist_relationship.all()
@@ -107,12 +121,14 @@ class FeatureContentPage(Page):
         return authors
 
     content_panels = Page.content_panels + [
-        # The content panels are displaying the components of content we defined in the StandardPage class above
-        # If you add something to the class and want it to appear for the editor you have to define it here too
-        # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
-        # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
-        # in the `From` statements at the top of the model
-        # InlinePanel('artist_groups', label="Artist(s)"),
+        # The content panels are displaying the components of content we defined
+        # in the StandardPage class above. If you add something to the class and
+        # want it to appear for the editor you have to define it here too
+        # A full list of the panel types you can use is at
+        # http://docs.wagtail.io/en/latest/reference/pages/panels.html
+        # If you add a different type of panel ensure you've imported it from
+        # wagtail.wagtailadmin.edit_handlers in the `From` statements at the top
+        # of the model InlinePanel('artist_groups', label="Artist(s)"),
         # SnippetChooserPanel('artist'),
         FieldPanel('date'),
         MultiFieldPanel(
@@ -126,12 +142,16 @@ class FeatureContentPage(Page):
         ),
         StreamFieldPanel('body'),
         InlinePanel('feature_page_artist_relationship', label="Artists"),
-        InlinePanel('feature_page_author_relationship', label="Authors", help_text='something'),
+        InlinePanel(
+            'feature_page_author_relationship',
+            label="Authors",
+            help_text='something'),
     ]
 
     @property
     def features_index(self):
-        # I'm not convinced this is altogether necessary... but still we're going from feature_content_page -> feature_index_page
+        # I'm not convinced this is altogether necessary... but still we're
+        # going from feature_content_page -> feature_index_page
         return self.get_ancestors().type(FeatureIndexPage).last()
 
     parent_page_types = [
@@ -144,9 +164,19 @@ class FeatureContentPage(Page):
 
 
 class FeatureIndexPage(Page):
-    listing_introduction = models.TextField(help_text='Text to describe this section. Will appear on other pages that reference this feature section', blank=True)
-    introduction = models.TextField(help_text='Text to describe this section. Will appear on the page', blank=True)
-    body = StreamField(StandardBlock(), blank=True, help_text="No good reason to have this here, but in case there's a feature section I can't think of")
+    listing_introduction = models.TextField(
+        help_text='Text to describe this section. Will appear on other pages that reference this feature section',
+        blank=True
+        )
+    introduction = models.TextField(
+        help_text='Text to describe this section. Will appear on the page',
+        blank=True
+        )
+    body = StreamField(
+        StandardBlock(),
+        blank=True,
+        help_text="No good reason to have this here, but in case there's a feature section I can't think of"
+        )
 
     search_fields = Page.search_fields + [
         index.SearchField('listing_introduction'),

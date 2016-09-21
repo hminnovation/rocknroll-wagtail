@@ -10,13 +10,22 @@ from modelcluster.models import ClusterableModel
 
 class SubgenreClass(ClusterableModel):
 
-    title = models.CharField(max_length=255, help_text="Be as esoteric as you'd like")
-    description = models.TextField(blank=True, help_text='A description of the sub-genre')
+    title = models.CharField(
+        max_length=255, help_text="Be as esoteric as you'd like")
+    description = models.TextField(
+        blank=True, help_text='A description of the sub-genre')
     slug = models.SlugField(
         allow_unicode=True,
         max_length=255,
         help_text="The name of the page as it will appear in URLs e.g http://domain.com/blog/[my-slug]/",
     )
+    # Title
+    # On a generic model you can use whatever field names you'd like. Initially
+    # this was called 'subgenre_name' but was changed to 'title' since Wagtail
+    # has out of the box JS that will convert anything put in a title field in
+    # to the slug field
+    #
+    # SlugField
     # We need to use a SlugField because we need the slug to be unique
 
     @property
@@ -31,8 +40,8 @@ class SubgenreClass(ClusterableModel):
         ], heading="Title", classname="collapsible")
     ]
 
-    # Even though there's no admin screen for subgenres we still need to return the title
-    # for it to populate the inlinepanel on the album screen
+    # Even though there's no admin screen for subgenres we still need to return
+    # the title for it to populate the inlinepanel on the album screen
     def __str__(self):
         return self.title
 
@@ -41,18 +50,24 @@ class SubgenreClass(ClusterableModel):
             verbose_name_plural = "Subgenres"
 
 
-# This, calls _all_ of the fields from the model above and builds a one way relationship
-# The inline panel that's placed within the genre class will populate the SubgenreClass
-# fields
+# This, calls _all_ of the fields from the model above and builds a one way
+# relationship. The inline panel that's placed within the genre class will
+# populate the SubgenreClass fields
 class SubGenreRelationship(Orderable, SubgenreClass):
-        subgenre_in_editor = ParentalKey('GenreClass', related_name='sub_genre_relationship')
+        subgenre_in_editor = ParentalKey(
+            'GenreClass', related_name='sub_genre_relationship')
 
 
-# A snippet is a way to create non-hierarchy content on Wagtail (http://docs.wagtail.io/en/v1.4.3/topics/snippets.html)
-# Wagtail 1.5 is likely to see these to either be deprecated, or at least used in very different ways
-# They are currently quite limited against standard page models in how editors can access them. The easiest way
-# to visualise that is probably to visit {whateverURLyouchose}/admin/snippets/author/author/
-# Note: the properties and panels are defined in exactly the same way as on a page model
+# A snippet is created by adding a `@snippet` decorator to a ClusterableModel.
+#
+# A snippet is a way to create non-hierarchy content on Wagtail
+# (http://docs.wagtail.io/en/v1.4.3/topics/snippets.html)
+# Since Wagtail 1.5 introduced ModelAdmin to core it's likely we'll see these
+# used less as it's now much easier to use generic models than it was before.
+#
+# They are used throughout this project though to enable us to use the
+# SnippetChooserPanels, which make the UI to select the relationships slightly
+# nicer.
 class GenreClass(ClusterableModel):
     """
     You've gotta define a genre right
