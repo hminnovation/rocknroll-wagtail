@@ -51,14 +51,14 @@ class SubGenreClassAlbumRelationship(Orderable, models.Model):
 
 
 class AlbumArtistRelationship(Orderable, models.Model):
-    ArtistRelationship = ParentalKey(
+    page = ParentalKey(
         'Album',
         related_name='album_artist_relationship'
     )
     artist_name = models.ForeignKey(
         'artist.Artist',
         # app.class
-        related_name="+",
+        related_name="artist_album_relationship",
         help_text='The artist(s) who made this album'
     )
     panels = [

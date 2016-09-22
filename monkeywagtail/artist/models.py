@@ -51,13 +51,26 @@ class Artist(ClusterableModel):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    # What's with the surprised guy '+'
+    # Django and Wagtail can sometimes clash because of the reverse relation that
+    # Django will create for a ForeignKey. There's a GitHub issue about it where
+    # @Kaedroho and @timheap go in to some details about the issue
+    # https://github.com/torchbox/wagtail/issues/503 In brief were a class
+    # called 'profile_image' a ValueError would be raised
+    #
+    # Using `related_name='+'` breaks this reverse relation. Where we _do_ have
+    # a reverse relation that we want to maintain it's important that you give
+    # it a unique name
+    # https://docs.djangoproject.com/en/dev/topics/db/models/#specifying-the-parent-link-field
 
     date_formed = models.DateField("Date the artist started", blank=True, null=True)
 
     # tags = ClusterTaggableManager(through=GenreTagRelationship, blank=True)
 
-    # Note below that standard blocks use 'help_text' for supplementary text rather than 'label' as with StreamField
-    biography = RichTextField(blank=True, help_text="Short biography about the user")
+    # Note below that standard blocks use 'help_text' for supplementary text
+    # rather than 'label' as with StreamField
+    biography = RichTextField(
+        blank=True, help_text="Short biography about the user")
 
     external_url = models.URLField(blank=True, null=True)
 
@@ -66,11 +79,14 @@ class Artist(ClusterableModel):
         return '/artists/' + self.slug
 
     panels = [
-        # The content panels are displaying the components of content we defined in the StandardPage class above
-        # If you add something to the class and want it to appear for the editor you have to define it here too
-        # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
-        # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
-        # in the `From` statements at the top of the model
+        # The content panels are displaying the components of content we defined
+        # in the StandardPage class above. If you add something to the class and
+        # want it to appear for the editor you have to define it here too
+        # A full list of the panel types you can use is at
+        # http://docs.wagtail.io/en/latest/reference/pages/panels.html
+        # If you add a different type of panel ensure you've imported it from
+        # wagtail.wagtailadmin.edit_handlers in the `From` statements at the top
+        # of the model
         FieldPanel('title'),
         FieldPanel('slug'),
         ImageChooserPanel('profile_image'),
@@ -80,12 +96,14 @@ class Artist(ClusterableModel):
     ]
 
     def __str__(self):
-        # We're returning the string that populates the snippets screen. Note it returns as plain-text
+        # We're returning the string that populates the snippets screen.
+        # Note it returns a plain-text string. Reference the `artist_image`
+        # below for returning a HTML rendition
         return self.title
 
     @property
     def all(self, request):
-        # we're trying to get everything in to a single property. Not working!... maybe go read the docs?
+        # This... not surprisingly having read the Django docs, won't work
         return Artist.objects.get_queryset()
 
     @property
@@ -104,9 +122,9 @@ class Artist(ClusterableModel):
         except:
             return ''
 
-        class Meta:
-            # We need to clarify the meta class else we get a issubclass() arg 1 error (which I don't really
-            # understand)
-            ordering = ['title']
-            verbose_name = "Artist"
-            verbose_name_plural = "Artists"
+        # class Meta:
+        #     # We need to clarify the meta class else we get a issubclass() arg
+        #     # 1 error (which I don't really understand)
+        #     ordering = ['title']
+        #     verbose_name = "Artist"
+        #     verbose_name_plural = "Artists"
