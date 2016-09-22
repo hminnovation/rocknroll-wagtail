@@ -89,7 +89,11 @@ class Author(models.Model):
 
     @property
     def image_listing_small(self):
-        return self.image.get_rendition('fill-50x50').img_tag()
+        # Needs to fail silently because image = null
+        try:
+            return self.image.get_rendition('fill-50x50').img_tag()
+        except:
+            return ''
         # @TODO Give a more attractive verbose name (e.g. image)
         # @TODO work out whether this is actually okay to do
         # It feels repetitive to have to define every image size

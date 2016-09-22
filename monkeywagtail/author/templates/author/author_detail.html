@@ -2,10 +2,12 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    <h2>{{ author.title }}</h2>
+    <h2>{{ author.title|capfirst }}</h2>
     {{ author.image_listing }}
     {{ author.biography|richtext }}
-    <a href="{{ author.external_url }}">{{ author.title }} website</a>
+    {% if author.external_url %}
+      <a href="{{ author.external_url }}">{{ author.title }} website</a>
+    {% endif %}
 
 
 	{% comment %}

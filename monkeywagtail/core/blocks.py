@@ -1,5 +1,3 @@
-from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtailblocks_cards.blocks import CardsBlock
@@ -68,8 +66,7 @@ class SimplifiedBlock(StreamBlock):
             blank=True, required=False, label='e.g. Fugazi')),
     ], icon="openquote", template="blocks/blockquote.html")
     embed = EmbedBlock(
-        help_text='Insert an embed URL e.g https://www.youtube.com/embed/SGJFWirQ3ks',
-        template="blocks/embed.html")
+        help_text='Insert an embed URL e.g https://www.youtube.com/embed/SGJFWirQ3ks')
 
 
 class StandardBlock(StreamBlock):

@@ -5,35 +5,39 @@
 
 {{ self.reviews }}
 <div class="row">
+  <div class="columns">
     {% for review in reviews %}
-    <div class="row">
-          {% for artist in review.artists %}
-            <a href="{{ artist.url }}">{{ artist }}</a>{% endfor %}
+            
+      {% for album in review.albums %}
+      <h2> 
+        <a href="{{ review.url }}">
+          {{ album.title }} <span>by</span>
+      {% for artist in album.artists %}
+            {{ artist.title }}
+      {% endfor %}
+        </a>
+      </h2>
+          <ul class="genre">
+              {% for genre in album.genres %}
+                  <li><a href="{{ genre.url }}">{{ genre }}</a></li>
+              {% endfor %}
+          </ul> 
+      {% endfor %}
 
-             {% for author in review.authors %}
-            <a href="{{ author.url }}">{{ author }}</a>{% endfor %}
+      {% for author in review.authors %}
+            <a href="{{ author.url }}">{{ author }}</a><br />
+      {% endfor %}
 
-        {{ review.title }}
         {{ review.listing_introduction }}
         {% if review.image %}
               {% image review.image width-100 as photo %}
               <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
         {% endif %}
-        <a href="{{ review.url }}">{{ review.url }}</a>
-    {% for album in review.albums %}
-        <ul class="genre">
-            {% for genre in album.genre %}
-                <li>{{ genre }}</li>
-            {% endfor %}
-        </ul> 
-    {% endfor %}
-    </div>
+        <a href="{{ review.url }}">read more</a>
+
     {% endfor %}
 </div>
-
-{% if review %}
-{% endif %}
-
+</div>
 
 {% if paginate_list.paginator.num_pages > 1 %}
   blah blah blah

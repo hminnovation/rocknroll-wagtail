@@ -152,6 +152,27 @@ class ReviewPage(Page):
         'ReviewIndexPage'
     ]
 
+    @property
+    def artists(self):
+        artists = [
+            n.artist for n in self.review_artist_relationship.all()
+        ]
+        return artists
+
+    @property
+    def albums(self):
+        albums = [
+            n.album for n in self.review_album_relationship.all()
+        ]
+        return albums
+
+    @property
+    def authors(self):
+        authors = [
+            n.author for n in self.review_author_relationship.all()
+        ]
+        return authors
+
 
 class ReviewIndexPage(Page):
     listing_introduction = models.TextField(
@@ -183,7 +204,7 @@ class ReviewIndexPage(Page):
 # This works, but doens't paginate
     def get_context(self, request):
         context = super(ReviewIndexPage, self).get_context(request)
-        context['reviews'] = ReviewPage.objects.descendant_of(self).live().order_by('-date_release')
+        context['reviews'] = ReviewPage.objects.descendant_of(self).live().order_by('-first_published_at')
         return context
 
 # Below is how we get children of reviews (i.e a review) on to the homepage

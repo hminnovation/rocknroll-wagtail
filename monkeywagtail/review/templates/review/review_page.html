@@ -5,53 +5,66 @@
 <article>
 
 <header class="row">
-        <h2 class="subheadline">{% for album in page.albums %}{{ album.album_name }} <span>by</span> {% for artist in album.album_artist %}{{ artist }}{% if not forloop.last %}, {% endif %}{% endfor %}</h2>{% endfor %}
+        {% for album in page.albums %}
+        <h2 class="subheadline">
+            {{ album.title }} 
+                <span>by</span> 
+            {% for artist in album.artists %}
+                {{ artist.title }}
+                    {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+                </h2>
+            <p>Released {{ album.release_date }}</p>
+        {% endfor %}
 </header>
 
-<div class="row">
-<aside class="meta small-12 medium-3 columns">
-    Review by <ul class="authors">{% for author in page.authors %}
-        <li><a href="{% url 'authors' %}{{ author.slug}}">{{ author.title }}</a>{% if not forloop.last %}, {% endif %}</li>
+
+<aside class="meta small-12 medium-2 columns">
+    Review by {% for author in page.authors %}
+        <a href="{% url 'authors' %}{{ author.slug}}">{{ author.title }}</a>{% if not forloop.last %}, {% endif %}
     {% endfor %}
-    <p>Released {{ page.date_release }}</p>
+    <p>{{ page.date_release }}</p>
     <p>{{ self.rating }}</p>
+    
+
+    
     {% for album in page.albums %}
-        <ul class="genre">
-            {% for genre in album.genre %}
-                <li>{{ genre }}</li>
-            {% endfor %}
-        </ul> 
+     {% if album.genre %}
+     <ul class="genre">   
+        {% for foo in album.genres %}
+             <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
+        {% endfor %}
+        {% if album.subgenres %}
         <ul class="subgenre">
             {% for subgenre in album.subgenres %}
                 <li>{{ subgenre }}</li>
             {% endfor %}
         </ul>
+        {% endif %}
+        </ul>
+        {% endif %}
     {% endfor %}
 </aside>
 
-<div class="small-12 medium-9 columns">
-<p><strong>{{ page.introduction }}</strong></p>
-</div>
-
 <div class="small-12 medium-6 columns">
+    <p><strong>{{ page.introduction }}</strong></p>
+
 {% image page.image width-400 %}
 {{ page.body }}
 </div>
 
-<aside class="small-12 medium-3 columns">
+<aside class="small-12 medium-4 columns">
 {% for album in page.albums %}
         <figure>{% image album.image fill-200x200 %}
         <figcaption>{{ album.image }}</figcaption>
         </figure>
-        <h2>{{ album.album_name }}</h2> 
-        <p>by {% for artist in album.album_artist %}{{ artist }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-        <p>Released: {{ album.release_date }}</p>
         <h3>Songs:</h3>
-        <ul>
-        {% for album_song in album.album_songs_in_editor %}
-            <ol>{{ album_song}}</ol>
-        {% endfor %}
-    </ul>
+            <ol>
+                {{ album.song_details }}
+            </ol>
+        {% comment %}
+            static/blocks/songblock.html
+        {% endcomment %}
 {% endfor %}
 </aside>
 </div>
