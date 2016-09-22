@@ -14,20 +14,41 @@ from monkeywagtail.genre.models import SubgenreClass
 
 
 @register_snippet
-# A snippet is a way to create non-hierarchy content on Wagtail (http://docs.wagtail.io/en/v1.4.3/topics/snippets.html)
-# Wagtail 1.5 is likely to see these to either be deprecated, or at least used in very different ways
-# They are currently quite limited against standard page models in how editors can access them. The easiest way
-# to visualise that is probably to visit {whateverURLyouchose}/admin/snippets/author/author/
-# Note: the properties and panels are defined in exactly the same way as on a page model
-# TODO: The author and artist snippets are very close to identical (single change that the title property is artist_name
-# on one and author_name on the other)
+# A snippet is created by adding a `@snippet` decorator to a ClusterableModel.
 #
-# Note we could make our life easier here by not using a snippet. A page model would
-# be easier to template and easier to filter. However, it we created a page model we
-# wouldn't be able to have it under multiple genres...except we would
+# A snippet is a way to create non-hierarchy content on Wagtail
+# (http://docs.wagtail.io/en/v1.4.3/topics/snippets.html)
+# Since Wagtail 1.5 introduced ModelAdmin to core it's likely we'll see these
+# used less as it's now much easier to use generic models than it was before.
+#
+# They are used throughout this project though to enable us to use the
+# SnippetChooserPanels, which make the UI to select the relationships slightly
+# nicer. Note, however, that we're mostly accessing them via ModelAdmin (have
+# a look at wagtail_hooks.py to see how we're doing that) rather than via the
+# snippets admin screen. ModelAdmin gives us _a lot_ more control over how to
+# display them.
+#
+# Arguably you could use a page model for an artist and have an information
+# architecture that looks like
+#
+# artist index page (page)
+#   |
+#   |__ Nirvana (page)
+#         |
+#         |__ Bleach (page)
+#         |
+#         |__ Nevermind (page)
+#
+# But this would cause us all sorts of difficulties where we have albums by
+# multiple artists (e.g. split records or compilations) and would be useless if
+# we ever wanted to extend the site to include live reviews.
+#
+# @TODO write the 'Sane content modelling' blog post
 class Artist(ClusterableModel):
     """
-    The author snippet gives a way to add authors to a site and create a one-way relationship with content
+    The artist snippet gives a way to relate artists to other content and create
+    a range of relationships (e.g. one-to-one, one-to-many or many-to-many
+    relationships) with content
     """
 
     title = models.CharField("The artist's name", max_length=254)
@@ -121,10 +142,3 @@ class Artist(ClusterableModel):
             return self.profile_image.get_rendition('fill-50x50').img_tag()
         except:
             return ''
-
-        # class Meta:
-        #     # We need to clarify the meta class else we get a issubclass() arg
-        #     # 1 error (which I don't really understand)
-        #     ordering = ['title']
-        #     verbose_name = "Artist"
-        #     verbose_name_plural = "Artists"

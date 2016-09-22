@@ -9,6 +9,10 @@ from wagtail.wagtailcore import hooks
 # in the RichTextField to encourage the editor to use
 # Streamfield. c/f https://groups.google.com/forum/#!topic/wagtail/lHSRpSrYtN8
 # for the original Google Group conversation on the subject.
+#
+# Arguably this could be placed within the `Core` but I wanted to make it clear
+# that it was here, and enables it to be easily removed from the project by
+# amending settings/base.py if you don't wish to limit hallo.
 
 
 @hooks.register('insert_editor_js')

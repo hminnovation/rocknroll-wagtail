@@ -49,7 +49,7 @@ if 'SERVER_EMAIL' in env:
     SERVER_EMAIL = env['SERVER_EMAIL']
 
 if 'CACHE_PURGE_URL' in env:
-    INSTALLED_APPS += ( 'wagtail.contrib.wagtailfrontendcache', )
+    INSTALLED_APPS += ('wagtail.contrib.wagtailfrontendcache',)
     WAGTAILFRONTENDCACHE = {
         'default': {
             'BACKEND': 'wagtail.contrib.wagtailfrontendcache.backends.HTTPBackend',
@@ -184,7 +184,7 @@ if 'LOG_DIR' in env:
         'level':        'INFO',
         'class':        'cloghandler.ConcurrentRotatingFileHandler',
         'filename':     os.path.join(env['LOG_DIR'], 'monkeywagtail.log'),
-        'maxBytes':     5242880, # 5MB
+        'maxBytes':     5242880,  # 5MB
         'backupCount':  5
     }
     LOGGING['loggers']['wagtail']['handlers'].append('monkeywagtail_file')
@@ -194,7 +194,7 @@ if 'LOG_DIR' in env:
         'level':        'INFO',
         'class':        'cloghandler.ConcurrentRotatingFileHandler',
         'filename':     os.path.join(env['LOG_DIR'], 'wagtail.log'),
-        'maxBytes':     5242880, # 5MB
+        'maxBytes':     5242880,  # 5MB
         'backupCount':  5
     }
     LOGGING['loggers']['wagtail']['handlers'].append('wagtail_file')
@@ -204,7 +204,7 @@ if 'LOG_DIR' in env:
         'level':        'ERROR',
         'class':        'cloghandler.ConcurrentRotatingFileHandler',
         'filename':     os.path.join(env['LOG_DIR'], 'error.log'),
-        'maxBytes':     5242880, # 5MB
+        'maxBytes':     5242880,  # 5MB
         'backupCount':  5
     }
     LOGGING['loggers']['django.request']['handlers'].append('errors_file')

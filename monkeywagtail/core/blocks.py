@@ -13,6 +13,8 @@ from wagtail.wagtailcore.blocks import (
 )
 # Note, you could import _all_ the blocks by using `from wagtail.wagtailcore
 # import blocks`. But it's a bad idea to import everything.
+#
+# @TODO add docs in relation to blocks
 
 
 class SongStreamBlock(StreamBlock):

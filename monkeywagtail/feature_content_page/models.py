@@ -7,16 +7,20 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailcore.fields import StreamField
 from modelcluster.fields import ParentalKey
 from wagtail.wagtailsearch import index
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel, MultiFieldPanel
+from wagtail.wagtailadmin.edit_handlers import (
+    FieldPanel,
+    StreamFieldPanel,
+    InlinePanel,
+    MultiFieldPanel)
 from monkeywagtail.core.blocks import StandardBlock
 from monkeywagtail.author.models import Author
 
 
 class ArtistFeaturePageRelationship(Orderable, models.Model):
     # http://www.tivix.com/blog/working-wagtail-i-want-my-m2ms/
-    # This is the start of defining the m2m. The related name is the 'magic' that Wagtail
-    # hooks to. The model name (artist) within the app (artist) is a terrible naming convention
-    # that you should avoid. It's 'class.model'
+    # This is the start of defining the m2m. The related name is the 'magic'
+    # that Wagtail hooks to. The model name (artist) within the app (artist) is
+    # a terrible naming convention that you should avoid. It's 'class.model'
     page = ParentalKey(
         'FeatureContentPage', related_name='feature_page_artist_relationship'
     )
@@ -36,8 +40,8 @@ class ArtistFeaturePageRelationship(Orderable, models.Model):
 
 class AuthorFeaturePageRelationship(Orderable, models.Model):
     # We get to define another m2m for authors since a page can have many authors
-    # and authors can obviously have many pages. You will see that the modelname and appname
-    # are once again identical because I'm not very good at this game!
+    # and authors can obviously have many pages. You will see that the modelname
+    # and appname are once again identical because I'm not very good at this game!
     page = ParentalKey(
         'FeatureContentPage', related_name='feature_page_author_relationship'
     )
@@ -76,13 +80,15 @@ class FeatureContentPage(Page):
         help_text='Image to be used where this feature content is listed'
     )
 
-    # Note below that standard blocks use 'help_text' for supplementary text rather than 'label' as with StreamField
+    # Note below that standard blocks use 'help_text' for supplementary text
+    # rather than 'label' as with StreamField
     introduction = models.TextField(
         blank=True,
         help_text="Text to show at the top of the individual page")
 
-    # Using CharField for little reason other than showing a different input type
-    # Wagtail allows you to use any field type Django follows, so you can use anything from
+    # Using CharField for little reason other than showing a different input
+    # type Wagtail allows you to use any field type Django follows, so you can
+    # use anything from
     # https://docs.djangoproject.com/en/1.9/ref/models/fields/#field-types
     listing_introduction = models.CharField(
         max_length=250,
@@ -98,27 +104,6 @@ class FeatureContentPage(Page):
         help_text="Blah blah blah",
         blank=True
         )
-
-    @property
-    # We're returning artists for the FeatureContentPage class. Note the fact we
-    # use the related name `artist_feature_page_relationship` to grab them
-    #
-    # @TODO Unconvinced you need these. Would only be if you wanted to define
-    # further categorisation using `artists` and `authors` that you're defining
-    # here
-    def artists(self):
-        artists = [
-            n.artist for n in self.feature_page_artist_relationship.all()
-        ]
-        return artists
-
-    @property
-    # Now the authors get pulled in
-    def authors(self):
-        authors = [
-            n.author for n in self.feature_page_author_relationship.all()
-        ]
-        return authors
 
     content_panels = Page.content_panels + [
         # The content panels are displaying the components of content we defined
@@ -161,6 +146,25 @@ class FeatureContentPage(Page):
 
     subpage_types = [
     ]
+
+    # We're returning artists and authors to allow the template to grab the
+    # related content. Note the fact we use the related name
+    # `artist_feature_page_relationship` to grab them. In the template we'll use
+    # a loop to grab them e.g. {% for artist in page.artists %}
+    #
+    # You don't need to place this at the end of the model, but conventionally
+    # it makes sense to put it here
+    def artists(self):
+        artists = [
+            n.artist for n in self.feature_page_artist_relationship.all()
+        ]
+        return artists
+
+    def authors(self):
+        authors = [
+            n.author for n in self.feature_page_author_relationship.all()
+        ]
+        return authors
 
 
 class FeatureIndexPage(Page):
@@ -205,7 +209,7 @@ class FeatureIndexPage(Page):
 
     def get_context(self, request):
         # http://docs.wagtail.io/en/v1.2/topics/pages.html#customising-template-context
-        # It can only be used on page models. Which is a pain.
+        # That convention can only be used on page models. Which is a pain.
         page_number = request.GET.get('page')
         paginator = Paginator(self.features, settings.DEFAULT_PER_PAGE)
         try:
@@ -220,7 +224,8 @@ class FeatureIndexPage(Page):
 
         return context
 
-    # This is neccessary for the homepage to get the children of the index page
+    # We use this property to allow the homepage to get the children of the
+    # referenced index pages
     @property
     def children(self):
         return self.get_children().specific().live()

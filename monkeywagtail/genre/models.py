@@ -58,22 +58,16 @@ class SubGenreRelationship(Orderable, SubgenreClass):
             'GenreClass', related_name='sub_genre_relationship')
 
 
-# A snippet is created by adding a `@snippet` decorator to a ClusterableModel.
-#
-# A snippet is a way to create non-hierarchy content on Wagtail
-# (http://docs.wagtail.io/en/v1.4.3/topics/snippets.html)
-# Since Wagtail 1.5 introduced ModelAdmin to core it's likely we'll see these
-# used less as it's now much easier to use generic models than it was before.
-#
-# They are used throughout this project though to enable us to use the
-# SnippetChooserPanels, which make the UI to select the relationships slightly
-# nicer.
 class GenreClass(ClusterableModel):
     """
     You've gotta define a genre right
     """
 
-    title = models.CharField("The genre", max_length=254, help_text='The genre. Something high level e.g. pop, metal, punk etc')
+    title = models.CharField(
+        "The genre",
+        max_length=254,
+        help_text='The genre. Something high level e.g. pop, metal, punk etc'
+        )
 
     slug = models.SlugField(
         allow_unicode=True,
@@ -89,20 +83,28 @@ class GenreClass(ClusterableModel):
         return '/genres/' + self.slug
 
     panels = [
-        # The content panels are displaying the components of content we defined in the StandardPage class above
-        # If you add something to the class and want it to appear for the editor you have to define it here too
-        # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
-        # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
-        # in the `From` statements at the top of the model
+        # The content panels are displaying the components of content we defined
+        # in the StandardPage class above. If you add something to the class and
+        # want it to appear for the editor you have to define it here too
+        # A full list of the panel types you can use is at
+        # http://docs.wagtail.io/en/latest/reference/pages/panels.html
+        # If you add a different type of panel ensure you've imported it from
+        # wagtail.wagtailadmin.edit_handlers in the `From` statements at the top
+        # of the model
         FieldPanel('title'),
         FieldPanel('slug'),
         FieldPanel('genre_description'),
-        InlinePanel('sub_genre_relationship', label="Subgenre", help_text="Note: this subgenres will populate the sub-genre snippet", min_num=1)
+        InlinePanel(
+            'sub_genre_relationship',
+            label="Subgenre",
+            help_text="Note: this subgenres will populate the sub-genre snippet",
+            min_num=1)
     ]
 
     def __str__(self):              # __unicode__ on Python 2
-        # We're returning the string that populates the snippets screen. Obvs whatever field you choose
-        # will come through as plain text
+        # We're returning the string that populates the snippets screen.
+        # Obvs whatever field you choose will come through as plain text
+        # Use __unicode__ if you're still using Python 2.7
         return self.title
 
     @property

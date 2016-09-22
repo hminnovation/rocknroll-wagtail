@@ -11,11 +11,15 @@ def artist_list(request):
 
 def artist_detail(request, slug):
     artist = get_object_or_404(Artist, slug=slug)
-    articles = set(p.page for p in artist.artist_feature_page_relationship.select_related('page').all() if p.page.live)
-    reviews = set(p.page for p in artist.artist_album_relationship.select_related('page').all())
-    # We use `page` because the parental key name is key on line 21 of review/models.py
+    articles = set(
+        p.page for p in artist.artist_feature_page_relationship.select_related('page').all() if p.page.live)
+    reviews = set(
+        p.page for p in artist.artist_album_relationship.select_related('page').all())
+    # We use `page` because the parental key name is key on line 21 of
+    # review/models.py
     #
-    # We use `p` because I want to. You just need to use a variable that can be passed through
+    # We use `p` because I want to. You just need to use a variable that can be
+    # passed through
     #
     # This works by getting pages into a list we can loop through on the template
     # It's `{classname}.{related_name}.select_related('page').all()`

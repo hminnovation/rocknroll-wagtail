@@ -14,6 +14,7 @@ class MenuAdmin(ModelAdmin):
     list_filter = ()
     search_fields = ('title',)
 
+
 class FooterAdmin(ModelAdmin):
     model = FooterMenu
     menu_label = 'Footer menu'  # ditch this to use verbose_name_plural from model

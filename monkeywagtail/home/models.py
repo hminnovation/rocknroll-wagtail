@@ -8,17 +8,24 @@ from monkeywagtail.core.blocks import StandardBlock
 class HomePage(Page):
     """
     The homepage for rock n roll wagtail
+    @TODO explain what's going on... even if it is reasonably straight-forward
 
     """
-    site_description_title = models.CharField(max_length=255, help_text='A title explaining this page.')
-    site_description = models.TextField(blank=True, help_text='A brief explanation of this page.')
+    site_description_title = models.CharField(
+        max_length=255,
+        help_text='A title explaining this page.'
+        )
+    site_description = models.TextField(
+        blank=True,
+        help_text='A brief explanation of this page.'
+        )
 
     advert_title = models.TextField(blank=True)
     advert_text = models.TextField(blank=True)
     advert_button = models.CharField(max_length=35, blank=True)
     advert_url = models.URLField("External link for advert", blank=True)
 
-    #Page features
+    # Page features
     featured_page_1 = models.ForeignKey(
         'wagtailcore.Page',
         null=True,
@@ -47,7 +54,7 @@ class HomePage(Page):
         verbose_name='Third featured page'
     )
 
-    #Section features
+    # Section features
     featured_section_1 = models.ForeignKey(
         'wagtailcore.Page',
         null=True,
@@ -96,7 +103,7 @@ class HomePage(Page):
             PageChooserPanel('featured_page_1'),
             PageChooserPanel('featured_page_2'),
             PageChooserPanel('featured_page_3'),
-            #PageChooserPanel('featured_page_3', 'events.EventIndexPage'),
+            # PageChooserPanel('featured_page_3', 'events.EventIndexPage'),
         ], heading="Homepage features"),
         MultiFieldPanel([
             PageChooserPanel('featured_section_1'),
@@ -115,4 +122,3 @@ class HomePage(Page):
 
     class Meta:
         verbose_name = "Party on Wayne homepage"
-

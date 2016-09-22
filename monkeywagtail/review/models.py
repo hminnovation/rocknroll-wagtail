@@ -14,7 +14,8 @@ from monkeywagtail.core.models import RelatedPage
 
 # Related page relationship
 class ReviewRelatedPageRelationship(RelatedPage):
-    source_page = ParentalKey('review.ReviewPage', related_name='related_pages')
+    source_page = ParentalKey(
+        'review.ReviewPage', related_name='related_pages')
 
 
 # Album
@@ -100,7 +101,9 @@ class ReviewPage(Page):
     # `SimplifiedBlock` class is a shared asset across the site. It is defined
     # in core > blocks.py. It is just as 'correct' to define the StreamField
     # directly within the model, but this method aids consistency.
-    body = StreamField(SimplifiedBlock(), blank=True, verbose_name="Review body")
+    body = StreamField(
+        SimplifiedBlock(),
+        blank=True, verbose_name="Review body")
 
     def get_context(self, request):
         # @TODO. Work out if we actually do need/want to return this?
@@ -111,11 +114,14 @@ class ReviewPage(Page):
         return context
 
     content_panels = Page.content_panels + [
-        # The content panels are displaying the components of content we defined in the ReviewPage class above
-        # If you add something to the class and want it to appear for the editor you have to define it here too
-        # A full list of the panel types you can use is at http://docs.wagtail.io/en/latest/reference/pages/panels.html
-        # If you add a different type of panel ensure you've imported it from wagtail.wagtailadmin.edit_handlers in
-        # in the `From` statements at the top of the model
+        # The content panels are displaying the components of content we defined
+        # in the ReviewPage class above. If you add something to the class and
+        # want it to appear for the editor you have to define it here too
+        # A full list of the panel types you can use is at
+        # http://docs.wagtail.io/en/latest/reference/pages/panels.html
+        # If you add a different type of panel ensure you've imported it from
+        # wagtail.wagtailadmin.edit_handlers in the `From` statements at the top
+        # of the model
         InlinePanel('review_album_relationship', label="Album", min_num=1,
                     max_num=1),
         InlinePanel(
