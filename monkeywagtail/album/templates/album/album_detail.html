@@ -2,6 +2,65 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
+    <h2>{{ album.title }}</h2>
+   {% if album.artists %}
+		{% for foo in album.artists %}
+			 <h3><a href="{{ foo.url }}">{{ foo.title }}</a></h3>
+		{% endfor %}
+	{% endif %}
 
-{{ self.Album }}
+	{% comment %}
+	Genres & subgenres
+	{% endcomment %}
+	<ul>
+	{% for foo in album.genres %}
+			 <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
+	{% endfor %}
+	{% if album.subgenres %}
+	<ul>
+		{% for foo in album.subgenres %}
+			 <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+	</ul>
+
+    {{ album.album_image }}
+    {{ album.release_date }}
+    {{ album.song_details }}
+
+{% if review %}
+<h3>Reviewed</h3>
+{% for object in review %}
+	<li><a href="{{object.url}}">{{ object.title }}</a>, <br />
+	on <span>{{ object.first_published_at|date:"D d M Y" }}</span> by 
+	{{ object.author_review_relationship }}</li>
+{% endfor %}
+{% else %}
+<p><em>{{ album.title }}</em> hasn't been reviewed</p>
+{% endif %}
+
+{% comment %}
+	
+
+<h3>Features</h3>
+{% if article %}
+{% for object in article %}
+	<li><a href="{{object.url}}">{{ object.title }}</a></li>
+{% endfor %}
+{% else %}
+<p>Sorry there are no features for {{ artist.title }}</p>
+{% endif %}
+
+<h3>Albums</h3>
+{% if album %}
+	{% for object in album  %}
+		<li><a href="{{object.url}}">{{ object.title }}</a>
+	{% endfor %}
+
+{% else %}
+<p>Sorry there are no albums for {{ artist.title }}</p>
+{% endif %}
+
+{% endcomment %}
 {% endblock %}

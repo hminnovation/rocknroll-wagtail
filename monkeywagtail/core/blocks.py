@@ -1,3 +1,5 @@
+from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtailblocks_cards.blocks import CardsBlock
@@ -7,23 +9,36 @@ from wagtail.wagtailcore.blocks import (
     StreamBlock,
     RichTextBlock,
     CharBlock,
-    TimeBlock,
+    RegexBlock,
     ChoiceBlock,
     PageChooserBlock
 )
 # Note, you could import _all_ the blocks by using `from wagtail.wagtailcore
 # import blocks`. But it's a bad idea to import everything.
 #
-# @TODO add docs in relation to blocks
+# @TODO add docs in relation to blocks. For t' moment
+# http://docs.wagtail.io/en/latest/topics/streamfield.html
+
+
+class SongBlock(StructBlock):
+    album_song_title = CharBlock(help_text='e.g. Waiting Room')
+    album_song_length = RegexBlock(
+        regex=r'^([0-9]){2}:([0-9]){2}$',
+        error_messages={
+            'invalid': "Please format your entry nn:nn e.g. 03:10"
+        },
+        help_text="e.g. 03:10"
+        )
+    # @TODO work out how to make help_text display for RegexBlock
+    # Notes about the RegEx block are at the end of the document
+
+    class Meta:
+        template = 'blocks/songblock.html'
 
 
 class SongStreamBlock(StreamBlock):
     # Title name. Time.
-    SongBlock = StructBlock([
-        ('album_song', CharBlock(
-            blank=True, required=False, label='e.g. Waiting Room')),
-        ('album_song_length', TimeBlock(blank=True, required=False)),
-    ], title="Song", icon="fa-music", template="blocks/songstreamblock.html")
+    Songs = SongBlock(icon='fa-music')
 
 
 class SimplifiedBlock(StreamBlock):

@@ -14,8 +14,11 @@ def album_list(request):
 
 def album_detail(request, slug):
     album = get_object_or_404(Album, slug=slug)
+    reviews = set(
+        p.page for p in album.album_review_relationship.select_related('page').all() if p.page.live)
     return render(request, 'album/album_detail.html', {
         'album': album,
+        'review': reviews,
     })
 
 

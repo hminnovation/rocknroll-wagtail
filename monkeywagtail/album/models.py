@@ -28,7 +28,7 @@ class GenreClassAlbumRelationship(Orderable, models.Model):
     )
     genres = models.ForeignKey(
         'genre.GenreClass',
-        related_name="+"
+        related_name="genre_album_relationship"
     )
     panels = [
         FieldPanel('genres')
@@ -41,7 +41,7 @@ class SubGenreClassAlbumRelationship(Orderable, models.Model):
     )
     subgenre = models.ForeignKey(
         'genre.SubgenreClass',
-        related_name="+"
+        related_name="subgenre_album_relationship"
     )
     panels = [
         # We need this for the inlinepanel on the Feature Content Page to grab
@@ -125,9 +125,36 @@ class Album(ClusterableModel):
     def __str__(self):
         return self.title
 
+    def artists(self):
+        artists = [
+            n.artist_name for n in self.album_artist_relationship.all()
+        ]
+        return artists
+
+    def genres(self):
+        genres = [
+            n.genres for n in self.album_genre_relationship.all()
+        ]
+        return genres
+
+    def subgenres(self):
+        subgenres = [
+            n.subgenre for n in self.album_subgenre_relationship.all()
+        ]
+        return subgenres
+
     def all(self, request):
         return Album.objects.get_queryset()
         # Still don't know how this works...
+
+    @property
+    def album_image(self):
+        # fail silently if there is no profile pic or the rendition file can't
+        # be found. Note @richbrennan worked out how to do this...
+        try:
+            return self.image.get_rendition('fill-400x400').img_tag()
+        except:
+            return ''
 
     def artist(obj):
         artist = ','.join([

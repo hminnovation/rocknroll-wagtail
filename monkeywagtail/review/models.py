@@ -20,7 +20,7 @@ class ReviewRelatedPageRelationship(RelatedPage):
 
 # Album
 class ReviewAlbumRelationship(models.Model):
-    pages = ParentalKey(
+    page = ParentalKey(
         'ReviewPage',
         related_name='review_album_relationship'
     )
@@ -62,10 +62,6 @@ class ReviewPage(Page):
         index.SearchField('introduction'),
         index.SearchField('body'),
     ]
-
-    date_release = models.DateField("Release date of album")
-    # We need this to be mandatory as we need to filter off the date
-    # Though should it be coming from the albums app?
 
     image = models.ForeignKey(
         'wagtailimages.Image',

@@ -20,14 +20,14 @@ our views.py file
 <p>Sorry there are no features for {{ artist.title }}</p>
 {% endif %}
 
-<h3>Reviews</h3>
-{% if review %}
-	{% for object in review  %}
+<h3>Albums</h3>
+{% if album %}
+	{% for object in album  %}
 		<li><a href="{{object.url}}">{{ object.title }}</a>
 	{% endfor %}
 
 {% else %}
-<p>Sorry there are no reviews for {{ artist.title }}</p>
+<p>Sorry there are no albums for {{ artist.title }}</p>
 {% endif %}
 
 {% endblock %}
