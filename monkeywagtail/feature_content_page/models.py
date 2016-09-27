@@ -204,23 +204,34 @@ class FeatureIndexPage(Page):
 
     @property
     def features(self):
-        return self.get_children().specific().live().descendant_of(self).order_by('-first_published_at')
-        # We want to use `date` but think we need to define date within the filter?
+        return FeatureContentPage.objects.live().descendant_of(self).order_by('-first_published_at')
+
+    def artist_filter(self):
+        artists = "abc"
+        return artists
+
+    def paginate(self, request, *args):
+        page = request.GET.get('page')
+        paginator = Paginator(self.features, 2)  # Show 2 features per page
+        try:
+            pages = paginator.page(page)
+        except PageNotAnInteger:
+            pages = paginator.page(1)
+        except EmptyPage:
+            pages = paginator.page(paginator.num_pages)
+        return pages
 
     def get_context(self, request):
-        # http://docs.wagtail.io/en/v1.2/topics/pages.html#customising-template-context
-        # That convention can only be used on page models. Which is a pain.
-        page_number = request.GET.get('page')
-        paginator = Paginator(self.features, settings.DEFAULT_PER_PAGE)
-        try:
-            features = paginator.page(page_number)
-        except PageNotAnInteger:
-            features = paginator.page(1)
-        except EmptyPage:
-            features = paginator.page(paginator.num_pages)
+        """
+        Overriding the context to get more control over what we return.
+        See the section `SEPARATED CONTEXT & PAGINATION` at the end of
+        this .py file for details on how it works.
+        """
+        context = super(FeatureIndexPage, self).get_context(request)
 
-        context = super().get_context(request)
-        context.update(features=features)
+        features = self.paginate(request, self.features)
+
+        context['features'] = features
 
         return context
 
@@ -229,3 +240,107 @@ class FeatureIndexPage(Page):
     @property
     def children(self):
         return self.get_children().specific().live()
+
+        # http://docs.wagtail.io/en/v1.2/topics/pages.html#customising-template-context
+
+# SEPARATED CONTEXT & PAGINATION
+#     def features(self):
+#        return FeatureContentPage.objects.live().descendant_of(self).order_by('-first_published_at')
+#        # We want to use `date` but think we need to define date within the filter?
+#        #
+#        # Previously self.get_children().specific().live().descendant_of(self).order_by('-first_published_at')
+#        # Which I think is redundant since `get_children()` and `descendant_of(self)` are identical?
+#
+#    def paginate(self, request, *args):
+#        page = request.GET.get('page')
+#        paginator = Paginator(self.features, 2)  # Show 2 features per page
+#        try:
+#            pages = paginator.page(page)
+#        except PageNotAnInteger:
+#            pages = paginator.page(1)
+#        except EmptyPage:
+#            pages = paginator.page(paginator.num_pages)
+#        return pages
+#
+#    def get_context(self, request):
+#        """
+#        Overriding the context to get more control over what we return.
+#        """
+#        context = super(FeatureIndexPage, self).get_context(request)
+#
+#        features = self.paginate(request, self.features)
+#        # Right... I think I understand this
+#        # the function `paginate` defines how the paginator should behave. We do
+#        # this passing (I think) a local variable 'pages' through that is made
+#        # available globally by the `paginate` function. On it's own it's inert.
+#        # Calling `features = self.paginate will give you a sad white space where
+#        # content should be. We need to make a request to the features function
+#        # (where we define the queryset for the content we want returned) within
+#        # paginate for anything to happen. We do this with
+#        # features = self.paginate(request, self.features) e.g. give me all the
+#        # features but wrap them with pagination.
+#        #
+#        # We need `self.` because we need to tell Python to go get them from
+#        # FeatureIndexPage rather than from within the `get_context` function.
+#        #
+#        # Within paginate we add a third positional argument (that can be
+#        # named whatever you want as far as I can tell, so have called it `*args` as
+#        # that appears to be the convention) to enable `self.features` to be requested. Without it
+#        # you'd get an error "paginate() takes 2 positional arguments but 3 were given"
+#        #
+#        #
+#        # features_pagination = self.features(request)
+#        # Without above we'll get an error local variable referenced before assignment.
+#        # Unfortunately, with above we get the error
+#        # 'PageQuerySet' object is not callable. Removing `(request)` removes the error
+#
+#        # pagination
+#        # features_pagination = self.get_paginated(request, features_pagination)
+#
+#        context['features'] = features
+#
+#        return context
+#
+#
+#
+#
+# MIXED CONTEXT & PAGINATION
+# For reference below will work _and_ paginate
+#
+# The difficulty with this is that we're mixing pagination
+# with context. It makes it quite difficult to follow the thread through
+# as features and paginator have different attributes assigned before
+# having features returned. It works fine, but isn't hugely extensible.
+#
+#    @property
+#    def features(self):
+#        return self.get_children().specific().live().descendant_of(self).order_by('-first_published_at')
+#        # We want to use `date` but think we need to define date within the filter?
+#
+#    def get_context(self, request):
+#        # http://docs.wagtail.io/en/v1.2/topics/pages.html#customising-template-context
+#        # That convention can only be used on page models. Which is a pain.
+#        page_number = request.GET.get('page')
+#        paginator = Paginator(self.features, settings.DEFAULT_PER_PAGE)
+#        try:
+#            features = paginator.page(page_number)
+#        except PageNotAnInteger:
+#            features = paginator.page(1)
+#        except EmptyPage:
+#            features = paginator.page(paginator.num_pages)
+#
+#        context = super().get_context(request)
+#        context.update(features=features)
+#
+#        return context
+#
+#
+# AMENDED CONTEXT
+# The absolute minimum required (if you want to override the context) is:
+#
+#    def get_context(self, request):
+#        context = super(FeatureIndexPage, self).get_context(request)
+#
+#        # Add extra variables and return the updated context
+#        context['features'] = FeatureContentPage.objects.live().descendant_of(self).order_by('-first_published_at')
+#        return context
