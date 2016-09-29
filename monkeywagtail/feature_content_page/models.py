@@ -204,10 +204,14 @@ class FeatureIndexPage(Page):
 
     @property
     def features(self):
-        return FeatureContentPage.objects.live().descendant_of(self).order_by('-first_published_at')
+        return FeatureContentPage.objects.live().descendant_of(self).order_by('-feature_page_artist_relationship')
 
     def artist_filter(self):
         artists = "abc"
+        # something like
+        # artists = features.filter(
+        #        feature_page_artist_relationship__artist__id=artist
+        #    )
         return artists
 
     def paginate(self, request, *args):
