@@ -69,6 +69,16 @@ The front-end is currently powered by Foundation. This will hopefully be amended
 
 To-do
 
+## Troubleshooting
+#### `command not found: gulp` (or Bower, NPM etc)
+To run Foundation, and compile SASS files using Django Compressor, you'll need to install some additional software if it isn't on your computer.
+
+Assuming you're starting from zero on a Mac running OSX
+
+ -  [Install Homebrew ](http://brew.sh/)
+ -  [Install NPM with Homebrew](https://changelog.com/install-node-js-with-homebrew-on-os-x/) `brew install node`
+ -  Install Bower `npm install -g bower`
+ -  Install Gulp `npm install -g gulp`
 
 ## Based upon
 
