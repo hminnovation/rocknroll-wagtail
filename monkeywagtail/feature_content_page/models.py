@@ -269,11 +269,19 @@ class FeatureIndexPage(Page):
 
     @property
     def features(self):
-        return FeatureContentPage.objects.live().descendant_of(self).order_by('-first_published_at')
+        return FeatureContentPage.objects.live().descendant_of(self).order_by('-feature_page_artist_relationship')
 
     # def genre_filter(self):
     #     return FeatureContentPage.objects.filter(feature_page_genre_relationship__genre__id=filter)
         # int() argument must be a string or a number, not 'type'
+
+    def artist_filter(self):
+        artists = "abc"
+        # something like
+        # artists = features.filter(
+        #        feature_page_artist_relationship__artist__id=artist
+        #    )
+        return artists
 
     def paginate(self, request, objects):
         page = request.GET.get('page')
@@ -365,7 +373,7 @@ class FeatureIndexPage(Page):
 #        context['features'] = features
 #
 #        return context
-# 
+#
 # Actually further conversation suggested I didn't understand. The `*args' isn't
 # necessary. I can either pass 'features' in to the paginate method and access it
 # there without need to use `self.` to get to the global

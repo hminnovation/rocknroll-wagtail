@@ -70,31 +70,23 @@ class SimplifiedBlock(StreamBlock):
 
 
 class StandardBlock(StreamBlock):
-    # This class was originally writted by Alex Gleason (@alexgleason)
     paragraph = RichTextBlock(
         icon="pilcrow",
         template="blocks/paragraph.html"
     )
-    h1 = CharBlock(
+    header = StructBlock([
+        ('header_text', CharBlock(
+            blank=True, required=False, label='Header')),
+        ('size', ChoiceBlock(choices=[
+            ('', 'Select a header size'),
+            ('h2', 'H2'),
+            ('h3', 'H3'),
+            ('h4', 'H4')
+        ], blank=True, required=False))
+        ],
         classname="title",
         icon="fa-header",
-        template="blocks/h1.html"
-    )
-    h2 = CharBlock(
-        classname="title",
-        icon="fa-header",
-        template="blocks/h2.html"
-    )
-    h3 = CharBlock(
-        classname="title",
-        icon="fa-header",
-        template="blocks/h3.html"
-    )
-    h4 = CharBlock(
-        classname="title",
-        icon="fa-header",
-        template="blocks/h4.html"
-    )
+        template="blocks/header.html")
     image = StructBlock([
         ('image', ImageChooserBlock()),
         ('caption', CharBlock(blank=True, required=False)),

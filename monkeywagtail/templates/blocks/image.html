@@ -9,11 +9,10 @@
     </figure>
   </div>
 
-{% elif self.style == 'fullwidth' %}
+{% elif self.style == 'full' %}
   <div class="block image">
     <figure>
-      {% image self.image original as picture %}
-        <div class="fullwidth-picture" style="background-image: url({{ picture.url }})"></div>
+      {% image self.image original %}
         {% if self.caption %}
           <figcaption>{{ self.caption }}</figcaption>
         {% endif %}
@@ -21,7 +20,7 @@
     </figure>
   </div>
 
-{% elif self.style == 'normal' %}
+{% elif self.style == 'half' %}
   <div class="block image">
     <div class="wrap">
       <figure>
