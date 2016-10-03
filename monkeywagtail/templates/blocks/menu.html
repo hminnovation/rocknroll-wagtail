@@ -1,0 +1,17 @@
+{% load wagtailcore_tags %}
+
+<ul class="dropdown menu" data-dropdown-menu> 
+{% for block in self %}
+  {% include_block block %}
+{% endfor %}
+</ul>
+
+{% comment %}
+  There's almost certainly a better way around this but we doing this because
+  we need to get around the way that Wagtail template renders blocks
+  http://docs.wagtail.io/en/latest/topics/streamfield.html#template-rendering
+
+  If we don't include this the block will be wrapped in a call called
+  `block menu-block`, which 99% of the times is helpful, but causes problems
+  being in the menu
+{% endcomment %}

@@ -139,4 +139,7 @@ class ParentMenuBlock(StructBlock):
 
 class MenuBlock(StreamBlock):
     menu_item = ParentMenuBlock(icon='fa-link')
+
+    class Meta:
+        template = 'blocks/menu.html'
 # We then wrap both the parent and child menu blocks within a StreamField block

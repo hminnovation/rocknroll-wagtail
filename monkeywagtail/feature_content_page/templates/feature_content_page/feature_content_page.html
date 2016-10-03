@@ -9,17 +9,28 @@
         </div>
     </div>
 
-{% for artist in page.artists %}
-    <div class="page_artist">
-        <div class="row">
-            <div class="columns small-12 medium-9 large-7 column-end">
-                <p>
-                    <a href="{% url 'artists' %}{{ artist.slug}}">{{ artist.title }}</a>
-                </p>
-            </div>
+
+<div class="page_artist_genre">
+    <div class="row">
+        <div class="columns small-12 medium-9 large-7 column-end">
+            {% for artist in page.artists %}
+            <p class="artist">
+                <a href="{% url 'artists' %}{{ artist.slug}}">{{ artist.title }}</a>
+            </p>
+            {% endfor %}
+            {% if page.genres %}
+            <ul class="genre">
+                {% for foo in page.genres %}
+                    <li>
+                        <a href="{{ foo.url }}">{{ foo.title }}</a>
+                        {% if not forloop.last %}, {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
     </div>
-{% endfor %}
+</div>
 
 <div class="page_title-meta">
     <div class="row">

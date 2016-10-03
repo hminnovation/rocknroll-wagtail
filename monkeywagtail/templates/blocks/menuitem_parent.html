@@ -1,24 +1,27 @@
 {% load wagtailimages_tags %}
 
-  <ul>
-    {% if self.parent_internal_link or self.parent_external_link %}
+
+ 
+  {% if self.parent_internal_link or self.parent_external_link %}
       <li>
+      <a href=
       {% if self.parent_internal_link %}
-      	<a href="/{{ self.parent_internal_link.slug}}">
+      	"/{{ self.parent_internal_link.slug}}"
       	{% elif self.parent_external_link %}
-      	<a href="{{ self.parent_external_link}}">
+        "{{ self.parent_external_link}}"
       	{% else %}
       {% endif %}
+      >
       {{ self.parent_link_text }}
-      </a></li>
-      {% if self.child_link %}
-      <ul>
-          {% for child in self.child_link %}
-            {{ child }}
-          {% endfor %}
-      </ul>
-      {% endif %}
-  </ul>
+      </a>
+        {% if self.child_link %}
+          <ul class="menu vertical">
+              {% for child in self.child_link %}
+                {{ child }}
+              {% endfor %}
+          </ul>
+        {% endif %}
+        </li>
   {% endif %}
 
 {% comment %}
@@ -29,4 +32,8 @@
   group of objects we need to populate them with a loop tag.
 
   See `menuitem_child.html` for notes on the conditionals.
+{% endcomment %}
+
+{% comment %}
+  
 {% endcomment %}

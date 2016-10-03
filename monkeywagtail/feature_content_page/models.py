@@ -12,6 +12,7 @@ from wagtail.wagtailadmin.edit_handlers import (
     StreamFieldPanel,
     InlinePanel,
     MultiFieldPanel)
+from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from monkeywagtail.core.blocks import StandardBlock
 from monkeywagtail.author.models import Author
 
@@ -34,7 +35,7 @@ class ArtistFeaturePageRelationship(Orderable, models.Model):
     )
     panels = [
         # We need this for the inlinepanel on the Feature Content Page to grab hold of
-        FieldPanel('artist')
+        SnippetChooserPanel('artist')
     ]
 
 
@@ -51,7 +52,33 @@ class AuthorFeaturePageRelationship(Orderable, models.Model):
     )
     panels = [
         # We need this for the inlinepanel on the Feature Content Page to grab hold of
-        FieldPanel('author')
+        SnippetChooserPanel('author')
+    ]
+
+
+class GenreFeaturePageRelationship(Orderable, models.Model):
+    page = ParentalKey(
+        'FeatureContentPage', related_name='feature_page_genre_relationship'
+    )
+    genre = models.ForeignKey(
+        'genre.GenreClass',
+        related_name='genre_feature_page_relationship'
+    )
+    panels = [
+        FieldPanel('genre')
+    ]
+
+
+class SubGenreFeaturePageRelationship(Orderable, models.Model):
+    page = ParentalKey(
+        'FeatureContentPage', related_name='feature_page_subgenre_relationship'
+    )
+    subgenre = models.ForeignKey(
+        'genre.SubGenreClass',
+        related_name='subgenre_feature_page_relationship'
+    )
+    panels = [
+        FieldPanel('subgenre')
     ]
 
 
@@ -126,6 +153,26 @@ class FeatureContentPage(Page):
             classname="collapsible"
         ),
         StreamFieldPanel('body'),
+        MultiFieldPanel(
+            # This duplicates the album/models.py album classa.
+            [
+                InlinePanel(
+                            'feature_page_genre_relationship',
+                            label="Genre",
+                            panels=None,
+                            min_num=1,
+                            max_num=1
+                ),
+                InlinePanel(
+                            'feature_page_subgenre_relationship',
+                            label="sub-genres",
+                            panels=None,
+                            min_num=1
+                ),
+            ],
+            heading="Genres",
+            classname="collapsible"
+        ),
         InlinePanel('feature_page_artist_relationship', label="Artists"),
         InlinePanel(
             'feature_page_author_relationship',
@@ -166,6 +213,23 @@ class FeatureContentPage(Page):
         ]
         return authors
 
+    def genres(self):
+        genres = [
+            n.genre for n in self.feature_page_genre_relationship.all()
+        ]
+        return genres
+
+    def subgenres(self):
+        subgenres = [
+            n.subgenre for n in self.feature_page_subgenre_relationship.all()
+        ]
+        return subgenres
+
+    # def genre_filter(self):
+    #     return self.objects.filter(feature_page_genre_relationship__genre__id=self)
+    #     # genre = self.feature_page_genre_relationship
+    #     # return genre
+
 
 class FeatureIndexPage(Page):
     listing_introduction = models.TextField(
@@ -179,7 +243,8 @@ class FeatureIndexPage(Page):
     body = StreamField(
         StandardBlock(),
         blank=True,
-        help_text="No good reason to have this here, but in case there's a feature section I can't think of"
+        help_text="No good reason to have this here, but in case there's a"
+                  "feature section I can't think of"
         )
 
     search_fields = Page.search_fields + [
@@ -206,6 +271,10 @@ class FeatureIndexPage(Page):
     def features(self):
         return FeatureContentPage.objects.live().descendant_of(self).order_by('-feature_page_artist_relationship')
 
+    # def genre_filter(self):
+    #     return FeatureContentPage.objects.filter(feature_page_genre_relationship__genre__id=filter)
+        # int() argument must be a string or a number, not 'type'
+
     def artist_filter(self):
         artists = "abc"
         # something like
@@ -214,9 +283,9 @@ class FeatureIndexPage(Page):
         #    )
         return artists
 
-    def paginate(self, request, *args):
+    def paginate(self, request, objects):
         page = request.GET.get('page')
-        paginator = Paginator(self.features, 2)  # Show 2 features per page
+        paginator = Paginator(objects, 2)  # Show 2 features per page
         try:
             pages = paginator.page(page)
         except PageNotAnInteger:
@@ -305,6 +374,9 @@ class FeatureIndexPage(Page):
 #
 #        return context
 #
+# Actually further conversation suggested I didn't understand. The `*args' isn't
+# necessary. I can either pass 'features' in to the paginate method and access it
+# there without need to use `self.` to get to the global
 #
 #
 #
@@ -337,7 +409,6 @@ class FeatureIndexPage(Page):
 #        context.update(features=features)
 #
 #        return context
-#
 #
 # AMENDED CONTEXT
 # The absolute minimum required (if you want to override the context) is:

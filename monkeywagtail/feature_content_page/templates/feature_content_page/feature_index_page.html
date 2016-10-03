@@ -2,6 +2,7 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
+{{ self.genre_filter }}
 <h1>Features</h1>
   {% for feature in features %}
     <div class="feature row">
