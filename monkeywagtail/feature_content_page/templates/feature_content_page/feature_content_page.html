@@ -2,37 +2,88 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-<h1>{{ page.title }}</h1>
-{% for author in page.authors %}
-    <p>
-        {{ author.title }}
-    </p>
-{% endfor %}
-
-        {% image page.image width-400 %}
-
-<p><strong>{{ page.introduction }}</strong></p>
-{{ page.date }}
-{{ page.body }}
-
+<div class="article">
+    <div class="row">
+        <div class="columns small-12 medium-9 large-7 column-end">
+            <h1>{{ page.title }}</h1>
+        </div>
+    </div>
 
 {% for artist in page.artists %}
-    {% comment %}
-    Artist has been placed into the page by the authors @property.
-    We get content from it by model.property e.g. `artist.title`
-
-    But wait... with the URL all we have is the slug. How to get /artists/
-    We do this with the eosoterically named reverse resolution of URLs
-    c/f https://docs.djangoproject.com/en/1.10/topics/http/urls/#reverse-resolution-of-urls
-
-    Have a look in artist/urls.py and you'll see that the artists list
-    has `name=artists`. You need that there for Django to know how to resolve
-    the URL and you'll hit annoying 404s.
-    {% endcomment %}
-    <p>
-            <a href="{% url 'artists' %}{{ artist.slug}}">{{ artist.title }}</a>
-            {{ artist.artist_image }}
-    </p>
+    <div class="page_artist">
+        <div class="row">
+            <div class="columns small-12 medium-9 large-7 column-end">
+                <p>
+                    <a href="{% url 'artists' %}{{ artist.slug}}">{{ artist.title }}</a>
+                </p>
+            </div>
+        </div>
+    </div>
 {% endfor %}
 
+<div class="page_title-meta">
+    <div class="row">
+        <div class="columns small-12 medium-9 large-7 column-end">
+            <date>{{ page.date }}</date>
+            <p>
+            {% for author in page.authors %}
+                {% if forloop.last and forloop.counter > 1 %}
+                &nbsp;and&nbsp;
+                {% endif %}
+                    <a href="{% url 'authors' %}{{ author.slug}}">{{ author.title }}</a>
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            </p>
+            {% for genre in page.genres %}
+                <li>
+                    <a href="{% url 'genres' %}{{ genre.slug}}">{{ genre.title }}</a>
+                </li>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% comment %}
+<div class="listing_image">
+    {% image page.image width-720 %}
+</div>
+
+Note: We aren't showing the listing image on the individual feature page, with
+the expectation that this would be an editorial decision based on the context-
+ual needs of a feature. e.g. it may be more appropriate to have a video, block-
+quote &etc.
+{% endcomment %}
+
+<div class="introduction">
+    <div class="row">
+        <div class="columns small-12 medium-9 large-7 column-end">
+        {% comment %}@TODO Make a sass mixin for above classes{% endcomment %}
+            {{ page.introduction }}
+        </div>
+    </div>
+</div>
+
+<div class="feature-body">
+    <div class="row">
+        <div class="columns small-12 medium-9 large-7 column-end">
+            {{ page.body }}
+        </div>
+    </div>
+</div>
+
+</div>
 {% endblock %}
+
+{% comment %}
+ARTISTS
+Artist has been placed into the page by the authors @property.
+We get content from it by model.property e.g. `artist.title`
+
+But wait... with the URL all we have is the slug. How to get /artists/
+We do this with the eosoterically named reverse resolution of URLs
+c/f https://docs.djangoproject.com/en/1.10/topics/http/urls/#reverse-resolution-of-urls
+
+Have a look in artist/urls.py and you'll see that the artists list
+has `name=artists`. You need that there for Django to know how to resolve
+the URL and you'll hit annoying 404s.
+{% endcomment %}

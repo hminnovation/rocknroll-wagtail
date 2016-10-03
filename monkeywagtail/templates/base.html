@@ -14,7 +14,8 @@
 
 
         <link rel="stylesheet" href="{% static 'css/app.css' %}">
-        {# <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic|Bitter:400,700,400italic' rel='stylesheet' type='text/css'> #}
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic|Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
 
         {% block extra_css %}
 
@@ -48,12 +49,8 @@
   <div class="row">{% breadcrumbs %}</div>
 {% endblock breadcrumb %}
 
-<div class="row">
-    <div class="small-12 columns">
-    {% block content %}        
-    {% endblock %}
-    </div>
-</div>  
+{% block content %}        
+{% endblock %}
 
 {% block footer %}
     <footer>
