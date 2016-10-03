@@ -3,6 +3,24 @@
 
 {% block content %}
 <h1>{{ page.title }}</h1>
+
+{% comment %}
+Genres & subgenres
+{% endcomment %}
+<ul>
+    {% for foo in page.genres %}
+             <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
+    {% endfor %}
+    {{ page.genre_filter }}
+    {% if page.subgenres %}
+    <ul>
+        {% for foo in page.subgenres %}
+             <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</ul>
+
 {% for author in page.authors %}
     <p>
         {{ author.title }}
