@@ -1,14 +1,19 @@
 {% load wagtailimages_tags %}
 
-  <ul>
-    {% if self.parent_internal_link or self.parent_external_link %}
-      <li>
+
+
+
+  <ul class="vertical medium-horizontal menu" data-responsive-menu="drilldown medium-dropdown">
+  {% if self.parent_internal_link or self.parent_external_link %}
+      <li class="menu-item">
+      <a data-toggle="dropdown" class="dropdown-toggle" href=
       {% if self.parent_internal_link %}
-      	<a href="/{{ self.parent_internal_link.slug}}">
+      	"/{{ self.parent_internal_link.slug}}"
       	{% elif self.parent_external_link %}
-      	<a href="{{ self.parent_external_link}}">
+        "{{ self.parent_external_link}}"
       	{% else %}
       {% endif %}
+      >
       {{ self.parent_link_text }}
       </a></li>
       {% if self.child_link %}
@@ -18,8 +23,9 @@
           {% endfor %}
       </ul>
       {% endif %}
-  </ul>
   {% endif %}
+  </ul>
+</div>
 
 {% comment %}
   This template was called by core/blocks.py and is populating base.html thanks
@@ -29,4 +35,8 @@
   group of objects we need to populate them with a loop tag.
 
   See `menuitem_child.html` for notes on the conditionals.
+{% endcomment %}
+
+{% comment %}
+  
 {% endcomment %}

@@ -30,14 +30,16 @@
 <div class="row logo">
     <div class="small-12 logo-text">
         <h1><a href="/">Rock 'n' roll Wagtail</a></h1>
-    {% mainmenu %}
     </div> 
 </div>
 
 <nav>
 {% block menu %}
     {% get_site_root as site_root %}
-    {% top_menu parent=site_root calling_page=self %}
+    {% main_menu %}
+    {% comment %}
+        {% main_menu parent=site_root calling_page=self %}
+    {% endcomment %}
 {% endblock menu %}
   </nav>
 </header>  

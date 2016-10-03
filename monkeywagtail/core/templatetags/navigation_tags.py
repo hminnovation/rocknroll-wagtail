@@ -102,7 +102,7 @@ def standard_index_listing(context, calling_page):
 # Main menu model
 # @TODO find docs re: .inclusion_tag
 @register.inclusion_tag('tags/mainmenu.html', takes_context=True)
-def mainmenu(context):
+def main_menu(context):
     return {
         'mainmenu': MainMenu.objects.all(),
         'request': context['request'],
