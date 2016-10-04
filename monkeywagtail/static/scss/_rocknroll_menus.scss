@@ -10,21 +10,30 @@
 }
 
 .top-bar {
-    ul {
-        background-color: transparent;
-    }
-    .dropdown.menu {
-        > li {
-            > a {
-                color: $white;
+  padding: 0px;
+  ul {
+      background-color: transparent;
+  }
+  .dropdown.menu {
+    margin-left: 30px;
+      > li {
+            &:hover {
+              background-color: $white;
             }
-        }
-        ul {
-            background-color: $white;
-        }
-    }
+          > a {
+              color: $white;
+              margin: 0 10px;
+              &:hover{
+                color: $metal;
+              }
+          }
+      }
+      ul {
+          background-color: $white;
+          border: 0;
+      }
+  }
 }
-
 
 /* STOP FOUC FROM FOUNDATION LOADING MENU */
 .no-js {
