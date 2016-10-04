@@ -45,11 +45,6 @@
                 {% if not forloop.last %}, {% endif %}
             {% endfor %}
             </p>
-            {% for genre in page.genres %}
-                <li>
-                    <a href="{% url 'genres' %}{{ genre.slug}}">{{ genre.title }}</a>
-                </li>
-            {% endfor %}
         </div>
     </div>
 </div>

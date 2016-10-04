@@ -6,6 +6,11 @@
     h1 {
         font-size: 1.6em;
         margin-bottom: 0;
+        margin-top: 10px;
+        width: 250px;
+        a {
+          color: $white;
+        }
     }
 }
 
@@ -17,19 +22,29 @@
   .dropdown.menu {
     margin-left: 30px;
       > li {
+        padding: 10px 0;
             &:hover {
-              background-color: $white;
+              background-color: $night;
             }
           > a {
               color: $white;
               margin: 0 10px;
               &:hover{
-                color: $metal;
+                color: $white;
               }
+          }
+          > ul {
+            > li {
+              a {
+                border-bottom: 1px solid $metal;
+                color: $white;
+                padding-left: 1.6em;
+              }
+            }
           }
       }
       ul {
-          background-color: $white;
+          background-color: $night;
           border: 0;
       }
   }
