@@ -1,12 +1,10 @@
-{% load wagtailimages_tags %}
-
-
+{% load wagtailcore_tags %}
  
   {% if self.parent_internal_link or self.parent_external_link %}
       <li>
       <a href=
       {% if self.parent_internal_link %}
-      	"/{{ self.parent_internal_link.slug}}"
+      	"/{{ self.parent_internal_link.slug }}"
       	{% elif self.parent_external_link %}
         "{{ self.parent_external_link}}"
       	{% else %}

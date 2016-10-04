@@ -6,25 +6,49 @@
     h1 {
         font-size: 1.6em;
         margin-bottom: 0;
+        margin-top: 10px;
+        width: 250px;
+        a {
+          color: $white;
+        }
     }
 }
 
 .top-bar {
-    ul {
-        background-color: transparent;
-    }
-    .dropdown.menu {
-        > li {
-            > a {
-                color: $white;
+  padding: 0px;
+  ul {
+      background-color: transparent;
+  }
+  .dropdown.menu {
+    margin-left: 30px;
+      > li {
+        padding: 10px 0;
+            &:hover {
+              background-color: $night;
             }
-        }
-        ul {
-            background-color: $white;
-        }
-    }
+          > a {
+              color: $white;
+              margin: 0 10px;
+              &:hover{
+                color: $white;
+              }
+          }
+          > ul {
+            > li {
+              a {
+                border-bottom: 1px solid $metal;
+                color: $white;
+                padding-left: 1.6em;
+              }
+            }
+          }
+      }
+      ul {
+          background-color: $night;
+          border: 0;
+      }
+  }
 }
-
 
 /* STOP FOUC FROM FOUNDATION LOADING MENU */
 .no-js {

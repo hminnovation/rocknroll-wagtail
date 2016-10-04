@@ -4,13 +4,13 @@
   <li class="menu-text"><h1>Rock 'n' roll Wagtail</h1></li>
 </div>
 
-<div class="top-bar" id="main-menu">
+<div class="top-bar"  style="width:100%" id="main-menu">
 	<div class="row">
 		<div class="columns small-12 medium-9">
-			<div class="top-bar-left">
-			<h1>Rock 'n' roll Wagtail</h1>
+			<div class="top-bar-left title">
+			<h1><a href="/">Rock 'n' roll Wagtail</a></h1>
 			</div>
-			<div class="top-bar-right">
+			<div class="top-bar-left">
 				{% for menu in mainmenu %}
 				      	{{ menu.menu }}
 				{% endfor %}
