@@ -1,0 +1,42 @@
+// Base styling for Rock n roll Wagtail's MENUS
+
+.top-bar, .title-bar {
+    background-color: $metal;
+    color: $white;
+    h1 {
+        font-size: 1.6em;
+        margin-bottom: 0;
+    }
+}
+
+.top-bar {
+    ul {
+        background-color: transparent;
+    }
+    .dropdown.menu {
+        > li {
+            > a {
+                color: $white;
+            }
+        }
+        ul {
+            background-color: $white;
+        }
+    }
+}
+
+
+/* STOP FOUC FROM FOUNDATION LOADING MENU */
+.no-js {
+  @include breakpoint(small only) {
+    .top-bar {
+      display: none;
+    }
+  }
+
+  @include breakpoint(medium) {
+    .title-bar {
+      display: none;
+    }
+  }
+}

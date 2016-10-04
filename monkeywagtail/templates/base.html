@@ -28,12 +28,14 @@
 
 {% block header %}  
 <header>
-  <!-- logo -->
+{% comment %}
+Note: We've currently got the title within menu...
 <div class="row logo">
     <div class="small-12 logo-text">
         <h1><a href="/">Rock 'n' roll Wagtail</a></h1>
     </div> 
 </div>
+{% endcomment %}
 
 <nav>
 {% block menu %}
@@ -45,7 +47,6 @@
 {% endblock menu %}
   </nav>
 </header>  
-  <!-- / logo -->
 {% endblock header %}
 
 {% block breadcrumb %}
