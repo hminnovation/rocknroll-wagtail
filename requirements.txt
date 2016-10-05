@@ -6,6 +6,7 @@ wagtail==1.6
 django-libsass==0.6
 libsass==0.8.3
 Pillow==3.0.0
+redis==2.10.5
 wagtailfontawesome==1.0.5 #This allows us to use FontAwesome icons for the admin area e.g. with StreamField
 wagtailerrorpages>=1.1.0 #This gives us a better 404
 wagtailblocks_cards>=2.0.1 #We use this for the menus

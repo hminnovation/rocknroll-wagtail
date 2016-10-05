@@ -9,6 +9,16 @@ env.roledefs = {
 }
 
 
+def pull_heroku_data():
+    local('psql -d monkeywagtail -c "ALTER USER vagrant with password \'vagrant\';"')
+    local('dropdb monkeywagtail')
+    local('heroku pg:pull DATABASE_URL monkeywagtail --app rocknroll-wagtail')
+    local('psql -d monkeywagtail -c "alter role vagrant password null;"')
+
+
+# Below are commands from the original wagtail-kit cookiecutter
+
+
 @roles('production')
 def deploy_production():
     # Remove this line when you're happy that this task is correct
