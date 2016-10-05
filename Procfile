@@ -1,1 +1,1 @@
-web: uwsgi --http :$PORT --module rocknrollwagtail.wsgi --master --offload-threads 1
+web: gunicorn project_tier.wsgi --log-file -

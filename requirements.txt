@@ -16,6 +16,7 @@ wagtailbettereditor==1.0.2
 dj-database-url==0.4.1
 whitenoise==2.0.4
 uwsgi==2.0.11.2
+gunicorn==19.4.1
 ConcurrentLogHandler==0.9.1
 
 # No idea where these are from
