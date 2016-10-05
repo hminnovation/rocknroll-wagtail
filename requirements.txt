@@ -5,7 +5,7 @@ django-redis==4.3.0
 wagtail==1.6
 django-libsass==0.6
 libsass==0.8.3
-Pillow==3.0.0
+Pillow==3.3.0
 redis==2.10.5
 wagtailfontawesome==1.0.5 #This allows us to use FontAwesome icons for the admin area e.g. with StreamField
 wagtailerrorpages>=1.1.0 #This gives us a better 404
@@ -36,3 +36,6 @@ typing==3.5.2.2
 
 # S3
 static3==0.6.1
+django-storages==1.5.1
+boto==2.39.0
+urllib3==1.13
