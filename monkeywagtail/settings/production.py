@@ -34,7 +34,7 @@ for key, value in os.environ.items():
 
 # Basic configuration
 
-APP_NAME = env.get('APP_NAME', 'monkeywagtail')
+APP_NAME = env.get('APP_NAME', 'rocknrollwagtail')
 
 if 'SECRET_KEY' in env:
     SECRET_KEY = env['SECRET_KEY']
@@ -151,7 +151,7 @@ LOGGING = {
         }
     },
     'loggers': {
-        'monkeywagtail': {
+        'rocknrollwagtail': {
             'handlers':     [],
             'level':        'INFO',
             'propagate':    False,
@@ -181,14 +181,14 @@ LOGGING = {
 
 if 'LOG_DIR' in env:
     # monkey log
-    LOGGING['handlers']['monkeywagtail_file'] = {
+    LOGGING['handlers']['rocknrollwagtail_file'] = {
         'level':        'INFO',
         'class':        'cloghandler.ConcurrentRotatingFileHandler',
-        'filename':     os.path.join(env['LOG_DIR'], 'monkeywagtail.log'),
+        'filename':     os.path.join(env['LOG_DIR'], 'rocknrollwagtail.log'),
         'maxBytes':     5242880,  # 5MB
         'backupCount':  5
     }
-    LOGGING['loggers']['wagtail']['handlers'].append('monkeywagtail_file')
+    LOGGING['loggers']['wagtail']['handlers'].append('rocknrollwagtail_file')
 
     # Wagtail log
     LOGGING['handlers']['wagtail_file'] = {
