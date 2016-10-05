@@ -12,11 +12,11 @@ Rock n roll wagtail
 
 ```
 git clone git@github.com:heymonkeyriot/rocknroll-wagtail.git
-cd rocknrollwagtail
+cd monkeywagtail
 vagrant up
 vagrant ssh
 pip install -r requirements.txt
-cd rocknrollwagtail/static
+cd monkeywagtail/static
 npm install
 bower install
 gulp watch
@@ -103,4 +103,4 @@ The project is based upon [Torchbox's Wagtail Cookiecutter](https://github.com/t
  - [ ] Introduce filtering for artist and reviews
  - [ ] Template the models
  - [ ] Fully inline comments for the different models and templates
- - [ ] Put `cd rocknrollwagtail/static && npm install && bower install` within vagrant provision file
+ - [ ] Put `cd monkeywagtail/static && npm install && bower install` within vagrant provision file

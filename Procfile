@@ -1,1 +1,1 @@
-web: gunicorn rocknrollwagtail.wsgi --log-file -
+web: gunicorn monkeywagtail.wsgi --log-file -
