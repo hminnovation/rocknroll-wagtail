@@ -33,3 +33,6 @@ pathtools==0.1.2
 pep8==1.7.0
 PyYAML==3.12
 typing==3.5.2.2
+
+# S3
+static3==0.6.1
