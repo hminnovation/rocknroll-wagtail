@@ -1,0 +1,51 @@
+{% load navigation_tags %}
+
+<div class="row">
+    {% breadcrumbs %}
+    
+    {% if '/albums/' in request.path or '/artists/' in request.path or '/authors/' in request.path or '/genres/' in request.path %}
+    <nav class="breadcrumbs" aria-label="You are here:" role="navigation">
+        <ul>
+            <li>
+                <a href='/'>home</a>
+            </li>
+            {% if '/albums/' in request.path %}
+                <li><a href="{% url 'albums' %}">albums</a></li>
+                <li>{{ album.title }}</li>
+            {% endif %}
+            {% if '/artists/' in request.path %}
+                <li><a href="{% url 'artists' %}">artists</a></li>
+                <li>{{ artist.title }}</li>
+            {% endif %}
+            {% if '/authors/' in request.path %}
+                <li><a href="{% url 'authors' %}">authors</a></li>
+                <li>{{ author.title }}</li>
+            {% endif %}
+            {% if '/genres/' in request.path %}
+                <li><a href="{% url 'genres' %}">genres</a></li>
+                <li>{{ genre.title }}</li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+  </div>
+  {% comment %}
+    @TODO This is bad...
+    Let us count the ways:
+    1. We're duplicating what's in tags/breadcrumbs.html that we defined in
+    core/templatetags/navigation_tags.py. We could have everything in 
+    breadcrumbs.html, but would require re-writing the context in
+    navigation_tags.py.
+    2. These requests should be defined as context within, either, the
+    individual views.py files for each app, or within something like the
+    navigation_tags.py file
+    3. The reason this is bad is because we're making the template think _a lot_
+    The template needs to decide if one of the above conditionals is true (or 
+    false) and will display different content accordingly
+    4. On the plus side we're not making bad query requests to the server because
+    we're just asking the template to look at the URL, but still it's clumsy
+    and line 6 shows how quickly it would get daft...
+    5. Anyway, done is better than perfect right? ¯\_(ツ)_/¯
+
+{% endcomment %}

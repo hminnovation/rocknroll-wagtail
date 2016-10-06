@@ -50,7 +50,7 @@ Note: We've currently got the title within menu...
 {% endblock header %}
 
 {% block breadcrumb %}
-  <div class="row">{% breadcrumbs %}</div>
+    {% include "tags/breadcrumbed.html" %}
 {% endblock breadcrumb %}
 
 {% block content %}        
