@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
+
 {% block content %}
+<a href='/'>home</a> | 
+{% if '/artists/' in request.path %}
+<a href="{% url 'artists' %}">artists</a> {% endif %}| {{ artist.title }}
+{% comment %}
+	@todo Hang your head in shame over how hacky above is. Now go and
+	put it into an include!
+{% endcomment %}
     <h2>{{ artist.title }}</h2>
     {{ artist.artist_image }}
     <p>{{ artist.biography|richtext }}</p>
