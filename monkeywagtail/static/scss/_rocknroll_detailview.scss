@@ -1,0 +1,36 @@
+// Detail views
+
+.author-detail {
+    background-color: $rust;
+    color: $white;
+    padding-bottom: $global-padding*3;
+    a {
+        color: $white;
+        text-decoration: underline;
+    }
+    .author-image {
+        float: left;
+        margin-top: $global-margin;
+        margin-right: $global-margin*3;
+        img {
+            border-radius: 100%;
+            border: 10px solid darken($rust, 10%);
+            min-width: 150px;
+            min-height: 150px;
+        }
+    }
+    .author-text {
+        float: left;
+        .author-title {
+            display: flex;
+            h2 {
+                margin-right: $global-margin;
+            }
+            h3 {
+                font-style: italic;
+                opacity: 0.6;
+                margin-top: 10px;
+            }
+        }
+    }
+}

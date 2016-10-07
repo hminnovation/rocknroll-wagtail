@@ -1,19 +1,39 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
+
+{% block breadcrumb %}
+<div class="author-detail">
+    {% include "tags/breadcrumbed.html" %}
+{% endblock breadcrumb %}
+
 {% block content %}
-    <h2>{{ author.title|capfirst }}</h2>
-    <h3>{{ author.job_title }}</h3>
-    {{ author.image_listing }}
-    {{ author.biography|richtext }}
-    {% if author.external_url %}
-      <a href="{{ author.external_url }}">{{ author.title }} website</a>
-    {% endif %}
+<div class="row">
+    <div class="author-image">
+      {{ author.image_listing }}
+    </div>
+    
+    <div class="author-text">
+      <div class="author-title">
+        <h2>{{ author.title|capfirst }}</h2>
+        <h3>{{ author.job_title }}</h3>
+      </div>
+
+      <div class="author-biography">
+        {{ author.biography|richtext }}
+        {% if author.external_url %}
+          <a href="{{ author.external_url }}">{{ author.title }} website</a>
+        {% endif %}
+      </div>
+    </div>
+</div>
+</div>
 
 
 	{% comment %}
 		This would probably be better as a separate include?
 	{% endcomment %}
+<div class="row author-content">
    	<h3>Features</h3>
    	{% if article %}
    		{% for object in article %}
@@ -30,5 +50,5 @@
    	{% else %}
    		<p>Sorry this author hasn't written any reviews yet.</p>
    	{% endif %}
-
+</div>
 {% endblock %}
