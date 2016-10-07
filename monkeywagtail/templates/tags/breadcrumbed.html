@@ -4,8 +4,8 @@
     {% breadcrumbs %}
     
     {% if '/albums/' in request.path or '/artists/' in request.path or '/authors/' in request.path or '/genres/' in request.path %}
-    <nav class="breadcrumbs" aria-label="You are here:" role="navigation">
-        <ul>
+    <nav aria-label="You are here:" role="navigation">
+        <ul class="breadcrumbs">
             <li>
                 <a href='/'>home</a>
             </li>

@@ -1,8 +1,7 @@
 {% load wagtailcore_tags %}
 
-<div class="row">
-  <nav class="breadcrumbs" aria-label="You are here:" role="navigation">
-      <ul>
+  <nav aria-label="You are here:" role="navigation">
+      <ul class="breadcrumbs" >
       {% if ancestors %}
         {% for ancestor in ancestors %}
           {% if forloop.last %}
@@ -16,4 +15,3 @@
       {% endif %}
       </ul>
   </nav>
-</div>
