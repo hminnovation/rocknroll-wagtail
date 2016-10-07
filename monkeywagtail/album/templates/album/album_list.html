@@ -3,10 +3,11 @@
 
 {% block content %}
 <h1>Albums</h1>
-    <div class="row small-up-2 medium-up-3 large-up-4 album-list-item">
+{#     <div class="row small-up-2 medium-up-3 large-up-4 album-list"> #}
+    <div class="row album-list">
         {% if albums %}
         {% for album in albums %}
-            <div class="column">
+            <div class="album-item">
                 <div class="album-image">
                     {% if album.album_image %}
                         {{ album.album_image }}
@@ -14,15 +15,15 @@
                 </div>
                 
             <div class="album-details">
+                {% if album.artists %}
+                    {% for artist in album.artists %}
+                             <h3>{{ artist.title }}</h3>
+                    {% endfor %}
+                {% endif %}
+
                 <a href="{{ album.url }}">
                     <h2>{{ album.title }}</h2>
                 </a>
-
-                {% if album.artists %}
-                {% for artist in album.artists %}
-                         <h3>{{ artist.title }}</h3>
-                {% endfor %}
-                {% endif %}
             </div>
         </div>
     {% endfor %}

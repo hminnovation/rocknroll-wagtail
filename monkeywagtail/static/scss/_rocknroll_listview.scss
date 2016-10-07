@@ -1,0 +1,29 @@
+// List views
+
+/* ALBUMS */
+/* note to self http://www.sketchingwithcss.com/samplechapter/cheatsheet.html */
+.album-list {
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+    .album-item {
+        margin-bottom: $global-margin;
+        margin-right: $global-margin;
+        width: 23%;
+        background-color: $floor;
+        .album-image {
+            overflow: hidden;
+            min-height: 200px;
+            max-height: 200px;
+        }
+        .album-details {
+            padding: $global-padding;
+            h2 {
+                font-size: 1.8em;
+            }
+            h3 {
+                font-size: 1.4em;
+            }
+        }
+    }
+}
