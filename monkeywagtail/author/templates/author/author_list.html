@@ -2,7 +2,8 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    <h2>Authors</h2>
+<h1>Authors</h1>
+<div class="row">
     {% if authors %}
     <ul class="row small-up-1 medium-up-2 large-up-3" data-equalizer>
         {% include "includes/card_list.html" with object=author list=authors %}
@@ -20,3 +21,4 @@ asfbi
         {% comment %} We use an include for the pagination to introduce consistency across the site. The `authors` comes from the property that we defined in the Author class {% endcomment %}
 {% endif %}
 {% endblock %}
+</div>

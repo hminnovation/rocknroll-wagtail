@@ -2,14 +2,32 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-    <h2>Albums</h2>
-    <ul>
-    {% if albums %}
+<h1>Albums</h1>
+    <div class="row small-up-2 medium-up-3 large-up-4 album-list-item">
+        {% if albums %}
         {% for album in albums %}
-            <li><a href="{{ album.url }}">{{ album.title }}</a></li>
-        {% endfor %}
+            <div class="column">
+                <div class="album-image">
+                    {% if album.album_image %}
+                        {{ album.album_image }}
+                    {% endif %}
+                </div>
+                
+            <div class="album-details">
+                <a href="{{ album.url }}">
+                    <h2>{{ album.title }}</h2>
+                </a>
+
+                {% if album.artists %}
+                {% for artist in album.artists %}
+                         <h3>{{ artist.title }}</h3>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
      {% else %}
      <p>Damn. You ain't added any albums yet</p>
      {% endif %}
-    </ul>
+    </div></div>
 {% endblock %}
