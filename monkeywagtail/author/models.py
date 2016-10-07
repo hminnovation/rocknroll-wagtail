@@ -40,6 +40,11 @@ class Author(models.Model):
         related_name='+'
     )
 
+    job_title = models.CharField(
+        "The author's job title", blank=True, max_length=254,
+        help_text="e.g. punk rock person"
+        )
+
     # Note below that standard blocks use 'help_text' for supplementary text
     # rather than 'label' as with StreamField
     biography = RichTextField(
@@ -67,6 +72,7 @@ class Author(models.Model):
             ],
             heading="Title"
         ),
+        FieldPanel('job_title'),
         ImageChooserPanel('image'),
         FieldPanel('biography'),
         FieldPanel('external_url')

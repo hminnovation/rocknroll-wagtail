@@ -27,3 +27,36 @@
         }
     }
 }
+
+.author-list {
+    .author-item {
+        display: flex;
+        flex-direction: row;
+        flex-flow: row wrap;
+        margin-bottom: $global-margin*3;
+        img {
+            border-radius: 100%;
+            margin-right: $global-margin*2.5;
+            max-width: 80px;
+            max-height: 80px;
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 0px;
+        }
+        h4 {
+            font-style: italic;
+            color: $straw;
+        }
+        &:last-child {
+            margin-bottom: 0;
+        }
+/*        &::after {
+            content:"";
+            height: 1px;
+            width: 80px;
+            background-color: $metal;
+            display: block;
+        }*/
+    }
+}

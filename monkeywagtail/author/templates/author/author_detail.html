@@ -3,6 +3,7 @@
 
 {% block content %}
     <h2>{{ author.title|capfirst }}</h2>
+    <h3>{{ author.job_title }}</h3>
     {{ author.image_listing }}
     {{ author.biography|richtext }}
     {% if author.external_url %}

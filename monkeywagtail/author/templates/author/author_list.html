@@ -2,23 +2,35 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-<h1>Authors</h1>
 <div class="row">
+    <h1>Authors</h1>
+    <div class="author-list">
     {% if authors %}
-    <ul class="row small-up-1 medium-up-2 large-up-3" data-equalizer>
-        {% include "includes/card_list.html" with object=author list=authors %}
-    </ul>
+        {% for author in authors %}
+        <div class="author-item">
+            <div class="author-image">
+                {{ author.image_listing }}
+            </div>
+            <div class="author-details">
+                <h2><a href="{{ author.url }}">{{ author.title }}</a></h2>
+                <h4>{{ author.job_title }}</h4>
+            </div>
+        </div>
+        {% endfor %}
 
-    {% else %}
+        {% else %}
 
-    <p>Ain't no authors in this town</p>
-    
-    {% endif %}
-
+        <p>Ain't no authors in this town</p>
+        
+        {% endif %}
+    </div>
+</div>
 {% if authors.paginator.count > 1 %}
 asfbi
         {% include "includes/pagination.html" with subpages=authors %}
-        {% comment %} We use an include for the pagination to introduce consistency across the site. The `authors` comes from the property that we defined in the Author class {% endcomment %}
+        {% comment %} We use an include for the pagination to introduce 
+        consistency across the site. The `authors` comes from the property that 
+        we defined in the Author class {% endcomment %}
 {% endif %}
 {% endblock %}
 </div>
