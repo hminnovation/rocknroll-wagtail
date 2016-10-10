@@ -12,10 +12,14 @@ def artist_list(request):
 def artist_detail(request, slug):
     artist = get_object_or_404(Artist, slug=slug)
     articles = set(
-        p.page for p in artist.artist_feature_page_relationship.select_related('page').all() if p.page.live)
+        p.page for p in artist.artist_feature_page_relationship.select_related('page')
+        .all() if p.page.live)
     albums = set(
-        p.page for p in artist.artist_album_relationship.select_related('page').all()
+        p.page for p
+        in artist.artist_album_relationship.select_related('page')
+        .all()
         )
+    reviews = Artist.objects.all()
     # We use `page` because the parental key name is key on line 21 of
     # review/models.py
     #
@@ -27,6 +31,9 @@ def artist_detail(request, slug):
     # Not entirely sure what `set` does other than to reverse order chronology
     #
     # Turn below in to useful thoughts... (what didn't work)
+    #
+    # artist.artist_album_relationship error = 'RelatedManager' object is not iterable
+    #
     # If no relatedname on `artist_feature_page_relationship` is set then
     # articles = artists.artist_feature_page_relationship.all()
     # returns `ArtistFeaturePageRelationship object` if {{article}} is put in the
@@ -39,5 +46,6 @@ def artist_detail(request, slug):
     return render(request, 'artist/artist_detail.html', {
          'artist': artist,
          'article': articles,
+         'review': reviews,
          'album': albums,
     })

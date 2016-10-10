@@ -1,5 +1,6 @@
 // Detail views
 
+/* AUTHOR */
 .author-detail {
     background-color: $rust;
     color: $white;
@@ -32,5 +33,12 @@
                 margin-top: 10px;
             }
         }
+    }
+}
+
+.feature-items {
+    @include grid-column-row($grid-column-gutter);
+    .feature-item {
+        @include grid-column(6, $grid-column-gutter);
     }
 }

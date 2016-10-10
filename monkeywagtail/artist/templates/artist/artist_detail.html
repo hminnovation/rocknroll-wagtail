@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags mathfilters wagtailimages_tags %}
 
 
 {% block content %}
@@ -18,21 +18,85 @@ our views.py file
 
 <h3>Features</h3>
 {% if article %}
-{% for object in article %}
-	<li><a href="{{object.url}}">{{ object.title }}</a></li>
-{% endfor %}
-{% else %}
-<p>Sorry there are no features for {{ artist.title }}</p>
+<div class="feature-items">
+	{% for feature in article %}
+		<div class="feature-item">
+			<a href="{{feature.url}}">
+				{% image feature.image width-400 as photo %}
+              		<img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+				<h2>{{ feature.title }}</h2>
+				{% for author in feature.authors  %}
+					<div class="feature-item-author">
+						<h5><a href="{% url 'authors' %}{{author.slug}}">{{ author }}</a></h5>
+					</div>
+				{% endfor %}
+			</a>
+				<p>{{ feature.listing_introduction }}</p>
+				<date>{{ feature.date }}</date>
+				{% for genre in feature.genres %}
+					<div class="feature-footer">
+						{{ genre }}
+					</div>
+				{% endfor %}
+			</a>
+		</div></div>
+	{% endfor %}
+	{% else %}
+	<p>Sorry there are no features for {{ artist.title }}</p>
+</div>
 {% endif %}
+
+<h3>Reviews</h3>
+{% for album in album  %}
+{% if album.album_review_relationship %}
+	<div class="review-items">
+	{% for review in album.album_review_relationship.all %}
+	<div class="review-item">
+	<a href="{{ review.page.url }}">
+		<div class="review-item-image">
+			{{ album.album_image }}	
+		</div>
+		<div class="review-item-text">
+			<h3>{{ artist.title }}</h3>
+			<h4>{{ album.title }}</h4>
+		</div>
+	</a>
+		<div class="review-item-meta">
+			<p>{{ review.page.listing_introduction }}</p>
+            {% with width=review.page.rating %}
+              	<div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+            {% endwith %}
+		</div>
+	</div>
+	{% endfor %}
+	{% comment %}
+	review.page because page is the ParentalKey on reviews/models.py
+	`album_review_relationship` because that's the album related name on
+	the ReviewAlbumRelationship class
+	`.all` because we otherwise can't iterate. You'll hit the error
+	"'RelatedManager' object is not iterable" without it.
+	{% endcomment %}
+{% else %}
+<p>Sorry there are no reviews for {{ artist.title }}</p>
+</div>
+{% endif %}
+{% endfor %}
 
 <h3>Albums</h3>
 {% if album %}
 	{% for object in album  %}
-		<li><a href="{{object.url}}">{{ object.title }}</a>
+		<li>
+		{{ object.album_image }}
+		<a href="{{object.url}}">{{ object.title }}</a>
+		{{ object.release_date }}
+		{{ object.genre }}
 	{% endfor %}
-
 {% else %}
 <p>Sorry there are no albums for {{ artist.title }}</p>
+{% comment %}
+	@TODO turn in to an include for all the places that albums are listed
+	e.g. {% include "includes/card_list.html" with object=artist list=artists %}
+{% endcomment %}
 {% endif %}
 
 {% endblock %}
