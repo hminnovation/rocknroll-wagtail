@@ -28,6 +28,7 @@
     }
 }
 
+/* AUTHORS */
 .author-list {
     .author-item {
         display: flex;
@@ -60,3 +61,86 @@
         }*/
     }
 }
+
+/* FEATURES */
+.template-feature-index-page {
+    h1 {
+        padding-left: $global-padding;
+    }
+}
+.feature-list {
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+    padding-left: $global-padding;
+    text-align: center;
+    .feature {
+        margin-bottom: $global-margin*3;
+        margin-right: $global-margin*2;
+        width: 45%;
+        .feature-genres {
+            ul {
+                list-style: none;
+                li {
+                    margin-top: -$global-margin*1.3;
+                    a {
+                        background-color: $white;
+                        padding: $global-padding;
+                    }
+                }
+            }
+        }
+        .feature-authors {
+            margin-bottom: $global-margin;
+            &::after {
+                content: "";
+                display: block;
+                margin: auto;
+                width: 40px;
+                height: 1px;
+                background-color: $rust;
+            }
+            ul {
+                list-style: none;
+                display: inline-block;
+                max-width: 48%;
+                &::after {
+                    content: "•";
+                    display: inline-block;
+                    margin: 0 10px 0 10px;
+                }
+                li {
+                    display: inline-block;
+                    margin-left: 10px;
+                }
+            }
+            date {
+                display: inline-block;
+                max-width: 48%;
+            }
+        }
+        .feature-artists {
+            ul {
+                list-style: none;
+                display: inline-block;
+                max-width: 48%;
+            }
+            li {
+                    display: inline-block;
+                    margin-left: 10px;
+                }
+        }
+        .feature-text {
+            a {
+                color: $metal;
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
