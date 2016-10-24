@@ -35,21 +35,6 @@ class GenreClassAlbumRelationship(Orderable, models.Model):
     ]
 
 
-class SubGenreClassAlbumRelationship(Orderable, models.Model):
-    page = ParentalKey(
-        'Album', related_name='album_subgenre_relationship'
-    )
-    subgenre = models.ForeignKey(
-        'genre.SubgenreClass',
-        related_name="subgenre_album_relationship"
-    )
-    panels = [
-        # We need this for the inlinepanel on the Feature Content Page to grab
-        # hold of
-        FieldPanel('subgenre')
-    ]
-
-
 class AlbumArtistRelationship(Orderable, models.Model):
     page = ParentalKey(
         'Album',
@@ -111,19 +96,13 @@ class Album(ClusterableModel):
             [
                 InlinePanel(
                             'album_genre_relationship', label="Genre",
-                            panels=None, min_num=1, max_num=1),
-                InlinePanel(
-                            'album_subgenre_relationship', label="sub-genres",
-                            panels=None, min_num=1),
+                            panels=None, min_num=1, max_num=1)
             ],
             heading="Genres",
             classname="collapsible"
         ),
         StreamFieldPanel('song_details'),
     ]
-
-    def __str__(self):
-        return self.title
 
     def artists(self):
         artists = [
@@ -143,9 +122,18 @@ class Album(ClusterableModel):
         ]
         return subgenres
 
-    def all(self, request):
-        return Album.objects.get_queryset()
-        # Still don't know how this works...
+    def __str__(self):
+        string = (
+            "Album: " + self.title +
+            " by " +
+            ','.join([str(self.artists())])
+            )
+        return string
+        # This will return something like Album: 13 Songs by Fugazi
+        # Need to get the result of the function call using artists(). Rather
+        # than just artists. c/f http://stackoverflow.com/questions/31937532/python-django-query-error-cant-convert-method-object-to-str-implicitly
+        # Then need to get the string out of the list
+        # http://stackoverflow.com/questions/9165421/python-typeerror-cant-convert-list-object-to-str-implicitly
 
     @property
     def album_image(self):

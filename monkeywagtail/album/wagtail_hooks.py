@@ -46,7 +46,7 @@ modeladmin_register(AlbumAdmin)
 #
 # List_filter
 # By contrast list_filter needs to be a specific field. In our case, because of
-# the ClusterableModel we use the related name 'album_artist_relationship'
+# the ClusterableModel we use the related name 'album_artist_relationship'.
 # Field names in list_filter can also span relations using the reverse
 # relationship (__) lookup. 'album_artist_relationship__artist_name' will let us
 # get the artist's name, and as importantly, filter on it.
