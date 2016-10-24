@@ -1,4 +1,10 @@
 // List views
+/* TABLE OF CONTENTS
+    • Albums
+    • Authors
+    • Features
+    • Filters
+*/
 
 /* ALBUMS */
 /* note to self http://www.sketchingwithcss.com/samplechapter/cheatsheet.html */
@@ -78,11 +84,13 @@
         margin-bottom: $global-margin*3;
         margin-right: $global-margin*2;
         width: 45%;
+        img {
+            margin-bottom: -$global-margin*1.3;
+        }
         .feature-genres {
             ul {
                 list-style: none;
                 li {
-                    margin-top: -$global-margin*1.3;
                     a {
                         background-color: $white;
                         padding: $global-padding;
@@ -138,6 +146,19 @@
     }
 }
 
+
+/* FILTERS */
+.filter-bar {
+    display: flex;
+    padding-left: $global-padding;
+    .filter-bar_item {
+        margin-right: $global-margin;
+        width: 32%;
+    }
+    .filter-bar_submit {
+        margin-top: $global-margin*1.5;
+    }
+}
 
 
 
