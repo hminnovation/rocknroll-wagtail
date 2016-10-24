@@ -11,33 +11,16 @@ from modelcluster.models import ClusterableModel
 class SubgenreClass(ClusterableModel):
 
     title = models.CharField(
-        max_length=255, help_text="Be as esoteric as you'd like")
-    description = models.TextField(
-        blank=True, help_text='A description of the sub-genre')
-    slug = models.SlugField(
-        allow_unicode=True,
         max_length=255,
-        help_text="The name of the page as it will appear in URLs e.g http://domain.com/blog/[my-slug]/",
-    )
-    # Title
-    # On a generic model you can use whatever field names you'd like. Initially
-    # this was called 'subgenre_name' but was changed to 'title' since Wagtail
-    # has out of the box JS that will convert anything put in a title field in
-    # to the slug field
-    #
-    # SlugField
-    # We need to use a SlugField because we need the slug to be unique
+        help_text="Be as esoteric as you'd like. This displays on the genre "
+        "page as a list to end users")
 
     @property
     def subgenre_url(self):
         return self.slug
 
     panels = [
-        MultiFieldPanel([
-            FieldPanel('title'),
-            FieldPanel('slug'),
-            FieldPanel('description')
-        ], heading="Title", classname="collapsible")
+        FieldPanel('title')
     ]
 
     # Even though there's no admin screen for subgenres we still need to return
@@ -74,6 +57,23 @@ class GenreClass(ClusterableModel):
         max_length=255,
         help_text="The name of the page as it will appear in URLs e.g http://domain.com/blog/[my-slug]/",
     )
+    # Title
+    # On a generic model you can use whatever field names you'd like. Initially
+    # this was called 'subgenre_name' but was changed to 'title' since Wagtail
+    # has out of the box JS that will convert anything put in a title field in
+    # to the slug field
+    #
+    # SlugField
+    # We need to use a SlugField because we need the slug to be unique
+
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text='Album cover image'
+    )
 
     genre_description = RichTextField(blank=True, help_text='A description of the genre')
 
@@ -93,6 +93,7 @@ class GenreClass(ClusterableModel):
         # of the model
         FieldPanel('title'),
         FieldPanel('slug'),
+        FieldPanel('image'),
         FieldPanel('genre_description'),
         InlinePanel(
             'sub_genre_relationship',
@@ -101,7 +102,7 @@ class GenreClass(ClusterableModel):
             min_num=1)
     ]
 
-    def __str__(self):              # __unicode__ on Python 2
+    def __str__(self):
         # We're returning the string that populates the snippets screen.
         # Obvs whatever field you choose will come through as plain text
         # Use __unicode__ if you're still using Python 2.7
@@ -128,6 +129,16 @@ class GenreClass(ClusterableModel):
     # template view.
     def subgenres(self):
         return self.sub_genre_relationship.all()
+
+    # This is for the model admin view
+    def subgenre_list(obj):
+        subgenres = ', '.join([
+            n.title for n in obj.sub_genre_relationship.all()
+        ])
+        return subgenres
+        # We can get to title of the SubgenreClass clusterable model through the
+        # parental key of SubGenreRelationship because we're passing through
+        # SubgenreClass as a parameter to that model (I think...)
 
     def get_context(self, request):
         context = super(GenreClass, self).get_context(request)

@@ -9,7 +9,7 @@ class GenreAdmin(ModelAdmin):
     menu_icon = 'fa-list-alt'  # change as required
     menu_order = 300
     add_to_settings_menu = False  # or True to add your model to the Settings sub-menu
-    list_display = ('title', 'description')
+    list_display = ('title', 'subgenre_list')
     search_fields = ('title',)
 
 
