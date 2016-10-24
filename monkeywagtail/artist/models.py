@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import admin
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailcore.fields import RichTextField
@@ -11,6 +12,19 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
 # from taggit.models import TaggedItemBase
 from monkeywagtail.genre.models import SubgenreClass
+
+
+class GenreArtistRelationship(Orderable, models.Model):
+    page = ParentalKey(
+        'Artist', related_name='artist_genre_relationship'
+    )
+    genres = models.ForeignKey(
+        'genre.GenreClass',
+        related_name='genre_artist_relationship'
+    )
+    panels = [
+        FieldPanel('genres')
+    ]
 
 
 @register_snippet
@@ -41,14 +55,11 @@ from monkeywagtail.genre.models import SubgenreClass
 #
 # But this would cause us all sorts of difficulties where we have albums by
 # multiple artists (e.g. split records or compilations) and would be useless if
-# we ever wanted to extend the site to include live reviews.
+# we ever wanted to extend the site beyond the paradigm of artist albums.
 #
-# @TODO write the 'Sane content modelling' blog post
 class Artist(ClusterableModel):
     """
-    The artist snippet gives a way to relate artists to other content and create
-    a range of relationships (e.g. one-to-one, one-to-many or many-to-many
-    relationships) with content
+    The artist snippet gives content fields to define an artist
     """
 
     title = models.CharField("The artist's name", max_length=254)
@@ -110,6 +121,13 @@ class Artist(ClusterableModel):
         # of the model
         FieldPanel('title'),
         FieldPanel('slug'),
+        InlinePanel(
+            'artist_genre_relationship',
+            label="Genre",
+            panels=None,
+            min_num=1,
+            max_num=1
+        ),
         ImageChooserPanel('profile_image'),
         FieldPanel('biography'),
         FieldPanel('date_formed'),
@@ -122,11 +140,14 @@ class Artist(ClusterableModel):
         # below for returning a HTML rendition
         return self.title
 
-    @property
-    def all(self, request):
-        # This... not surprisingly having read the Django docs, won't work
-        return Artist.objects.get_queryset()
+    # CONTENT FOR TEMPLATE
+    def genres(self):
+        genres = [
+            n.genres for n in self.artist_genre_relationship.all()
+        ]
+        return genres
 
+    # MODEL ADMIN THINGS
     @property
     def age(self):
         if self.date_formed:
@@ -142,3 +163,81 @@ class Artist(ClusterableModel):
             return self.profile_image.get_rendition('fill-50x50').img_tag()
         except:
             return ''
+        # c/f https://docs.python.org/3/tutorial/errors.html
+        # for try / except explanation
+
+    def genre(obj):
+        genre = ','.join([
+                str(n.genres) for n in obj.artist_genre_relationship.all()
+        ])
+        return genre
+
+        artist.admin_order_field = 'artist_genre_relationship__genres'
+
+    def decade_formed(self):
+        # We fail silently because date formed isn't mandatory
+        try:
+            return self.date_formed.strftime('%Y')[:3] + "0's"
+        except:
+            return 'No date given'
+    decade_formed.short_description = 'Decade the artist began'
+    # We're extending date_formed so that it's slightly easier to filter when
+    # there's lots of artists. The default returned by date_formed would be
+    # dd MM yyyy (e.g. 08 Oct 2016), which is a bit too granular
+    #
+    # That's unfortunately the easy part...
+    #
+    # If you want to filter on it too (which you might well do) I can't figure
+    # it out :(
+
+    # def decade_formed_filter(obj):
+    #         date = obj.date_formed.strftime('%Y')[:3] + "0's"
+    #         return date
+
+
+# class decade_born_list_filter(admin.SimpleListFilter):
+#         # Human-readable title which will be displayed in the
+#         # right admin sidebar just above the filter options.
+#         title = ('decade formed')
+#
+#     # Parameter for the filter that will be used in the URL query.
+#         parameter_name = 'decade'
+#
+#         def lookups(self, request, model_admin):
+#             """
+#             Returns a list of tuples. The first element in each
+#             tuple is the coded value for the option that will
+#             appear in the URL query. The second element is the
+#             human-readable name for the option that will appear
+#             in the right sidebar.
+#             """
+#             return (
+#                 ('80s', _('in the eighties')),
+#                 ('90s', _('in the nineties')),
+#                 ('2010s', _('in the 2010s')),
+#             )
+#
+#         def queryset(self, request, queryset):
+#             """
+#             Returns the filtered queryset based on the value
+#             provided in the query string and retrievable via
+#             `self.value()`.
+#             """
+#             # Compare the requested value (either '80s' or '90s')
+#             # to decide how to filter the queryset.
+#             if self.value() == '80s':
+#                 return queryset.filter(
+#                     date_formed__gte=date(1980, 1, 1),
+#                     date_formed__lte=date(1989, 12, 31))
+#             if self.value() == '90s':
+#                 return queryset.filter(
+#                     date_formed__gte=date(1990, 1, 1),
+#                     date_formed__lte=date(1999, 12, 31))
+#             if self.value() == '2010s':
+#                 return queryset.filter(
+#                     date_formed__gte=date(2010, 1, 1),
+#                     date_formed__lte=date(2019, 12, 31))
+#
+#
+# class PersonAdmin(admin.ModelAdmin):
+#     list_filter = (DecadeBornListFilter,)

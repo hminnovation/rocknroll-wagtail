@@ -1,9 +1,35 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Artist
 
 
 def artist_list(request):
     artists = Artist.objects.all()
+
+    paginator = Paginator(artists, 2)  # Show 2 contacts per page
+
+    page = request.GET.get('page')
+    try:
+        artists = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        artists = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        artists = paginator.page(paginator.num_pages)
+
+    return render(request, 'artist/artist_list.html', {
+         'artists': artists,
+    })
+    # For more details on pagination
+    # https://docs.djangoproject.com/en/1.10/topics/pagination/
+
+
+def artist_genre_list(request, genre):
+    artists = Artist.objects.all().filter(
+        artist_genre_relationship__genres__slug=genre
+        )
+
     return render(request, 'artist/artist_list.html', {
          'artists': artists,
     })
