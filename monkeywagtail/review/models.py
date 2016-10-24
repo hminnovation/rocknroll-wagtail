@@ -174,6 +174,27 @@ class ReviewPage(Page):
         return authors
 
 
+# class ReviewFeatureIndexPage(Page):
+#     content_panels = Page.content_panels + []
+#
+#     class Meta:
+#         verbose_name = "Reviews for albums with 4+ reviews"
+#
+#     subpage_types = []
+#
+#     parent_page_types = [
+#         'ReviewIndexPage'
+#     ]
+#
+#     def get_context(self, request):
+#         context = super(ReviewFeatureIndexPage, self).get_context(request)
+#
+#         reviews = ReviewPage.objects.live().filter(rating__gte=4).order_by('-first_published_at')
+#
+#         context['reviews'] = reviews
+#         return context
+
+
 class ReviewIndexPage(Page):
     listing_introduction = models.TextField(
         help_text='Text to describe this section. Will appear on other pages that reference this feature section',
@@ -200,14 +221,83 @@ class ReviewIndexPage(Page):
         'ReviewPage'
     ]
 
+    def get_filtered_review_pages(self, request={}):
+        # useful primer about defining python functions
+        # https://www.tutorialspoint.com/python/python_functions.htm
+        reviews = ReviewPage.objects.live().descendant_of(self)
+
+        is_filtering = False
+
+        request_filters = {}
+        for k, v in request.GET.items():
+            request_filters[k] = (v)
+
+        # filter on rating
+        rating = request_filters.get('rating', '')
+        if rating:
+            is_filtering = True
+            reviews = reviews.filter(
+                rating__gte=rating
+            )
+
+        # filter on first letter of review page album
+        artist_name = request_filters.get('artist_name', '')
+        if artist_name:
+            is_filtering = True
+            reviews = reviews.filter(
+                review_album_relationship__album__album_artist_relationship__artist_name__title__istartswith=artist_name
+            )
+
+        # filter by genre
+        genre = request_filters.get('genre', '')
+        if genre:
+            is_filtering = True
+            reviews = reviews.filter(
+                review_album_relationship__album__album_genre_relationship__genres__slug=genre
+            )
+
+        # Defining the filter
+        filters = {
+            'rating': rating,
+            'artist_name': artist_name,
+            'genre': genre,
+        }
+
+        reviews = reviews.order_by('-first_published_at')
+        return reviews, filters, is_filtering
+
 # Index page context to return content
 # This works, but doens't paginate
     def get_context(self, request):
+        # returning a dictionary of content
         context = super(ReviewIndexPage, self).get_context(request)
-        context['reviews'] = ReviewPage.objects.descendant_of(self).live().order_by('-first_published_at')
+
+        # Running that dict() through my page models get_filtered_review_pages function
+        reviews, filters, is_filtering = self.get_filtered_review_pages(request)
+
+        context['reviews'] = reviews
+        context['filters'] = filters
+        context['is_filtering'] = is_filtering
+        # context['reviews'] = ReviewPage.objects.descendant_of(self).live().order_by('-first_published_at')
         return context
 
 # Below is how we get children of reviews (i.e a review) on to the homepage
     @property
     def children(self):
         return self.get_children().specific().live()
+
+# Optional arguments
+# context
+#
+# A dictionary of values to add to the template context. By default, this is an
+# empty dictionary. If a value in the dictionary is callable, the view will call
+# it just before rendering the template.
+# So :
+#
+# def all_contacts(request):
+#     context = dict()
+#     context['contacts'] = Contact.objects.all()
+#     context['otherStuffProcessedByTheTemplate'] = …
+#     # etc…
+#
+#     return render(request, 'about/all.html', context)
