@@ -1,3 +1,5 @@
+import collections
+
 from django.db import models
 from django.db.models import Count
 from django.conf import settings
@@ -15,6 +17,8 @@ from wagtail.wagtailadmin.edit_handlers import (
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from monkeywagtail.core.blocks import StandardBlock
 from monkeywagtail.author.models import Author
+
+FilterObject = collections.namedtuple('FilterObject', 'id, name, slug')
 
 
 class ArtistFeaturePageRelationship(Orderable, models.Model):
@@ -66,19 +70,6 @@ class GenreFeaturePageRelationship(Orderable, models.Model):
     )
     panels = [
         FieldPanel('genre')
-    ]
-
-
-class SubGenreFeaturePageRelationship(Orderable, models.Model):
-    page = ParentalKey(
-        'FeatureContentPage', related_name='feature_page_subgenre_relationship'
-    )
-    subgenre = models.ForeignKey(
-        'genre.SubGenreClass',
-        related_name='subgenre_feature_page_relationship'
-    )
-    panels = [
-        FieldPanel('subgenre')
     ]
 
 
@@ -161,13 +152,7 @@ class FeatureContentPage(Page):
                             label="Genre",
                             panels=None,
                             min_num=1,
-                            max_num=1
-                ),
-                InlinePanel(
-                            'feature_page_subgenre_relationship',
-                            label="sub-genres",
-                            panels=None,
-                            min_num=1
+                            max_num=3
                 ),
             ],
             heading="Genres",
@@ -267,25 +252,52 @@ class FeatureIndexPage(Page):
         'FeatureContentPage'
     ]
 
-    @property
-    def features(self):
-        return FeatureContentPage.objects.live().descendant_of(self).order_by('-feature_page_artist_relationship')
+    # @property
+    # def features(self):
+    #     """
+    #     Return feature pages that will live under this index page.
+    #     This is now redundant since we return our features via
+    #     the `get_filtered_feature_pages` function below.
+    #     """
+    #     return FeatureContentPage.objects.live().descendant_of(self).order_by('-date')
 
-    # def genre_filter(self):
-    #     return FeatureContentPage.objects.filter(feature_page_genre_relationship__genre__id=filter)
-        # int() argument must be a string or a number, not 'type'
+    def filter_years(self):
+        """
+        Return a collection of years from the date field of feature pages beneath
+        this page.
+        """
+        years = set()
+        features = FeatureContentPage.objects.live().descendant_of(self)
+        year_dates = features.dates('date', 'year', order='DESC')
+        for date in year_dates:
+            years.add(date.year)
+        return sorted(years, reverse=True)
 
-    def artist_filter(self):
-        artists = "abc"
-        # something like
-        # artists = features.filter(
-        #        feature_page_artist_relationship__artist__id=artist
-        #    )
-        return artists
+    def genres(self):
+        """
+        Return a list of genres from pages that have a relationship defined
+        with a genre and are living beneath this page.
+        """
+        genres = set()
+
+        for feature_content_page in FeatureContentPage.objects.live().descendant_of(self):
+            feature_genres = [
+                d.genre for d in
+                feature_content_page.feature_page_genre_relationship.all()
+            ]
+
+            for genre in feature_genres:
+                genres.add(FilterObject(
+                    id=genre.id,
+                    name=genre.title,
+                    slug=genre.slug
+                ))
+
+        return sorted(genres, key=lambda d: d.name)
 
     def paginate(self, request, objects):
         page = request.GET.get('page')
-        paginator = Paginator(objects, 2)  # Show 2 features per page
+        paginator = Paginator(objects, 20)  # Show 20 features per page
         try:
             pages = paginator.page(page)
         except PageNotAnInteger:
@@ -293,6 +305,56 @@ class FeatureIndexPage(Page):
         except EmptyPage:
             pages = paginator.page(paginator.num_pages)
         return pages
+
+    def get_filtered_feature_pages(self, request={}):
+        """
+        Return a filtered queryset of live feature pages that are decendants of
+        this page.
+        """
+        features = FeatureContentPage.objects.live().descendant_of(self)
+        # The first step is to create a `features` variable that we populate
+        # with a query. This will return all feature_content_pages that are
+        # live (e.g. not draft) and a descendant of this index page
+
+        is_filtering = False
+        # Second is to create a filter variable. By default it is set to false
+
+        request_filters = {}
+        for k, v in request.GET.items():
+            request_filters[k] = (v)
+        # Here the `=(v)` will accept any value and will trigger `is_filtering`
+        # to be True in year and genre below if populated
+
+        # filter by year
+        year = request_filters.get('year', '')
+        if year:
+            is_filtering = True
+            features = features.filter(date__year=year)
+        # This appends the `features` variable with a filter. The filter in this
+        # case being a the 'year', which we access via the double underscore
+        # ('__') reverse lookup from the 'date' field.
+
+        # filter by genre
+        genre = request_filters.get('genre', '')
+        if genre:
+            is_filtering = True
+            features = features.filter(
+                feature_page_genre_relationship__genre__slug=genre
+            )
+        # We filter on genre__slug so that we can guarantee a response
+        # that doesn't include spaces e.g. 'heavy-metal' rather than 'heavy
+        #  metal' but it gives more useful information than genre__id
+
+        if not is_filtering:
+            pass
+
+        filters = {
+            'year': year,
+            'genre': genre
+        }
+
+        features = features.order_by('-date')
+        return features, filters, is_filtering
 
     def get_context(self, request):
         """
@@ -302,9 +364,17 @@ class FeatureIndexPage(Page):
         """
         context = super(FeatureIndexPage, self).get_context(request)
 
-        features = self.paginate(request, self.features)
+        # filters
+        features, filters, is_filtering = self.get_filtered_feature_pages(request)
+
+        # Pagination
+        features = self.paginate(request, features)
+        # (request, features) looks for the 'features' on line 392
 
         context['features'] = features
+
+        context['filters'] = filters
+        context['is_filtering'] = is_filtering
 
         return context
 

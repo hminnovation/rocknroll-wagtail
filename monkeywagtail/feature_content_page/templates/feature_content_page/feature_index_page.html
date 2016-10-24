@@ -6,6 +6,38 @@
 
 <div class="row">
 <h1>Features</h1>
+
+<form action="." method="get" class="filter-bar">
+            {% if page.filter_years %}
+                <div class="filter-bar_item filter">
+                    <label for="filter_year" class="filter_label">Year</label>
+                    <select id="filter_year" name="year" class="filter_select">
+                        <option value="">Any year</option>
+                        {% for year in page.filter_years %}
+                            <option value="{{ year }}" {% if filters.year == year|slugify %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+
+            {% if page.genres %}
+                <div class="filter-bar_item filter">
+                    <label for="filter_genre" class="filter_label">Genre</label>
+                    <select id="filter_genre" name="genre" class="filter_select">
+                        <option value="">Any genre</option>
+                        {% for genre in page.genres %}
+                            <option value="{{ genre.slug }}" {% if filters.genre == genre.slug|slugify %}selected{% endif %}>{{ genre.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+
+            <div class="filter-bar_item filter-bar_submit">
+                <button type="submit" class="button">Filter</button>
+            </div>
+</form>
+
+
 <div class="feature-list">
   {% for feature in features %}
     <div class="feature row">
@@ -21,7 +53,7 @@
             <ul class="genre">
                 {% for genre in feature.genres %}
                     <li>
-                        <a href="{{ genre.url }}">{{ genre.title }}</a>
+                        <a href="?genre={{ genre.slug }}">{{ genre.title }}</a>
                         {% if not forloop.last %}, {% endif %}
                     </li>
                 {% endfor %}

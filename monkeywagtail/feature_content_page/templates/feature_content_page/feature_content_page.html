@@ -20,9 +20,14 @@
             {% endfor %}
             {% if page.genres %}
             <ul class="genre">
-                {% for foo in page.genres %}
+                {% for genre in page.genres %}
                     <li>
-                        <a href="{{ foo.url }}">{{ foo.title }}</a>
+                    {% comment %}
+                    <a href="{{ genre.url }}">{{ genre.title }}</a>
+                    This would take you to the genre detail page   
+                    {% endcomment %}
+                    
+                        <a href="../?genre={{ genre.slug }}">{{ genre.title }}</a>
                         {% if not forloop.last %}, {% endif %}
                     </li>
                 {% endfor %}
