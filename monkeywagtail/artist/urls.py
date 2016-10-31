@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     url(r'^artists/$', views.artist_list, name='artists'),
-    url(r'^artists/(?P<slug>[\w]+)/$', views.artist_detail),
+    url(r'^artists/(?P<slug>[\w-]+)/$', views.artist_detail),
     url(r'^artists/genre/(?P<genre>[\w-]+)/$', views.artist_genre_list),
 ]
 
