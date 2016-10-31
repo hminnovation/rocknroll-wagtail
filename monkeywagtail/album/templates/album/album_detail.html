@@ -16,13 +16,6 @@
 	{% for foo in album.genres %}
 			 <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
 	{% endfor %}
-	{% if album.subgenres %}
-	<ul>
-		{% for foo in album.subgenres %}
-			 <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
-		{% endfor %}
-	</ul>
-	{% endif %}
 	</ul>
 
     {{ album.album_image }}

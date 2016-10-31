@@ -34,13 +34,6 @@
         {% for foo in album.genres %}
              <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
         {% endfor %}
-        {% if album.subgenres %}
-        <ul class="subgenre">
-            {% for subgenre in album.subgenres %}
-                <li>{{ subgenre }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
         </ul>
         {% endif %}
     {% endfor %}
