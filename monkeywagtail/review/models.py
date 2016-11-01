@@ -3,6 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailsearch import index
+from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, StreamFieldPanel, InlinePanel, TabbedInterface, ObjectList,
     MultiFieldPanel)
@@ -195,7 +196,7 @@ class ReviewPage(Page):
 #         return context
 
 
-class ReviewIndexPage(Page):
+class ReviewIndexPage(RoutablePageMixin, Page):
     listing_introduction = models.TextField(
         help_text='Text to describe this section. Will appear on other pages that reference this feature section',
         blank=True)
@@ -220,6 +221,43 @@ class ReviewIndexPage(Page):
     subpage_types = [
         'ReviewPage'
     ]
+
+#    @route(r'^order$')
+#    def rating(self, request, *args, **kwargs):
+#        """
+#        View function for the current events page
+#        """
+#        request.is_rating_ordered = True
+#        return Page.serve(self, request, *args, **kwargs)
+#
+#    def order_reviews(self, is_rating_ordered=False):
+#        reviews = ReviewPage.objects.live().descendant_of(self)
+#        reviews = reviews.order_by('-review_album_relationship__album__album_genre_relationship__genres__slug')
+#
+#        return reviews
+
+    def get_ordered_review_pages(self, request={}):
+        reviews = ReviewPage.objects.live().descendant_of(self)
+
+        is_ordering = False
+
+        request_orders = {}
+        for k, v in request.GET.items():
+            request_orders[k] = (v)
+
+        # by rating
+        # currently returns `need more than 3 values to unpack`
+        order_rating = request_order.get('rating', '')
+        if rating:
+            is_ordering = True
+            reviews = reviews.order_by('-rating__gte')
+
+        # Defining the filter
+        ordering = {
+            'order_rating': rating,
+        }
+
+        return reviews, ordering, is_ordering
 
     def get_filtered_review_pages(self, request={}):
         # useful primer about defining python functions
@@ -268,12 +306,15 @@ class ReviewIndexPage(Page):
 
 # Index page context to return content
 # This works, but doens't paginate
-    def get_context(self, request):
+    def get_context(self, request, *args, **kwargs):
         # returning a dictionary of content
-        context = super(ReviewIndexPage, self).get_context(request)
+        context = super(ReviewIndexPage, self).get_context(request, *args, **kwargs)
+
+        # damn...
+        # reviews = self.order_reviews(getattr(request, 'is_rating_ordered', False))
 
         # Running that dict() through my page models get_filtered_review_pages function
-        reviews, filters, is_filtering = self.get_filtered_review_pages(request)
+        reviews, filters, is_filtering, ordering, is_ordering = self.get_filtered_review_pages(request)
 
         context['reviews'] = reviews
         context['filters'] = filters
