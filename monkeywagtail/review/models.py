@@ -236,35 +236,38 @@ class ReviewIndexPage(RoutablePageMixin, Page):
 #
 #        return reviews
 
-    def get_ordered_review_pages(self, request={}):
-        reviews = ReviewPage.objects.live().descendant_of(self)
-
-        is_ordering = False
-
-        request_orders = {}
-        for k, v in request.GET.items():
-            request_orders[k] = (v)
-
-        # by rating
-        # currently returns `need more than 3 values to unpack`
-        order_rating = request_order.get('rating', '')
-        if rating:
-            is_ordering = True
-            reviews = reviews.order_by('-rating__gte')
-
-        # Defining the filter
-        ordering = {
-            'order_rating': rating,
-        }
-
-        return reviews, ordering, is_ordering
+#    def get_ordered_review_pages(self, request={}):
+#        reviews = ReviewPage.objects.live().descendant_of(self)
+#
+#        is_ordering = False
+#
+#        request_orders = {}
+#        for k, v in request.GET.items():
+#            request_orders[k] = (v)
+#
+#        # by rating
+#        # currently returns `need more than 3 values to unpack`
+#        order_rating = request_orders.get('rating', '')
+#        if rating:
+#            is_ordering = True
+#            reviews = reviews.order_by('-rating__gte')
+#
+#        # Defining the filter
+#        ordering = {
+#            'order_rating': order_rating,
+#        }
+#
+#        return reviews, ordering, is_ordering
 
     def get_filtered_review_pages(self, request={}):
         # useful primer about defining python functions
         # https://www.tutorialspoint.com/python/python_functions.htm
-        reviews = ReviewPage.objects.live().descendant_of(self)
+
+        reviews = ReviewPage.objects.live().descendant_of(self).order_by('-first_published_at')
+        # This is the default context for the reviews index page
 
         is_filtering = False
+        # By default we return an unfiltered list
 
         request_filters = {}
         for k, v in request.GET.items():
@@ -294,14 +297,24 @@ class ReviewIndexPage(RoutablePageMixin, Page):
                 review_album_relationship__album__album_genre_relationship__genres__slug=genre
             )
 
+        sort_by = request_filters.get('sort_by', 'modified')
+        if sort_by == 'rating':
+            reviews = reviews.order_by('-rating', '-first_published_at')
+            # We need to give the date to ensure that there's ordering consistency
+            # within ratings (e.g. that all reviews marked 5 are ordered chronologically)
+            # Django doesn't take an opinion on how to order lists so will randomly
+            # order if not set. "If a query doesn’t have an ordering specified,
+            # results are returned from the database in an unspecified order. "
+            # https://docs.djangoproject.com/en/1.10/ref/models/querysets/#order-by
+
         # Defining the filter
         filters = {
             'rating': rating,
             'artist_name': artist_name,
             'genre': genre,
+            'sort_by': sort_by,
         }
 
-        reviews = reviews.order_by('-first_published_at')
         return reviews, filters, is_filtering
 
 # Index page context to return content
@@ -314,7 +327,7 @@ class ReviewIndexPage(RoutablePageMixin, Page):
         # reviews = self.order_reviews(getattr(request, 'is_rating_ordered', False))
 
         # Running that dict() through my page models get_filtered_review_pages function
-        reviews, filters, is_filtering, ordering, is_ordering = self.get_filtered_review_pages(request)
+        reviews, filters, is_filtering = self.get_filtered_review_pages(request)
 
         context['reviews'] = reviews
         context['filters'] = filters
