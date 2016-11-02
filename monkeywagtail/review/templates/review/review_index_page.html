@@ -3,7 +3,7 @@
 
 {% block content %}
 
-{{ self.reviews }}
+Order by rating <a href="?sort_by=rating-desc">high to low</a> &middot; <a href="?sort_by=rating-asc">low to high</a>
 <div class="row">
   <div class="columns">
     {% for review in reviews %}
@@ -39,7 +39,7 @@
 </div>
 </div>
 
-{% if paginate_list.paginator.num_pages > 1 %}
-  blah blah blah
+{% if paginate_list.paginator.num_pages > 1 %}avd
+  {% include "includes/pagination.html" with subpages=reviews %}
 {% endif %}
 {% endblock %}

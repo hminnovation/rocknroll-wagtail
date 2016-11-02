@@ -1,9 +1,10 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailsearch import index
-from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
+# from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, StreamFieldPanel, InlinePanel, TabbedInterface, ObjectList,
     MultiFieldPanel)
@@ -196,7 +197,7 @@ class ReviewPage(Page):
 #         return context
 
 
-class ReviewIndexPage(RoutablePageMixin, Page):
+class ReviewIndexPage(Page):
     listing_introduction = models.TextField(
         help_text='Text to describe this section. Will appear on other pages that reference this feature section',
         blank=True)
@@ -258,6 +259,16 @@ class ReviewIndexPage(RoutablePageMixin, Page):
 #        }
 #
 #        return reviews, ordering, is_ordering
+    def paginate(self, request, objects):
+        page = request.GET.get('page')
+        paginator = Paginator(objects, 1)  # Show 20 objects per page
+        try:
+            pages = paginator.page(page)
+        except PageNotAnInteger:
+            pages = paginator.page(1)
+        except EmptyPage:
+            pages = paginator.page(paginator.num_pages)
+        return pages
 
     def get_filtered_review_pages(self, request={}):
         # useful primer about defining python functions
@@ -298,8 +309,10 @@ class ReviewIndexPage(RoutablePageMixin, Page):
             )
 
         sort_by = request_filters.get('sort_by', 'modified')
-        if sort_by == 'rating':
+        if sort_by == 'rating-asc':
             reviews = reviews.order_by('-rating', '-first_published_at')
+        if sort_by == 'rating-desc':
+            reviews = reviews.order_by('rating', '-first_published_at')
             # We need to give the date to ensure that there's ordering consistency
             # within ratings (e.g. that all reviews marked 5 are ordered chronologically)
             # Django doesn't take an opinion on how to order lists so will randomly
@@ -323,11 +336,11 @@ class ReviewIndexPage(RoutablePageMixin, Page):
         # returning a dictionary of content
         context = super(ReviewIndexPage, self).get_context(request, *args, **kwargs)
 
-        # damn...
-        # reviews = self.order_reviews(getattr(request, 'is_rating_ordered', False))
-
         # Running that dict() through my page models get_filtered_review_pages function
         reviews, filters, is_filtering = self.get_filtered_review_pages(request)
+
+        # Pagination. Has to be after reviews is defined
+        reviews = self.paginate(request, reviews)
 
         context['reviews'] = reviews
         context['filters'] = filters
