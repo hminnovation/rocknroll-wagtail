@@ -39,7 +39,7 @@ Order by rating <a href="?sort_by=rating-desc">high to low</a> &middot; <a href=
 </div>
 </div>
 
-{% if paginate_list.paginator.num_pages > 1 %}avd
+{% if reviews.paginator.count > 1 %}
   {% include "includes/pagination.html" with subpages=reviews %}
 {% endif %}
 {% endblock %}

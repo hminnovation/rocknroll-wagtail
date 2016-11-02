@@ -332,9 +332,9 @@ class ReviewIndexPage(Page):
 
 # Index page context to return content
 # This works, but doens't paginate
-    def get_context(self, request, *args, **kwargs):
+    def get_context(self, request):
         # returning a dictionary of content
-        context = super(ReviewIndexPage, self).get_context(request, *args, **kwargs)
+        context = super(ReviewIndexPage, self).get_context(request)
 
         # Running that dict() through my page models get_filtered_review_pages function
         reviews, filters, is_filtering = self.get_filtered_review_pages(request)
