@@ -1,7 +1,7 @@
 <nav role="navigation" aria-label="Pagination">
     <ul class="pagination">
         {% if subpages.has_previous %}
-            <li><a href="?page={{ subpages.previous_page_number }}{% if search_query %}&amp;query={{ search_query|urlencode }}{% endif %}{% if extra_url_params %}&amp;{{ extra_url_params }}{% endif %}" class="previous">previous</a></li>
+            <li><a href="?page={{ subpages.previous_page_number }}{% if filters.genre %}&amp;genre={{ filters.genre }}{% endif %}{% if filters.reviews %}&amp;reviews={{ filters.reviews }}{% endif %}{% if filters.artist_name %}&amp;artist_name={{ filters.artist_name }}{% endif %}{% if filters.sort_by %}&amp;sort_by={{ filters.sort_by }}{% endif %}" class="previous">previous</a></li>
         {% endif %}
 
         <li class="current">
@@ -9,7 +9,12 @@
         </li>
 
         {% if subpages.has_next %}
-            <li><a href="?page={{ subpages.next_page_number }}{% if search_query %}&amp;query={{ search_query|urlencode }}{% endif %}{% if extra_url_params %}&amp;{{ extra_url_params }}{% endif %}" class="next">next</a></li>
+            <li><a href="?page={{ subpages.next_page_number }}{% if filters.genre %}&amp;genre={{ filters.genre }}{% endif %}{% if filters.reviews %}&amp;reviews={{ filters.reviews }}{% endif %}{% if filters.artist_name %}&amp;artist_name={{ filters.artist_name }}{% endif %}{% if filters.sort_by %}&amp;sort_by={{ filters.sort_by }}{% endif %}" class="next">next</a></li>
         {% endif %}
     </ul>
 </nav>
+
+{% comment %}
+    We should be passing through the variables for pagination via the get_context
+    function on the model...
+{% endcomment %}
