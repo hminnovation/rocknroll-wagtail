@@ -1,3 +1,5 @@
+import collections
+
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -13,6 +15,7 @@ from modelcluster.fields import ParentalKey
 from monkeywagtail.core.blocks import SimplifiedBlock
 from monkeywagtail.core.models import RelatedPage
 
+FilterObject = collections.namedtuple('FilterObject', 'id, name, slug, artist')
 
 # Related page relationship
 class ReviewRelatedPageRelationship(RelatedPage):
@@ -223,42 +226,6 @@ class ReviewIndexPage(Page):
         'ReviewPage'
     ]
 
-#    @route(r'^order$')
-#    def rating(self, request, *args, **kwargs):
-#        """
-#        View function for the current events page
-#        """
-#        request.is_rating_ordered = True
-#        return Page.serve(self, request, *args, **kwargs)
-#
-#    def order_reviews(self, is_rating_ordered=False):
-#        reviews = ReviewPage.objects.live().descendant_of(self)
-#        reviews = reviews.order_by('-review_album_relationship__album__album_genre_relationship__genres__slug')
-#
-#        return reviews
-
-#    def get_ordered_review_pages(self, request={}):
-#        reviews = ReviewPage.objects.live().descendant_of(self)
-#
-#        is_ordering = False
-#
-#        request_orders = {}
-#        for k, v in request.GET.items():
-#            request_orders[k] = (v)
-#
-#        # by rating
-#        # currently returns `need more than 3 values to unpack`
-#        order_rating = request_orders.get('rating', '')
-#        if rating:
-#            is_ordering = True
-#            reviews = reviews.order_by('-rating__gte')
-#
-#        # Defining the filter
-#        ordering = {
-#            'order_rating': order_rating,
-#        }
-#
-#        return reviews, ordering, is_ordering
     def paginate(self, request, objects):
         page = request.GET.get('page')
         paginator = Paginator(objects, 1)  # Show 20 objects per page
@@ -269,6 +236,26 @@ class ReviewIndexPage(Page):
         except EmptyPage:
             pages = paginator.page(paginator.num_pages)
         return pages
+
+    def artists(self):
+        """
+        Return a list of artists from pages that have a relationship defined
+        with a genre and are living beneath this page.
+        """
+        artists = set()
+        review_page = [
+            d.albums for d in ReviewPage.objects.live().descendant_of(self)
+        ]
+        albums = [
+                d.album for d in
+                review_page.review_album_relationship.all()
+            ]
+        artists = [
+                d.artist_name for d in
+                albums.album_artist_relationship.all()
+            ]
+
+        return sorted(artists, key=lambda d: d.name)
 
     def get_filtered_review_pages(self, request={}):
         # useful primer about defining python functions

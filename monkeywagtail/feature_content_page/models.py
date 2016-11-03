@@ -297,7 +297,7 @@ class FeatureIndexPage(Page):
 
     def paginate(self, request, objects):
         page = request.GET.get('page')
-        paginator = Paginator(objects, 20)  # Show 20 features per page
+        paginator = Paginator(objects, 1)  # Show 20 features per page
         try:
             pages = paginator.page(page)
         except PageNotAnInteger:
