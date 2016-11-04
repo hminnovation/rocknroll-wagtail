@@ -3,7 +3,11 @@
 
 {% block content %}
 
-{{ page.artists }}
+<ul>
+{% for artist in page.artists %}
+  <li>{{ artist }}</li>
+{% endfor %}
+</ul>
 
 Order by rating <a href="?sort_by=rating-desc">high to low</a> &middot; <a href="?sort_by=rating-asc">low to high</a>
 <div class="row">

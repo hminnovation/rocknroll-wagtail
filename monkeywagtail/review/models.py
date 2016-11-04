@@ -239,16 +239,20 @@ class ReviewIndexPage(Page):
 
     def artists(self):
         """
-        Return a list of artists from pages that have a relationship defined
-        with a genre and are living beneath this page.
+        Return a list of artists from reviews that have a relationship defined
+        with an album and are living beneath this page.
         """
         artists = set()
+        # Don't duplicate
         for review_page in ReviewPage.objects.live().descendant_of(self):
+            import pdb; pdb.set_trace()
             review_page_albums = [
-                d.page for d in review_page.review_album_relationship.all()
-            ]
-            for artist in review_page_albums:
-                pass
+                n.album for n in review_page.review_album_relationship.all()
+                ]
+            for album in review_page_albums:
+                artists = [
+                    n.artist_name for n in album.album_artist_relationship.all()
+                ]
             # review_page = [
             #     d.albums for d in ReviewPage.objects.live().descendant_of(self)
             # ]
@@ -261,7 +265,8 @@ class ReviewIndexPage(Page):
         #         albums.album_artist_relationship.all()
         #     ]
 
-        return sorted(review_page_albums, key=lambda d: d.id)
+        # return sorted(artists, key=lambda d: d.artists)
+        return sorted(artists)
 
     def get_filtered_review_pages(self, request={}):
         # useful primer about defining python functions
