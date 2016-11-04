@@ -228,7 +228,7 @@ class ReviewIndexPage(Page):
 
     def paginate(self, request, objects):
         page = request.GET.get('page')
-        paginator = Paginator(objects, 1)  # Show 20 objects per page
+        paginator = Paginator(objects, 10)  # Show 20 objects per page
         try:
             pages = paginator.page(page)
         except PageNotAnInteger:
@@ -243,19 +243,25 @@ class ReviewIndexPage(Page):
         with a genre and are living beneath this page.
         """
         artists = set()
-        review_page = [
-            d.albums for d in ReviewPage.objects.live().descendant_of(self)
-        ]
-        albums = [
-                d.album for d in
-                review_page.review_album_relationship.all()
+        for review_page in ReviewPage.objects.live().descendant_of(self):
+            review_page_albums = [
+                d.page for d in review_page.review_album_relationship.all()
             ]
-        artists = [
-                d.artist_name for d in
-                albums.album_artist_relationship.all()
-            ]
+            for artist in review_page_albums:
+                pass
+            # review_page = [
+            #     d.albums for d in ReviewPage.objects.live().descendant_of(self)
+            # ]
+        # albums = [
+        #         d.album for d in
+        #         review_page.title.all()
+        #     ]
+        # artists = [
+        #         d.artist_name for d in
+        #         albums.album_artist_relationship.all()
+        #     ]
 
-        return sorted(artists, key=lambda d: d.name)
+        return sorted(review_page_albums, key=lambda d: d.id)
 
     def get_filtered_review_pages(self, request={}):
         # useful primer about defining python functions
