@@ -1,9 +1,10 @@
 import collections
+# https://docs.python.org/2/library/collections.html
 
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.models import Orderable, Page
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailsearch import index
 # from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
@@ -15,7 +16,10 @@ from modelcluster.fields import ParentalKey
 from monkeywagtail.core.blocks import SimplifiedBlock
 from monkeywagtail.core.models import RelatedPage
 
-FilterObject = collections.namedtuple('FilterObject', 'id, name, slug, artist')
+FilterObject = collections.namedtuple('FilterObject', 'id, name, slug')
+# https://docs.python.org/2/library/collections.html#collections.namedtuple
+# You can call the tuple keys whatever you want. e.g 'nid', 'title', 'snail'
+
 
 # Related page relationship
 class ReviewRelatedPageRelationship(RelatedPage):
@@ -41,7 +45,7 @@ class ReviewAlbumRelationship(models.Model):
 
 
 # And the authors
-class ReviewAuthorRelationship(models.Model):
+class ReviewAuthorRelationship(Orderable, models.Model):
     page = ParentalKey(
         'ReviewPage',
         related_name='review_author_relationship'
@@ -106,14 +110,6 @@ class ReviewPage(Page):
         SimplifiedBlock(),
         blank=True, verbose_name="Review body")
 
-    def get_context(self, request):
-        # @TODO. Work out if we actually do need/want to return this?
-        # We're not allowing reviews to be nested under reviews so feels
-        # unnecessary
-        context = super(ReviewPage, self).get_context(request)
-        context['children'] = Page.objects.live().in_menu().child_of(self)
-        return context
-
     content_panels = Page.content_panels + [
         # The content panels are displaying the components of content we defined
         # in the ReviewPage class above. If you add something to the class and
@@ -156,13 +152,6 @@ class ReviewPage(Page):
     parent_page_types = [
         'ReviewIndexPage'
     ]
-
-    @property
-    def artists(self):
-        artists = [
-            n.artist for n in self.review_artist_relationship.all()
-        ]
-        return artists
 
     @property
     def albums(self):
@@ -226,6 +215,30 @@ class ReviewIndexPage(Page):
         'ReviewPage'
     ]
 
+    def authors(self):
+        """
+        Return a list of genres from pages that have a relationship defined
+        with a genre and are living beneath this page.
+        """
+        authors = set()
+
+        for review_page in ReviewPage.objects.live().descendant_of(self):
+            # import pdb; pdb.set_trace()
+            review_authors = [
+                d.author for d in review_page.review_author_relationship.all()
+            ]
+
+            for author in review_authors:
+                authors.add(FilterObject(
+                    id=author.id,
+                    name=author.title,
+                    slug=author.slug
+                ))
+
+        # return author  # (Is not a list. Will return most recently added author)
+        # return review_authors  # (Returns authors attached to review with lowest sort order)
+        return sorted(authors, key=lambda d: d.name)  # (Returns all authors)
+
     def paginate(self, request, objects):
         page = request.GET.get('page')
         paginator = Paginator(objects, 10)  # Show 20 objects per page
@@ -238,24 +251,37 @@ class ReviewIndexPage(Page):
         return pages
 
     def artists(self):
+        pass
         """
         Return a list of artists from reviews that have a relationship defined
         with an album and are living beneath this page.
+
+        (a,b,c) or 'a,b,c' = tuple
+        [a,b,c] = list
+        Tuples have structure, lists have order
+        https://docs.python.org/2/library/stdtypes.html#typesseq
         """
-        artists = set()
-        # Don't duplicate
-        for review_page in ReviewPage.objects.live().descendant_of(self):
-            import pdb; pdb.set_trace()
-            review_page_albums = [
-                n.album for n in review_page.review_album_relationship.all()
-                ]
-            for album in review_page_albums:
-                artists = [
-                    n.artist_name for n in album.album_artist_relationship.all()
-                ]
-            # review_page = [
-            #     d.albums for d in ReviewPage.objects.live().descendant_of(self)
-            # ]
+        # artists = set()
+        # Set() will return an unduplicated list of artists
+        # import pdb; pdb.set_trace()
+        # for review_page in ReviewPage.objects.live().descendant_of(self):
+        #     return [n.slug for n in review_page]
+        # review_page = [ 
+        #     n for n in ReviewPage.objects.live().descendant_of(self)
+        # ]
+        # review_page_albums = [
+        #     n.album for n in review_page.review_album_relationship.all()
+        #     ]
+        # for album in review_page_albums:
+        #     artists = [
+        #         n.artist_name for n in album.album_artist_relationship.all()
+        #     ]
+        # artists = ReviewPage.objects.all().filter(
+        #         review_album_relationship__album__album_artist_relationship__artist_name__title=title
+        #     )
+        # review_page = [
+        #     d.albums for d in ReviewPage.objects.live().descendant_of(self)
+        # ]
         # albums = [
         #         d.album for d in
         #         review_page.title.all()
@@ -266,7 +292,7 @@ class ReviewIndexPage(Page):
         #     ]
 
         # return sorted(artists, key=lambda d: d.artists)
-        return sorted(artists)
+        # return review_page
 
     def get_filtered_review_pages(self, request={}):
         # useful primer about defining python functions

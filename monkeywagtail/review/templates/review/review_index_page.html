@@ -9,6 +9,10 @@
 {% endfor %}
 </ul>
 
+{% for author in page.authors %}
+  <li>{{ author.slug }}</li>
+{% endfor %}
+
 Order by rating <a href="?sort_by=rating-desc">high to low</a> &middot; <a href="?sort_by=rating-asc">low to high</a>
 <div class="row">
   <div class="columns">
