@@ -5,12 +5,27 @@
 
 <ul>
 {% for artist in page.artists %}
-  <li>{{ artist }}</li>
+  <li><a href="?artist_name={{artist.name.0}}">{{ artist.name.0 }}</a></li>
+  {# Add `.0` means only the first letter shows #}
 {% endfor %}
 </ul>
 
+<ul>
+{% for genre in page.genres %}
+  <li><a href="?genre={{genre.slug}}">{{ genre.name }}</a></li>
+{% endfor %}
+</ul>
+
+{% for i in "xxxxx" %}
+   <a href="?rating={{forloop.counter}}">{{ forloop.counter }}</a>
+   {% comment %}
+   This is a quick hack because we don't have an equivalent of `for i = 1 to n`
+   http://stackoverflow.com/questions/1107737/numeric-for-loop-in-django-templates
+   {% endcomment %}
+{% endfor %}
+
 {% for author in page.authors %}
-  <li>{{ author.slug }}</li>
+  <li>{{ author.name }}</li>
 {% endfor %}
 
 Order by rating <a href="?sort_by=rating-desc">high to low</a> &middot; <a href="?sort_by=rating-asc">low to high</a>

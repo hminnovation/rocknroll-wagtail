@@ -168,27 +168,6 @@ class ReviewPage(Page):
         return authors
 
 
-# class ReviewFeatureIndexPage(Page):
-#     content_panels = Page.content_panels + []
-#
-#     class Meta:
-#         verbose_name = "Reviews for albums with 4+ reviews"
-#
-#     subpage_types = []
-#
-#     parent_page_types = [
-#         'ReviewIndexPage'
-#     ]
-#
-#     def get_context(self, request):
-#         context = super(ReviewFeatureIndexPage, self).get_context(request)
-#
-#         reviews = ReviewPage.objects.live().filter(rating__gte=4).order_by('-first_published_at')
-#
-#         context['reviews'] = reviews
-#         return context
-
-
 class ReviewIndexPage(Page):
     listing_introduction = models.TextField(
         help_text='Text to describe this section. Will appear on other pages that reference this feature section',
@@ -235,9 +214,61 @@ class ReviewIndexPage(Page):
                     slug=author.slug
                 ))
 
-        # return author  # (Is not a list. Will return most recently added author)
-        # return review_authors  # (Returns authors attached to review with lowest sort order)
-        return sorted(authors, key=lambda d: d.name)  # (Returns all authors)
+        return authors
+
+    def artists(self):
+        """
+        Return a list of artists from reviews that have a relationship defined
+        with an album and are living beneath this page.
+
+        Note it will return 'a' and 'A' as different strings
+        """
+        artists = set()
+        # Don't duplicate
+        for review_page in ReviewPage.objects.live().descendant_of(self):
+            # import pdb; pdb.set_trace()
+            review_page_albums = [
+                n.album for n in review_page.review_album_relationship.all()
+                ]
+            for album in review_page_albums:
+                album_artists = [
+                    n.artist_name for n in album.album_artist_relationship.all()
+                ]
+                for artist in album_artists:
+                    artists.add(FilterObject(
+                        id=artist.id,
+                        name=artist.title,
+                        slug=artist.slug
+                        )
+                    )
+        return sorted(artists, key=lambda d: d.name)
+
+    def genres(self):
+        """
+        Return a list of genres from reviews that have a relationship defined
+        with an album and are living beneath this page.
+
+        Note it will return 'a' and 'A' as different strings
+        """
+        genres = set()
+        # Don't duplicate
+        for review_page in ReviewPage.objects.live().descendant_of(self):
+            # import pdb; pdb.set_trace()
+            review_page_albums = [
+                n.album for n in review_page.review_album_relationship.all()
+                ]
+            for album in review_page_albums:
+                album_genres = [
+                    n.genres for n in album.album_genre_relationship.all()
+                ]
+                for genre in album_genres:
+                    genres.add(FilterObject(
+                        id=genre.id,
+                        name=genre.title,
+                        slug=genre.slug
+                        )
+                    )
+        return sorted(genres, key=lambda d: d.name)
 
     def paginate(self, request, objects):
         page = request.GET.get('page')
@@ -249,50 +280,6 @@ class ReviewIndexPage(Page):
         except EmptyPage:
             pages = paginator.page(paginator.num_pages)
         return pages
-
-    def artists(self):
-        pass
-        """
-        Return a list of artists from reviews that have a relationship defined
-        with an album and are living beneath this page.
-
-        (a,b,c) or 'a,b,c' = tuple
-        [a,b,c] = list
-        Tuples have structure, lists have order
-        https://docs.python.org/2/library/stdtypes.html#typesseq
-        """
-        # artists = set()
-        # Set() will return an unduplicated list of artists
-        # import pdb; pdb.set_trace()
-        # for review_page in ReviewPage.objects.live().descendant_of(self):
-        #     return [n.slug for n in review_page]
-        # review_page = [ 
-        #     n for n in ReviewPage.objects.live().descendant_of(self)
-        # ]
-        # review_page_albums = [
-        #     n.album for n in review_page.review_album_relationship.all()
-        #     ]
-        # for album in review_page_albums:
-        #     artists = [
-        #         n.artist_name for n in album.album_artist_relationship.all()
-        #     ]
-        # artists = ReviewPage.objects.all().filter(
-        #         review_album_relationship__album__album_artist_relationship__artist_name__title=title
-        #     )
-        # review_page = [
-        #     d.albums for d in ReviewPage.objects.live().descendant_of(self)
-        # ]
-        # albums = [
-        #         d.album for d in
-        #         review_page.title.all()
-        #     ]
-        # artists = [
-        #         d.artist_name for d in
-        #         albums.album_artist_relationship.all()
-        #     ]
-
-        # return sorted(artists, key=lambda d: d.artists)
-        # return review_page
 
     def get_filtered_review_pages(self, request={}):
         # useful primer about defining python functions
@@ -392,3 +379,28 @@ class ReviewIndexPage(Page):
 #     # etc…
 #
 #     return render(request, 'about/all.html', context)
+
+# class ReviewFeatureIndexPage(Page):
+#     content_panels = Page.content_panels + []
+#
+#     class Meta:
+#         verbose_name = "Reviews for albums with 4+ reviews"
+#
+#     subpage_types = []
+#
+#     parent_page_types = [
+#         'ReviewIndexPage'
+#     ]
+#
+#     def get_context(self, request):
+#         context = super(ReviewFeatureIndexPage, self).get_context(request)
+#
+#         reviews = ReviewPage.objects.live().filter(rating__gte=4).order_by('-first_published_at')
+#
+#         context['reviews'] = reviews
+#         return context
+
+        # (a,b,c) or 'a,b,c' = tuple
+        # [a,b,c] = list
+        # Tuples have structure, lists have order
+        # https://docs.python.org/2/library/stdtypes.html#typesseq
