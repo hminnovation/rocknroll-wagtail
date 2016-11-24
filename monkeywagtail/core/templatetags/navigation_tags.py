@@ -1,6 +1,6 @@
 from django import template
 from wagtail.wagtailcore.models import Page
-from monkeywagtail.core.models import MainMenu
+from monkeywagtail.core.models import MainMenu, FooterMenu
 
 register = template.Library()
 
@@ -102,9 +102,18 @@ def standard_index_listing(context, calling_page):
 
 # Main menu model
 # @TODO find docs re: .inclusion_tag
-@register.inclusion_tag('tags/mainmenu.html', takes_context=True)
+@register.inclusion_tag('tags/menu-wrap.html', takes_context=True)
 def main_menu(context):
     return {
         'mainmenu': MainMenu.objects.all(),
         'request': context['request'],
     }
+
+@register.inclusion_tag('tags/menu-wrap.html', takes_context=True)
+def footer_menu(context):
+    return {
+        'footermenu': FooterMenu.objects.all(),
+        'request': context['request'],
+    }
+# This won't work very well for the footer because it isn't useful having children
+# items within a menu in the footer

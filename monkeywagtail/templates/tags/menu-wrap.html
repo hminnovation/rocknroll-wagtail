@@ -1,0 +1,24 @@
+{% if mainmenu %}
+	<div class="top-bar-left">
+		{% for menu in mainmenu %}
+		      	{{ menu.menu }}
+		{% endfor %}
+	</div>
+{% endif %}
+
+
+{% for menu in footermenu %}
+	{{ menu.menu }}
+{% endfor %}
+
+{% comment %}
+We have arguably a rather odd system here that could no doubt be improved.
+
+For the moment though we use the following files to create the main dropdown 
+menu.
+
+templates/tags/menu-wrap.html
+   -> templates/tags/menu.html
+      -> templates/tags/menuitem_parent.html
+         -> templates/tags/menuitem_child.html
+{% endcomment %}

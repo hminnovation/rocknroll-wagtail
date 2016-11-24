@@ -74,3 +74,25 @@
 .pagination {
   padding-left: $global-margin*2;
 }
+
+/* footer */
+footer {
+  ul {
+    display: inline-block!important;
+    li {
+      display: inline-block!important;
+      visibility: visible!important;
+      position: relative!important;
+      ul {
+        display: inline-block!important;
+        visibility: visible!important;
+        position: relative!important;
+        li {
+          display: inline-block!important;
+          visibility: visible!important;
+          position: relative!important;
+        }
+      }
+    }
+  }
+}

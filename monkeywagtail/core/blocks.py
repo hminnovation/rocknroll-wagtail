@@ -115,7 +115,7 @@ class ChildMenuBlock(StructBlock):
     # idea and there's likely a better solution, but this works...
 
     class Meta:
-        template = 'blocks/menuitem_child.html'
+        template = 'tags/menuitem_child.html'
 # The above will give a StructBlock of content (e.g. the same fields will always
 # be accessible to the user) to create child menu items
 
@@ -128,7 +128,7 @@ class ParentMenuBlock(StructBlock):
     child_link = CardsBlock(ChildMenuBlock())
 
     class Meta:
-        template = 'blocks/menuitem_parent.html'
+        template = 'tags/menuitem_parent.html'
         # help_text = 'abc' (just to note that you can have help_text here)
 
 # The parent menu block is very similar to the child except that we have includ-
@@ -141,5 +141,5 @@ class MenuBlock(StreamBlock):
     menu_item = ParentMenuBlock(icon='fa-link')
 
     class Meta:
-        template = 'blocks/menu.html'
+        template = 'tags/menu.html'
 # We then wrap both the parent and child menu blocks within a StreamField block

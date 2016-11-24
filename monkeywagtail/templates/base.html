@@ -28,22 +28,29 @@
 
 {% block header %}  
 <header>
-{% comment %}
-Note: We've currently got the title within menu...
-<div class="row logo">
-    <div class="small-12 logo-text">
-        <h1><a href="/">Rock 'n' roll Wagtail</a></h1>
-    </div> 
-</div>
-{% endcomment %}
 
 <nav>
 {% block menu %}
-    {% get_site_root as site_root %}
-    {% main_menu %}
+<div class="title-bar" data-responsive-toggle="main-menu" data-hide-for="medium">
+  <button class="menu-icon" type="button" data-toggle></button>
+  <div class="title-bar-title">Menu</div>
+  <li class="menu-text"><h1>Rock 'n' roll Wagtail</h1></li>
+</div>
+
+<div class="top-bar"  style="width:100%" id="main-menu">
+    <div class="row">
+        <div class="columns small-12 medium-9">
+            <div class="top-bar-left title">
+            <h1><a href="/">Rock 'n' roll Wagtail</a></h1>
+            </div>
+            {% get_site_root as site_root %}
+            {% main_menu %}
     {% comment %}
         {% main_menu parent=site_root calling_page=self %}
     {% endcomment %}
+        </div>
+    </div>
+</div>
 {% endblock menu %}
   </nav>
 </header>  
@@ -58,6 +65,8 @@ Note: We've currently got the title within menu...
 
 {% block footer %}
     <footer>
+    {% get_site_root as site_root %}
+        {% footer_menu %}
     {% comment %}
         <ul class="small-8 small-centered columns inline-list">
             <li>Made by <a href="//github.com/heymonkeyriot">Edd Baldry</a> (and <a href="//github.com/heymonkeyriot/rocknroll-wagtail/graphs/contributors">friends</a>)</li>
