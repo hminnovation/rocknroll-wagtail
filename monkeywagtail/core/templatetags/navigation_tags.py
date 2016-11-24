@@ -1,6 +1,6 @@
 from django import template
 from wagtail.wagtailcore.models import Page
-from monkeywagtail.core.models import MainMenu, FooterMenu
+from monkeywagtail.core.models import MainMenu
 
 register = template.Library()
 
