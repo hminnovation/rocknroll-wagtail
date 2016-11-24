@@ -1,7 +1,41 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags mathfilters wagtailimages_tags %}
 
 {% block content %}
+
+<form action="." method="get" class="filter-bar">
+            {% if page.filter_years %}
+                <div class="filter-bar_item filter">
+                    <label for="filter_year" class="filter_label">Year</label>
+                    <select id="filter_year" name="year" class="filter_select">
+                        <option value="">Any year</option>
+                        {% for year in page.filter_years %}
+                            <option value="{{ year }}" {% if filters.year == year|slugify %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+
+            {% if page.genres %}
+             <label for="filter_genre" class="filter_label">Genre</label>
+              {% for genre in page.genres %}
+                <input type="checkbox" name="genre" value="{{ genre.slug }}" {% if filters.genre == genre.slug|slugify %}checked{% endif %}> {{ genre.name }}
+            {% endfor %}
+
+            {% for i in "xxxxx" %}
+               <input type="radio" name="rating" value="{{ forloop.counter }}" {% if filters.rating == forloop.counter|slugify %}checked{% endif %}>
+                <span style="width:{{ forloop.counter|mul:1.3 }}%" class="star_ratings_sprite_rating"></span> {{forloop.counter}} and above
+               {% comment %}
+               This is a quick hack because we don't have an equivalent of `for i = 1 to n`
+               http://stackoverflow.com/questions/1107737/numeric-for-loop-in-django-templates
+               {% endcomment %}
+            {% endfor %}
+            <div class="filter-bar_item filter-bar_submit">
+                <button type="submit" class="button">Filter</button>
+            </div>
+            {% endif %}
+</form>
+
 
 <ul>
 {% for artist in page.artists %}
@@ -10,19 +44,7 @@
 {% endfor %}
 </ul>
 
-<ul>
-{% for genre in page.genres %}
-  <li><a href="?genre={{genre.slug}}">{{ genre.name }}</a></li>
-{% endfor %}
-</ul>
 
-{% for i in "xxxxx" %}
-   <a href="?rating={{forloop.counter}}">{{ forloop.counter }}</a>
-   {% comment %}
-   This is a quick hack because we don't have an equivalent of `for i = 1 to n`
-   http://stackoverflow.com/questions/1107737/numeric-for-loop-in-django-templates
-   {% endcomment %}
-{% endfor %}
 
 {% for author in page.authors %}
   <li>{{ author.name }}</li>
