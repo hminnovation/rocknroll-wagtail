@@ -99,7 +99,8 @@ class ReviewPage(Page):
     # https://docs.djangoproject.com/en/1.9/ref/models/fields/#field-types
     listing_introduction = models.CharField(
         max_length=250, blank=True,
-        help_text="Text shown on review, and other, listing pages, if empty will show 'Introduction' field content"
+        help_text="Text shown on review, and other, listing pages, if empty will"
+        " show 'Introduction' field content"
         )
 
     # Note below we're calling StreamField from another location. The
@@ -170,10 +171,11 @@ class ReviewPage(Page):
 
 class ReviewIndexPage(Page):
     listing_introduction = models.TextField(
-        help_text='Text to describe this section. Will appear on other pages that reference this feature section',
+        help_text="Text to describe this section. Will appear on other pages"
+        " that reference this feature section",
         blank=True)
     introduction = models.TextField(
-        help_text='Text to describe this section. Will appear on the page',
+        help_text="Text to describe this section. Will appear on the page",
         blank=True)
 
     search_fields = Page.search_fields + [

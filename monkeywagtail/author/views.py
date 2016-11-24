@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Author
 
@@ -6,7 +7,11 @@ from .models import Author
 def author_list(request):
     authors = Author.objects.all()
 
-    paginator = Paginator(authors, 2)  # Show 2 contacts per page
+    paginator = Paginator(
+        authors, settings.DEFAULT_PER_PAGE
+    )  # Show number of items defined by site default
+    # To show a sepcific number
+    # paginator = Paginator(authors, 2)  # Show 2 contacts per page
 
     page = request.GET.get('page')
     try:
@@ -15,7 +20,7 @@ def author_list(request):
         # If page is not an integer, deliver first page.
         authors = paginator.page(1)
     except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
+        # If page is out of range (e.g. 9999), deliver last page of results
         authors = paginator.page(paginator.num_pages)
 
     return render(request, 'author/author_list.html', {
@@ -28,9 +33,15 @@ def author_list(request):
 def author_detail(request, slug):
     author = get_object_or_404(Author, slug=slug)
     articles = set(
-        p.page for p in author.author_feature_page_relationship.select_related('page').all() if p.page.live)
+        p.page for p in 
+        author.author_feature_page_relationship.select_related('page').all()
+        if p.page.live
+    )
     reviews = set(
-        p.page for p in author.author_review_relationship.select_related('page').all() if p.page.live)
+        p.page for p in
+        author.author_review_relationship.select_related('page').all()
+        if p.page.live
+    )
     return render(request, 'author/author_detail.html', {
         'author': author,
         'article': articles,

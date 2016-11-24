@@ -78,7 +78,7 @@ class Author(models.Model):
         FieldPanel('external_url')
     ]
 
-    def __str__(self):              # __unicode__ on Python 2
+    def __str__(self):
         # We're returning the string that populates the snippets screen.
         # Note it returns a plain-text string. Reference the `artist_image`
         # below for returning a HTML rendition
@@ -104,24 +104,3 @@ class Author(models.Model):
         # @TODO work out whether this is actually okay to do
         # It feels repetitive to have to define every image size
 
-    @property
-    # @TODO work out how to paginate a non-page model :)
-    # below doesn't work!
-    def authors(self):
-        return Author.objects.all()
-        # need to use `.filter()`?
-
-    def get_context(self, request):
-        page_number = request.GET.get('page')
-        paginator = Paginator(self.authors, settings.DEFAULT_PER_PAGE)
-        try:
-            authors = paginator.page(page_number)
-        except PageNotAnInteger:
-            authors = paginator.page(1)
-        except EmptyPage:
-            authors = paginator.page(paginator.num_pages)
-
-        context = super().get_context(request)
-        context.update(authors=authors)
-
-        return context
