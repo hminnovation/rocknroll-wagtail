@@ -6,6 +6,12 @@ from wagtail.wagtailadmin.edit_handlers import (
 from modelcluster.models import ClusterableModel
 from monkeywagtail.core.blocks import MenuBlock
 
+# CORE
+# You'll see that core is pretty empty. We could, most likely get away with
+# creating all the classes here in other apps (e.g. MainMenu could arguably be
+# in the home app and RelatedPage in feature_content_page's model)
+# Having them in core though allows their re-use across any app later in the
+# project and abstracts them to a more logical location.
 
 # MENUS
 # We're creating a menu withing admin > settings > navigation menu
@@ -52,27 +58,6 @@ class MainMenu(ClusterableModel):
     class Meta:
         verbose_name = "Main navigation"
         verbose_name_plural = "Main navigation"
-
-
-class FooterMenu(ClusterableModel):
-    title = models.CharField(
-        max_length=255, null=False, blank=False, verbose_name='Menu title')
-    menu = StreamField(MenuBlock(), verbose_name="Menus", blank=True)
-
-    panels = [
-        FieldPanel('title'),
-        StreamFieldPanel('menu'),
-    ]
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = "Footer menu"
-
-# @TODO work out if there's a way to return context using a title name rather
-# than class name e.g. 'primarynav': {random_title}.objects.order_by('order'),
-# that way we could just have a single menu class
 
 
 # Related pages

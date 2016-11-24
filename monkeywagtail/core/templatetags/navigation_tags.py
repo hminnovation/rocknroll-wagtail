@@ -108,12 +108,3 @@ def main_menu(context):
         'mainmenu': MainMenu.objects.all(),
         'request': context['request'],
     }
-
-@register.inclusion_tag('tags/menu-wrap.html', takes_context=True)
-def footer_menu(context):
-    return {
-        'footermenu': FooterMenu.objects.all(),
-        'request': context['request'],
-    }
-# This won't work very well for the footer because it isn't useful having children
-# items within a menu in the footer
