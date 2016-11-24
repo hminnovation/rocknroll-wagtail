@@ -2,6 +2,7 @@ from django.db import models
 from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Orderable
 from wagtail.wagtailcore import blocks
+from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.wagtailsnippets.models import register_snippet
 from modelcluster.fields import ParentalKey
@@ -93,7 +94,7 @@ class GenreClass(ClusterableModel):
         # of the model
         FieldPanel('title'),
         FieldPanel('slug'),
-        FieldPanel('image'),
+        ImageChooserPanel('image'),
         FieldPanel('genre_description'),
         InlinePanel(
             'sub_genre_relationship',
