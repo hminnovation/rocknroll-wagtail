@@ -274,7 +274,7 @@ class ReviewIndexPage(Page):
 
     def paginate(self, request, objects):
         page = request.GET.get('page')
-        paginator = Paginator(objects, 10)  # Show 20 objects per page
+        paginator = Paginator(objects, 2)  # Show 20 objects per page
         try:
             pages = paginator.page(page)
         except PageNotAnInteger:

@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags mathfilters wagtailimages_tags %}
+{% load wagtailcore_tags mathfilters wagtailimages_tags navigation_tags %}
 
 {% block content %}
 
+<div class="review_filters">
 <form action="." method="get" class="filter-bar">
             {% if page.filter_years %}
                 <div class="filter-bar_item filter">
@@ -37,6 +38,7 @@
 </form>
 
 
+<label>Artist A-Z</label>
 <ul>
 {% for artist in page.artists %}
   <li><a href="?artist_name={{artist.name.0}}">{{ artist.name.0 }}</a></li>
@@ -45,42 +47,59 @@
 </ul>
 
 
-
+<label>Reviews by</label>
 {% for author in page.authors %}
   <li>{{ author.name }}</li>
 {% endfor %}
+</div>
 
-Order by rating <a href="?sort_by=rating-desc">high to low</a> &middot; <a href="?sort_by=rating-asc">low to high</a>
-<div class="row">
+<div class="row review_list">
+  <div class="review_order">
+    <label>Order by rating</label>
+    <a href="?sort_by=rating-desc{% if search_query %}query={{ search_query|urlencode }}{% endif %}{% if filters %}{% filters_query filters=filters %}{% endif %}">high to low</a> &middot; <a href="?sort_by=rating-asc">low to high</a>
+  </div>
   <div class="columns">
     {% for review in reviews %}
             
       {% for album in review.albums %}
+        {% if album.image %}
+            <div class="review_artwork">
+              {% image album.image width-400 as photo %}
+              <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+            </div>
+        {% endif %}
       <h2> 
         <a href="{{ review.url }}">
-          {{ album.title }} <span>by</span>
-      {% for artist in album.artists %}
-            {{ artist.title }}
-      {% endfor %}
+          <span class="album_title">{{ album.title }}</span> <span>by</span>
+          {% for artist in album.artists %}
+                <span class="artist_name">{{ artist.title }}</span>
+          {% endfor %}
         </a>
       </h2>
           <ul class="genre">
               {% for genre in album.genres %}
-                  <li><a href="{{ genre.url }}">{{ genre }}</a></li>
+                  <li><a href="/?{{ genre.slug }}">{{ genre }}</a></li>
               {% endfor %}
           </ul> 
       {% endfor %}
 
       {% for author in review.authors %}
-            <a href="{{ author.url }}">{{ author }}</a><br />
+           by: <a href="{{ author.url }}">{{ author }}</a><br />
       {% endfor %}
 
-        {{ review.listing_introduction }}
-        {% if review.image %}
-              {% image review.image width-100 as photo %}
-              <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
-        {% endif %}
-        <a href="{{ review.url }}">read more</a>
+
+        {% with width=review.rating %}
+                <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+        {% endwith %}
+        
+        {{ review.first_published_at|date:"F d Y" }}
+        {% comment %}
+          We could set this universally within our setting using 
+          `DATE_FORMAT = "Y-m-d"`
+          https://docs.djangoproject.com/en/dev/ref/settings/#date-format
+          Exhaustive docs on _all_ the possible date combinations are at
+          https://docs.djangoproject.com/en/1.10/ref/templates/builtins/#date
+        {% endcomment %}
 
     {% endfor %}
 </div>
