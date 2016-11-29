@@ -72,7 +72,17 @@
 
 /* PAGIINATION */
 .pagination {
+  margin: $global-padding*2 auto;
+  max-width: 20rem;
   padding-left: $global-margin*2;
+  > * :not(li) {
+    padding: $global-padding/2 $global-padding;
+  }
+  span {
+    &.inactive {
+      color: $custom-grey;
+    }
+  }
 }
 
 /* footer */

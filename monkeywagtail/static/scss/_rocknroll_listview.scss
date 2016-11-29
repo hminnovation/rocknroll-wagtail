@@ -70,8 +70,10 @@
 
 /* FEATURES */
 .template-feature-index-page {
-    h1 {
-        padding-left: $global-padding;
+    content {
+        h1 {
+            padding-left: $global-padding;
+        }
     }
 }
 .feature-list {
@@ -84,8 +86,19 @@
         margin-bottom: $global-margin*3;
         margin-right: $global-margin*2;
         width: 45%;
+        &:only-child {
+            // where the feature is all alone :sob:
+            margin: auto;
+        }
         img {
             margin-bottom: -$global-margin*1.3;
+        }
+        .feature-image {
+            height: 285px;
+            background-color: pink;
+            float: left;
+            width: 100%;
+            overflow: hidden;
         }
         .feature-genres {
             ul {

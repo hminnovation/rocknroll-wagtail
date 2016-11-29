@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags navigation_tags wagtailimages_tags %}
 
 {% block content %}
-{{ self.genre_filter }}
 
+<content>
 <div class="row">
 <h1>Features</h1>
 
@@ -40,13 +40,13 @@
 
 <div class="feature-list">
   {% for feature in features %}
-    <div class="feature row">
-    {% if feature.image %}
-      <div class="small-12 columns">
-              {% image feature.image width-700 as photo %}
-              <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+    <div class="feature">
+      <div class="feature-image">
+        {% if feature.image %}
+            {% image feature.image width-600 as photo %}
+            <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+        {% endif %}
       </div>
-    {% endif %}
       <div class="small-12 columns">
         <div class="feature-genres">
            {% if feature.genres %}
@@ -75,7 +75,7 @@
                 </ul>
               {% endif %}
               <date class="feature-date">
-                {{ feature.date }}
+                {{ feature.date|date:"F d Y" }}
               </date>
             </div>
 
@@ -83,7 +83,7 @@
               {% if feature.artists %}
                 <ul>
                   {% for artist in feature.artists %}
-                    <li class="artist"><a href="{{ artist.url }}">{{ artist }}</a></li>
+                    <li class="artist"><a href="{{ artist.url }}">{{ artist|title }}</a></li>
                   {% endfor %}
                 </ul>
               {% endif %}
@@ -99,6 +99,9 @@
             Read more
             {% endif %}</a>
           </div>
+          {% for genre in feature.genres %}
+            <a href="/?genre={{ genre.slug }}">{{ genre }}</a>
+          {% endfor %}
       </div>
     </div>
   {% endfor %}
@@ -111,4 +114,5 @@
            across the site. The `features` comes from the property that we
            defined in the FeatureContentPageIndex class {% endcomment %}
 {% endif %}
+</content>
 {% endblock %}
