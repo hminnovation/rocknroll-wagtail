@@ -1,9 +1,11 @@
 from django import template
+from django.template import Template
+from django.utils.http import urlencode
 from wagtail.wagtailcore.models import Page
 from monkeywagtail.core.models import MainMenu
 
 register = template.Library()
-
+# https://docs.djangoproject.com/en/1.9/howto/custom-template-tags/
 
 @register.assignment_tag(takes_context=True)
 def get_site_root(context):
@@ -108,3 +110,21 @@ def main_menu(context):
         'mainmenu': MainMenu.objects.all(),
         'request': context['request'],
     }
+
+
+@register.simple_tag
+def filters_query(filters):
+    """
+    Takes a dictionary of filters, remove unused ones and return as urlencoded
+    string.
+    """
+    new_filters = {}
+
+    for k, v in filters.items():
+        if v:
+            new_filters[k] = v
+
+    if bool(new_filters):
+        return '&'+urlencode(new_filters)
+    else:
+        return ''
