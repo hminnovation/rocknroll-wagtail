@@ -42,3 +42,23 @@
         @include grid-column(6, $grid-column-gutter);
     }
 }
+
+/* FEATURE DETAIL PAGES */
+.template-feature-content-page {
+    .header {
+        ul {
+            list-style: none;
+            li {
+                display: inline-block;
+            }
+        }
+        .feature_title-meta {
+            margin-bottom: $global-margin;
+            display: flex;
+            justify-content: center;
+            .authors {
+                margin: -1px 0 0 6px;
+            }
+        }
+    }
+}

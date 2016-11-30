@@ -3,56 +3,60 @@
 
 {% block content %}
 <div class="article">
-    <div class="row">
-        <div class="columns small-12 medium-9 large-7 column-end">
-            <h1>{{ page.title }}</h1>
+    <div class="header">
+        <div class="row feature_title">
+            <div class="columns small-12 text-center">
+                <h1>{{ page.title }}</h1>
+            </div>
         </div>
-    </div>
 
 
-<div class="page_artist_genre">
-    <div class="row">
-        <div class="columns small-12 medium-9 large-7 column-end">
-            {% for artist in page.artists %}
-            <p class="artist">
-                <a href="{% url 'artists' %}{{ artist.slug}}">{{ artist.title }}</a>
-            </p>
-            {% endfor %}
-            {% if page.genres %}
-            <ul class="genre">
-                {% for genre in page.genres %}
-                    <li>
-                    {% comment %}
-                    <a href="{{ genre.url }}">{{ genre.title }}</a>
-                    This would take you to the genre detail page   
-                    {% endcomment %}
+        <aside>
+            <div class="row feature_artist_genre">
+                <div class="columns small-12 text-center">
+                    <ul class="artists">
+                    {% for artist in page.artists %}
+                        <li class="artist">
+                            <a href="{% url 'artists' %}{{ artist.slug}}">{{ artist.title|title }}</a>
+                            {% if not forloop.last %}, {% endif %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    {% if page.genres %}
+                    <ul class="genres">
+                        {% for genre in page.genres %}
+                            <li class="genre">
+                                {% comment %}
+                                <a href="{{ genre.url }}">{{ genre.title }}</a>
+                                This would take you to the genre detail page   
+                                {% endcomment %}
+                                <a href="../?genre={{ genre.slug }}">{{ genre.title }}</a>
+                                {# This will instead filter the features on the index page #}
+                                {% if not forloop.last %}, {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row feature_title-meta">
+                    <span class="date">
+                        <strong>Written</strong> <date>{{ page.date|date:"F d Y" }}</date>
+                    </span>
                     
-                        <a href="../?genre={{ genre.slug }}">{{ genre.title }}</a>
+                    <ul class="authors">
+                    <strong>by</strong> {% for author in page.authors %}
+                        {% if forloop.last and forloop.counter > 1 %}
+                        &nbsp;and&nbsp;
+                        {% endif %}
+                            <li><a href="{% url 'authors' %}{{ author.slug}}">{{ author.title }}</a></li>
                         {% if not forloop.last %}, {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
+                    {% endfor %}
+                    </ul>
+            </div>
+        </aside>
     </div>
-</div>
-
-<div class="page_title-meta">
-    <div class="row">
-        <div class="columns small-12 medium-9 large-7 column-end">
-            <date>{{ page.date }}</date>
-            <p>
-            {% for author in page.authors %}
-                {% if forloop.last and forloop.counter > 1 %}
-                &nbsp;and&nbsp;
-                {% endif %}
-                    <a href="{% url 'authors' %}{{ author.slug}}">{{ author.title }}</a>
-                {% if not forloop.last %}, {% endif %}
-            {% endfor %}
-            </p>
-        </div>
-    </div>
-</div>
 
 {% comment %}
 <div class="listing_image">
