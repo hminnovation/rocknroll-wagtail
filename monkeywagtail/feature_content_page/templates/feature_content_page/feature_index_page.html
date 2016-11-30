@@ -41,12 +41,14 @@
 <div class="feature-list">
   {% for feature in features %}
     <div class="feature">
-      <div class="feature-image">
-        {% if feature.image %}
-            {% image feature.image width-600 as photo %}
-            <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
-        {% endif %}
-      </div>
+      <a href="{{ feature.url }}">
+        <div class="feature-image">
+          {% if feature.image %}
+              {% image feature.image width-600 as photo %}
+              <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+          {% endif %}
+        </div>
+      </a>
       <div class="small-12 columns">
         <div class="feature-genres">
            {% if feature.genres %}
@@ -96,7 +98,7 @@
             {% elif feature.introduction  %}
               <p>{{ feature.introduction }}</p>
             {% else %}
-            Read more
+            <p>Read more</p>
             {% endif %}</a>
           </div>
           {% for genre in feature.genres %}

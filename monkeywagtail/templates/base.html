@@ -39,16 +39,12 @@
 
 <div class="top-bar"  style="width:100%" id="main-menu">
     <div class="row">
-        <div class="columns small-12 medium-9">
-            <div class="top-bar-left title">
-            <h1><a href="/">Rock 'n' roll Wagtail</a></h1>
-            </div>
-            {% get_site_root as site_root %}
-            {% main_menu %}
-    {% comment %}
-        {% main_menu parent=site_root calling_page=self %}
-    {% endcomment %}
+        <div class="title">
+        <h1><a href="/">Rock 'n' roll Wagtail</a></h1>
         </div>
+        {% get_site_root as site_root %}
+        {% main_menu %}
+        {# Note that main_menu is defined in core/templatetags/navigation_tags.py #}
     </div>
 </div>
 {% endblock menu %}

@@ -20,10 +20,13 @@ $floor : #eeeeee;
 }
 
 /* LOGO AND TOP-BAR */
-.logo {
-    h1 {
-        a {
-            color: $custom-black;
+.top-bar {
+    .title {
+        text-align: center;
+        h1 {
+            width: auto;
+            a {
+            }
         }
     }
 }

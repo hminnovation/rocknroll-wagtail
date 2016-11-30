@@ -20,7 +20,9 @@
       background-color: transparent;
   }
   .dropdown.menu {
-    margin-left: 30px;
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
       > li {
         padding: 10px 0;
             &:hover {
@@ -68,6 +70,11 @@
 /* Breadcrumbs */
 .breadcrumbs {
   margin: 1rem;
+  text-align: center;
+  li {
+    display: inline-flex;
+    float: none;
+  }
 }
 
 /* PAGIINATION */

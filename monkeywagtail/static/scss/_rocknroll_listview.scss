@@ -58,13 +58,6 @@
         &:last-child {
             margin-bottom: 0;
         }
-/*        &::after {
-            content:"";
-            height: 1px;
-            width: 80px;
-            background-color: $metal;
-            display: block;
-        }*/
     }
 }
 
@@ -72,7 +65,7 @@
 .template-feature-index-page {
     content {
         h1 {
-            padding-left: $global-padding;
+            text-align: center;
         }
     }
 }
@@ -85,10 +78,13 @@
     .feature {
         margin-bottom: $global-margin*3;
         margin-right: $global-margin*2;
-        width: 45%;
+        width: 48%;
         &:only-child {
             // where the feature is all alone :sob:
             margin: auto;
+        }
+        &:last-child {
+            margin-right: 0;
         }
         img {
             margin-bottom: -$global-margin*1.3;
@@ -112,11 +108,10 @@
             }
         }
         .feature-authors {
-            margin-bottom: $global-margin;
             &::after {
                 content: "";
                 display: block;
-                margin: auto;
+                margin: $global-margin auto;
                 width: 40px;
                 height: 1px;
                 background-color: $rust;
@@ -124,6 +119,7 @@
             ul {
                 list-style: none;
                 display: inline-block;
+                margin-bottom: 0;
                 max-width: 48%;
                 &::after {
                     content: "•";
