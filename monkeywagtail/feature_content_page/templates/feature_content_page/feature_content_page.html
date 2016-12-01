@@ -70,20 +70,16 @@ quote &etc.
 {% endcomment %}
 
 {% if page.introduction %}
-<div class="introduction">
-    <div class="row">
-        <div class="columns small-12 medium-9 large-7 column-end">
+<div class="feature-introduction">
         {% comment %}@TODO Make a sass mixin for above classes{% endcomment %}
-            {{ page.introduction }}
-        </div>
+            <div class="row">{{ page.introduction }}</div>
+            
     </div>
 </div>
 {% endif %}
 
 {% if page.body %}
 <div class="feature-body">
-    <div class="row">
-        <div class="columns small-12 medium-9 large-7 column-end">
             {{ page.body }}
         </div>
     </div>

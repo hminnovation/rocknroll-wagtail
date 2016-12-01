@@ -1,0 +1,33 @@
+@mixin padding_horizontal {
+    padding-left: $global-padding*20;
+    padding-right: $global-padding*20;
+    @include breakpoint(large down){
+        padding-left: $global-padding*12;
+        padding-right: $global-padding*12;
+    }
+    @include breakpoint(medium down){
+        padding-left: $global-padding*2;
+        padding-right: $global-padding*2;
+    }
+    @include breakpoint(medium down){
+        padding-left: $global-padding;
+        padding-right: $global-padding;
+    }
+}
+
+@mixin padding_vertical {
+    padding-top: $global-padding*2;
+    padding-bottom: $global-padding*2;
+    @include breakpoint(medium down){
+        padding-top: $global-padding;
+        padding-bottom: $global-padding;
+    }
+}
+
+@mixin line-height {
+    line-height: $global-lineheight*1.5;
+    @include breakpoint(medium down){
+        line-height: $global-lineheight;
+    }
+}
+/* .element { @include padding(10px); } */

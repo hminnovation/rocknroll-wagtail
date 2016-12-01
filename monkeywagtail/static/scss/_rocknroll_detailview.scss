@@ -45,6 +45,9 @@
 
 /* FEATURE DETAIL PAGES */
 .template-feature-content-page {
+    h1 {
+        font-size: 4rem;
+    }
     .header {
         ul {
             list-style: none;
@@ -61,4 +64,31 @@
             }
         }
     }
+    .feature-introduction {
+        background-color: $rust;
+        color: $white;
+        font-weight: 600;
+        @include line-height;
+        @include padding_horizontal;
+        @include padding_vertical;
+    }
+
+    .feature-body {
+        background-color: $floor;
+        padding-top: $global-padding*2;
+    }
 }
+
+// Additional styling for the features app. Specifically features index page
+// and the features page templates
+
+
+.page_title-meta {
+    .columns {
+        display: flex;
+    }
+    date {
+        margin-right: $global-margin;
+    }
+}
+
