@@ -63,6 +63,49 @@
 
 /* FEATURES */
 .template-feature-index-page {
+    .filter-bar {
+        display: flex;
+        form {
+            display: flex;
+            width: 80%;
+            padding-left: $global-padding;
+            .filter-bar_item {
+                margin-right: $global-margin;
+                width: 46%;
+            }
+            .filter-bar_submit {
+                margin-top: $global-margin*1.5;
+                width: 6%;
+            }
+        }
+        .review_order {
+            margin-left: 1rem;
+            label {
+                margin-bottom: 8px;
+            }
+            a {
+                border: 1px solid $custom-grey;
+                padding: 0.6rem 0.5rem;
+                border-radius: 3px;
+                margin-right: 0.2rem;
+                margin-top: 20px;
+                &:hover {
+                    background-color: $metal;
+                    color: $white;
+                    span {
+                        color: $white;
+                    }
+                }
+                &:last-child {
+                    margin-right: 0;
+                }
+                span {
+                    color: $custom-black;
+                }
+            }
+        }
+    }
+
     content {
         h1 {
             text-align: center;
@@ -99,6 +142,9 @@
         .feature-genres {
             ul {
                 list-style: none;
+                &:first-child {
+                    margin-left: 0;
+                }
                 li {
                     a {
                         background-color: $white;
@@ -141,10 +187,16 @@
                 list-style: none;
                 display: inline-block;
                 max-width: 48%;
+                &:first-child {
+                    margin-left: 0;
+                }
             }
             li {
                     display: inline-block;
                     margin-left: 10px;
+                    &:first-child {
+                        margin-left: 0;
+                    }
                 }
         }
         .feature-text {
@@ -154,21 +206,6 @@
         }
     }
 }
-
-
-/* FILTERS */
-.filter-bar {
-    display: flex;
-    padding-left: $global-padding;
-    .filter-bar_item {
-        margin-right: $global-margin;
-        width: 32%;
-    }
-    .filter-bar_submit {
-        margin-top: $global-margin*1.5;
-    }
-}
-
 
 
 

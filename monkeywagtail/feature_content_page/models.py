@@ -210,11 +210,6 @@ class FeatureContentPage(Page):
         ]
         return subgenres
 
-    # def genre_filter(self):
-    #     return self.objects.filter(feature_page_genre_relationship__genre__id=self)
-    #     # genre = self.feature_page_genre_relationship
-    #     # return genre
-
 
 class FeatureIndexPage(Page):
     listing_introduction = models.TextField(
@@ -345,15 +340,21 @@ class FeatureIndexPage(Page):
         # that doesn't include spaces e.g. 'heavy-metal' rather than 'heavy
         #  metal' but it gives more useful information than genre__id
 
+        sort_by = request_filters.get('sort_by', 'modified')
+        if sort_by == 'date-asc':
+            features = features.order_by('first_published_at')
+        if sort_by == 'date-desc':
+            features = features.order_by('-first_published_at')
+
         if not is_filtering:
             pass
 
         filters = {
             'year': year,
-            'genre': genre
+            'genre': genre,
+            'sort_by': sort_by
         }
 
-        features = features.order_by('-date')
         return features, filters, is_filtering
 
     def get_context(self, request):
