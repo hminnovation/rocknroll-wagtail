@@ -15,6 +15,45 @@
     }
 }
 
+@mixin padding_horizontal_left {
+    padding-left: $global-padding*24;
+    @include breakpoint(large down){
+        padding-left: $global-padding*12;
+    }
+    @include breakpoint(medium down){
+        padding-left: $global-padding*2;
+    }
+    @include breakpoint(medium down){
+        padding-left: $global-padding;
+    }
+}
+
+@mixin padding_horizontal_right {
+    padding-right: $global-padding*22;
+    @include breakpoint(large down){
+        padding-right: $global-padding*12;
+    }
+    @include breakpoint(medium down){
+        padding-right: $global-padding*2;
+    }
+    @include breakpoint(medium down){
+        padding-right: $global-padding;
+    }
+}
+
+@mixin padding_horizontal_right_extra {
+    padding-right: $global-padding*40;
+    @include breakpoint(large down){
+        padding-right: $global-padding*12;
+    }
+    @include breakpoint(medium down){
+        padding-right: $global-padding*2;
+    }
+    @include breakpoint(medium down){
+        padding-right: $global-padding;
+    }
+}
+
 @mixin padding_vertical {
     padding-top: $global-padding*2;
     padding-bottom: $global-padding*2;

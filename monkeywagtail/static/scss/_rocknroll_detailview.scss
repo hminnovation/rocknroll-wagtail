@@ -65,8 +65,7 @@
         }
     }
     .feature-introduction {
-        background-color: $rust;
-        color: $white;
+        color: $custom-black;
         font-size: 1.4em;
         text-align: center;
         @include line-height_extra;
@@ -76,6 +75,9 @@
     
     .feature-content {
         display: flex;
+        @include breakpoint(medium down){
+            display: block;
+        }
         .feature-body {
             flex: 2;
         }
@@ -84,8 +86,25 @@
         }
     }
     .feature-body {
-        background-color: $floor;
         padding-top: $global-padding*2;
+        .block-header, 
+        .block-paragraph, 
+        .block-blockquote, 
+        .block-embed {
+            @include padding_horizontal_left;
+            padding-right: 2em;
+        }
+    }
+    .feature-body:only-child {
+    // Related items are optional, and know that if .feature-related isn't there
+    // that .feature-body will be an :only-child. 
+        .block-header, 
+        .block-paragraph, 
+        .block-blockquote, 
+        .block-embed {
+            @include padding_horizontal_left;
+            @include padding_horizontal_right_extra;
+        }
     }
 }
 
