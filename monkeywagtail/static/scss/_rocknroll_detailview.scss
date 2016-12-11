@@ -94,16 +94,71 @@
             @include padding_horizontal_left;
             padding-right: 2em;
         }
+        .block-image {
+            figure {
+                margin-left: 0;
+                margin-right: 0;
+            }
+            figcaption {
+                color: $custom-black;
+            }
+            .square {
+                display: flex;
+                @include padding_horizontal_left;
+                img {
+                    width: 350px;
+                    height: 350px;
+                    margin-right: $global-margin;
+                }
+                figcaption {}
+            }
+            .full {
+                figcaption {
+                    margin-top: $global-margin;
+                    @include padding_horizontal_left;
+                }
+            }
+            .fit {
+                @include padding_horizontal_left;
+            }
+        }
     }
     .feature-body:only-child {
     // Related items are optional, and know that if .feature-related isn't there
-    // that .feature-body will be an :only-child. 
+    // that .feature-body will be an :only-child.
         .block-header, 
         .block-paragraph, 
         .block-blockquote, 
         .block-embed {
             @include padding_horizontal_left;
             @include padding_horizontal_right_extra;
+        }
+        .block-image {
+            .square {
+                @include padding_horizontal_left;
+                @include padding_horizontal_right_extra;
+                figure {
+                    display: flex;
+                }
+                img {
+                    width: 350px;
+                    height: 350px;
+                    margin-right: $global-margin;
+                }
+                figcaption {
+                    align-self: flex-end;
+                }
+            }
+            .full {
+                figcaption {
+                    @include padding_horizontal_left;
+                    @include padding_horizontal_right_extra;
+                }
+            }
+            .fit {
+                @include padding_horizontal_left;
+                @include padding_horizontal_right_extra;
+            }
         }
     }
 }
