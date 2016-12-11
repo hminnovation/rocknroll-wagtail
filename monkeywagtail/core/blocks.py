@@ -90,8 +90,9 @@ class StandardBlock(StreamBlock):
         ('caption', CharBlock(blank=True, required=False)),
         ('style', ChoiceBlock(choices=[
             ('', 'Select an image size'),
+            ('fit', 'Fit-to-text-width'),
             ('full', 'Full-width'),
-            ('half', 'Half-width')
+            ('square', 'Square')
         ], required=False))
     ], icon="image", template="blocks/image.html")
     blockquote = StructBlock([

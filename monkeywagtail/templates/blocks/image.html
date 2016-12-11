@@ -4,29 +4,31 @@
 {% if self.style == 'square' %}
   <div class="block image square">
     <figure>
-      {% image self.image fill-352x352 %}
-      {% if self.caption %}<figcaption>{{ self.caption }}</figcaption>{% endif %}
+      {% image self.image fill-600x600 %}
+        {% if self.caption %}
+          <figcaption>{{ self.caption }}</figcaption>
+        {% endif %}
     </figure>
   </div>
 
 {% elif self.style == 'full' %}
-  <div class="block image">
+  <div class="block image full">
     <figure>
-      {% image self.image original %}
+      {% image self.image width-2000 %}
         {% if self.caption %}
           <figcaption>{{ self.caption }}</figcaption>
         {% endif %}
       </figure>
     </div>
 
-{% elif self.style == 'half' %}
-  <div class="block image">
-    <div class="wrap">
+{% elif self.style == 'fit' %}
+  <div class="block image fit">
       <figure>
-      {% image self.image width-1088 %}
-      {% if self.caption %}<figcaption>{{ self.caption }}</figcaption>{% endif %}
+        {% image self.image width-1088 %}
+          {% if self.caption %}
+            <figcaption>{{ self.caption }}</figcaption>
+          {% endif %}
       </figure>
-    </div>
   </div>
 
 {% endif %}
