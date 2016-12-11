@@ -7,7 +7,8 @@
 <div class="row">
 <h1>Features</h1>
 
-<form action="." method="get" class="filter-bar">
+<div class="filter-bar">
+<form action="." method="get">
             {% if page.filter_years %}
                 <div class="filter-bar_item filter">
                     <label for="filter_year" class="filter_label">Year</label>
@@ -31,11 +32,15 @@
                     </select>
                 </div>
             {% endif %}
-
             <div class="filter-bar_item filter-bar_submit">
                 <button type="submit" class="button">Filter</button>
             </div>
-</form>
+        </form>
+            <div class="review_order">
+              <label>Order by date</label>
+              <a href="?sort_by=date-asc">newest <span>▼</span></a><a href="?sort_by=date-desc">oldest <span>▲</span></a>
+            </div>
+</div>
 
 
 <div class="feature-list">
@@ -79,6 +84,7 @@
               <date class="feature-date">
                 {{ feature.date|date:"F d Y" }}
               </date>
+              {{ feature.date_from }}
             </div>
 
             <div class="feature-artists">
