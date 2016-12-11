@@ -67,12 +67,22 @@
     .feature-introduction {
         background-color: $rust;
         color: $white;
-        font-weight: 600;
-        @include line-height;
+        font-size: 1.4em;
+        text-align: center;
+        @include line-height_extra;
         @include padding_horizontal;
         @include padding_vertical;
     }
-
+    
+    .feature-content {
+        display: flex;
+        .feature-body {
+            flex: 2;
+        }
+        .feature-related {
+            flex: 1;
+        }
+    }
     .feature-body {
         background-color: $floor;
         padding-top: $global-padding*2;
