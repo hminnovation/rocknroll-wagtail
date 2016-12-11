@@ -65,8 +65,6 @@ class SimplifiedBlock(StreamBlock):
         ('attribute_group', CharBlock(
             blank=True, required=False, label='e.g. Fugazi')),
     ], icon="openquote", template="blocks/blockquote.html")
-    embed = EmbedBlock(
-        help_text='Insert an embed URL e.g https://www.youtube.com/embed/SGJFWirQ3ks')
 
 
 class StandardBlock(StreamBlock):
@@ -103,6 +101,10 @@ class StandardBlock(StreamBlock):
         ('attribute_group', CharBlock(
             blank=True, required=False, label='e.g. Fugazi')),
     ], icon="openquote", template="blocks/blockquote.html")
+    embed = EmbedBlock(
+        help_text='Insert an embed URL e.g https://www.youtube.com/embed/SGJFWirQ3ks',
+        icon="embed",
+        template="blocks/embed.html")
 
 
 class ChildMenuBlock(StructBlock):
