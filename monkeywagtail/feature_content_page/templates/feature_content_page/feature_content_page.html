@@ -79,11 +79,17 @@ quote &etc.
     {% if page.image_choices != 'hide' %}
         <div class="feature-image">
             {% if page.image_choices == 'fit' %}
-                {% image self.image class='fit' width-950 %}
+                <div class="fit">
+                    {% image self.image width-950 %}
+                </div>
             {% elif page.image_choices == 'expand' %}
-                {% image self.image class='expand' width-1200 %}
+                <div class="expand">
+                    {% image self.image width-1200 %}
+                </div>
             {% elif page.image_choices == 'full' %}
-                {% image self.image class='full' width-2000 %}
+                <div class="full">
+                    {% image self.image width-2000 %}
+                </div>
             {% endif %}
         </div>
     {% endif %}
