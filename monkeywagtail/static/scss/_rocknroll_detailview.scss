@@ -109,6 +109,9 @@
             padding-right: 2em;
         }
         .block-image {
+            img {
+                width: 100%;
+            }
             figure {
                 margin-left: 0;
                 margin-right: 0;
@@ -117,14 +120,18 @@
                 color: $custom-black;
             }
             .square {
-                display: flex;
                 @include padding_horizontal_left;
+                figure {
+                    display: flex;
+                }
                 img {
                     width: 350px;
                     height: 350px;
                     margin-right: $global-margin;
                 }
-                figcaption {}
+                figcaption {
+                    align-self: flex-end;
+                }
             }
             .full {
                 figcaption {
@@ -138,6 +145,7 @@
         }
     }
     .feature-body:only-child {
+    // For when no .feature-related
     // Related items are optional, and know that if .feature-related isn't there
     // that .feature-body will be an :only-child.
         .block-header, 
