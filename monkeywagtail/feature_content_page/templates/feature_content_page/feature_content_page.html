@@ -75,12 +75,31 @@ quote &etc.
     </div>
 {% endif %}
 
+{% if page.image %}
+    {% if page.image_choices != 'hide' %}
+        <div class="feature-image">
+            {% if page.image_choices == 'fit' %}
+                {% image self.image class='fit' width-950 %}
+            {% elif page.image_choices == 'expand' %}
+                {% image self.image class='expand' width-1200 %}
+            {% elif page.image_choices == 'full' %}
+                {% image self.image class='full' width-2000 %}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endif %}
+
 <div class="feature-content">
     {% if page.body %}
         <div class="feature-body">
             {{ page.body }}
         </div>
     {% endif %}
+        <div class="feature-related">
+            {% for artist in page.artists %}
+                {{ artist }}
+            {% endfor %}
+        </div>
 </div>
 
 </div>

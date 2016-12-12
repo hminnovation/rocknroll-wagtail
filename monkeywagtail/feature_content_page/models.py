@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Count
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django import forms
 from wagtail.wagtailcore.models import Orderable, Page
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailcore.fields import StreamField
@@ -78,8 +79,8 @@ class FeatureContentPage(Page):
     This is a feature content page for all of your interviews, news etc.
     """
 
-    # TODO This almost entirely duplicates StandardPage class. They should be referencing something
-    # to reduce the duplication
+    # TODO This almost entirely duplicates StandardPage class. They should be
+    # referencing something to reduce the duplication
 
     search_fields = Page.search_fields + [
         # Defining what fields the search catches
@@ -96,6 +97,25 @@ class FeatureContentPage(Page):
         on_delete=models.SET_NULL,
         related_name='+',
         help_text='Image to be used where this feature content is listed'
+    )
+
+    # Page models mostly use generic Django fields. Here we're using a choice
+    # field for how the images should be styled.
+    # https://docs.djangoproject.com/en/1.10/ref/models/fields/#choices
+    # You can reference core/blocks.py for how you can reference choices within
+    # StreamField
+
+    image_choices_list = (
+            ('fit', 'Contained width'),
+            ('expand', 'Expanded width'),
+            ('full', 'Full width'),
+            ('hide', 'Hidden (e.g. only display on listings)'),
+        )
+
+    image_choices = models.CharField(
+        max_length=255,
+        choices=image_choices_list,
+        help_text='How you want the image to be displayed on the feature page'
     )
 
     # Note below that standard blocks use 'help_text' for supplementary text
@@ -136,11 +156,18 @@ class FeatureContentPage(Page):
         FieldPanel('date'),
         MultiFieldPanel(
             [
-                ImageChooserPanel('image'),
                 FieldPanel('introduction'),
                 FieldPanel('listing_introduction'),
             ],
-            heading="Introduction and listing image",
+            heading="Introduction",
+            classname="collapsible"
+        ),
+        MultiFieldPanel(
+            [
+                ImageChooserPanel('image'),
+                FieldPanel('image_choices'),
+            ],
+            heading="Image details",
             classname="collapsible"
         ),
         StreamFieldPanel('body'),

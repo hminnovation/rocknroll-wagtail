@@ -90,7 +90,7 @@ class StandardBlock(StreamBlock):
         ('caption', CharBlock(blank=True, required=False)),
         ('style', ChoiceBlock(choices=[
             ('', 'Select an image size'),
-            ('fit', 'Fit-to-text-width'),
+            ('fit', 'Contained width'),
             ('full', 'Full-width'),
             ('square', 'Square')
         ], required=False))
