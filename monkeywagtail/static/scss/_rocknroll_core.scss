@@ -21,6 +21,16 @@ body {
     line-height: 1.7;
 }
 
+content {
+    a {
+        border-bottom: 1px solid $rust;
+        transition: visibility 2s 0 ease;
+        &:hover {
+            border-bottom: none;
+        }
+    }
+}
+
 .row {
     max-width: 78em;
 }
