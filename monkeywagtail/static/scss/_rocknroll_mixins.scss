@@ -1,6 +1,6 @@
 @mixin padding_horizontal {
-    padding-left: $global-padding*24;
-    padding-right: $global-padding*22;
+    padding-left: $global-padding*20;
+    padding-right: $global-padding*17;
     @include breakpoint(large down){
         padding-left: $global-padding*12;
         padding-right: $global-padding*12;
@@ -16,7 +16,7 @@
 }
 
 @mixin padding_horizontal_left {
-    padding-left: $global-padding*24;
+    padding-left: $global-padding*20;
     @include breakpoint(large down){
         padding-left: $global-padding*12;
     }
