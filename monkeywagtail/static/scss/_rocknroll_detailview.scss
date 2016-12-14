@@ -43,7 +43,10 @@
     }
 }
 
+/* -------------------- */
 /* FEATURE DETAIL PAGES */
+/* -------------------- */
+/* Feature detail page main content */
 .template-feature-content-page {
     h1 {
         font-size: 4rem;
@@ -183,7 +186,32 @@
             }
         }
     }
+/* Feature detail page related content */
+    .feature-content {
+        .feature-related {
+            padding-top: $global-padding*2;
+            h2 {
+                font-size: 1.7em;
+            }
+                .artist {
+                    text-align: center;
+                    width: 12em;
+                    .artist-image {
+                        border-radius: 100%;
+                        margin: auto;
+                        margin-bottom: $global-margin*2;
+                        width: 120px;
+                        height: 120px;
+                        overflow: hidden;
+                        img {
+                            width: auto;
+                        }
+                    }
+                }
+            }
+        }
 }
+
 
 // Additional styling for the features app. Specifically features index page
 // and the features page templates
