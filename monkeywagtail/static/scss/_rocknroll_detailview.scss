@@ -47,7 +47,7 @@
         margin-bottom: $global-margin;
         margin-right: $global-margin;
         padding: 0;
-        > *:not(img, a) {
+        > *:not(img, a, ul) {
             padding-left: $global-padding;
             padding-right: $global-padding;
         }
@@ -229,19 +229,17 @@
     .feature-item {
         background-color: $floor;
         ul {
+            display: flex;
+            flex-flow: row wrap;
             margin: auto;
-            width: inherit;
-        }
-        li {
-                background-color: $floor;
+            padding: 0;
+            li {
                 list-style: none;
-                margin: -$global-margin*3 auto 0 auto;
-                padding: 0.5em 1em;
-                width: auto;
+                margin-right: $global-margin*0.5;
+            }
         }
         h2 {
             font-size: 1.8em;
-            margin-top: $global-margin;
             a {
                 border-bottom: none;
             }

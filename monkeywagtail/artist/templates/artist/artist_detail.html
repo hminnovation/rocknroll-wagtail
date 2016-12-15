@@ -35,7 +35,9 @@ our views.py file
                 <ul>
                 {% for genre in feature.genres %}
                     <li>
+                        {# @TODO fix URL #}
                         <a href="{{feature.url}}/../?genre={{ genre.slug }}">{{ genre }}</a>
+                        {% if not forloop.last %}, {% endif %}
                     </li>
                 {% endfor %}
                 </ul>
