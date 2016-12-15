@@ -3,9 +3,14 @@
 
 
 {% block content %}
-    <h2>{{ artist.title }}</h2>
-    {{ artist.artist_image }}
-    <p>{{ artist.biography|richtext }}</p>
+    {% image artist.profile_image fill-200x200-c100 as photo %}
+    <div class="artist-image">
+        <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+    </div>
+    <h1>{{ artist.title }}</h1>
+    <div class="feature-introduction">
+    	<div class="row">{{ artist.biography|richtext }}</div>
+    </div>
 
 {% comment %}
 We get the features and reviews, that this artist has a relationship to, from 
@@ -35,8 +40,9 @@ our views.py file
 					</div>
 				{% endfor %}
 			</a>
-		</div></div>
+		</div>
 	{% endfor %}
+	</div>
 	{% else %}
 	<p>Sorry there are no features for {{ artist.title }}</p>
 </div>
