@@ -2,9 +2,9 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block content %}
-<article>
+<article class="article">
 
-<header class="row">
+<header class="row feature_title">
         {% for album in page.albums %}
         <h2 class="subheadline">
             {{ album.title }} 
@@ -19,7 +19,7 @@
 </header>
 
 
-<aside class="meta small-12 medium-2 columns">
+<aside class="meta small-12 medium-2 columns feature_title_meta">
     Review by {% for author in page.authors %}
         <a href="{% url 'authors' %}{{ author.slug}}">{{ author.title }}</a>{% if not forloop.last %}, {% endif %}
     {% endfor %}
@@ -28,6 +28,7 @@
     
 
     
+    <div class="row feature_artist_genre">
     {% for album in page.albums %}
      {% if album.genre %}
      <ul class="genre">   
@@ -37,16 +38,22 @@
         </ul>
         {% endif %}
     {% endfor %}
+    </div>
 </aside>
 
-<div class="small-12 medium-6 columns">
-    <p><strong>{{ page.introduction }}</strong></p>
+
+<div class="feature-content">
+    <div class="feature-introduction">
+        {{ page.introduction }}
+    </div>
 
 {% image page.image width-400 %}
-{{ page.body }}
-</div>
+    <div class="feature-body">
+        {{ page.body }}
+    </div>
 
-<aside class="small-12 medium-4 columns">
+
+<aside class="feature-related">
 {% for album in page.albums %}
         <figure>{% image album.image fill-200x200 %}
         <figcaption>{{ album.image }}</figcaption>
@@ -60,6 +67,7 @@
         {% endcomment %}
 {% endfor %}
 </aside>
+</div>
 </div>
 </article>
 
