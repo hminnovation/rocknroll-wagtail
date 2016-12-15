@@ -67,6 +67,10 @@
         margin-left: auto;
         margin-right: auto;
         padding: 0;
+        .review-item-image {
+            margin: $global-margin auto;
+            width: 200px;
+        }
         .review-item-rating {
             width: auto;
             margin: auto;
