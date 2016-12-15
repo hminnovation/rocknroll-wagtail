@@ -78,21 +78,23 @@ our views.py file
 {% endif %}
 {% endfor %}
 
-<h3>Albums</h3>
-{% if album %}
-	{% for object in album  %}
-		<li>
-		{{ object.album_image }}
-		<a href="{{object.url}}">{{ object.title }}</a>
-		{{ object.release_date }}
-		{{ object.genre }}
-	{% endfor %}
-{% else %}
-<p>Sorry there are no albums for {{ artist.title }}</p>
 {% comment %}
-	@TODO turn in to an include for all the places that albums are listed
-	e.g. {% include "includes/card_list.html" with object=artist list=artists %}
+Note 15 December 2016
+Albums exist as their own app, and could be accessed by users, but for this
+release of Rock n Roll Wagtail they aren't. If you did want to include them
+you could do something like the following
+	<h3>Albums</h3>
+	{% if album %}
+		{% for object in album  %}
+			<li>
+			{{ object.album_image }}
+			<a href="{{object.url}}">{{ object.title }}</a>
+			{{ object.release_date }}
+			{{ object.genre }}
+		{% endfor %}
+	{% else %}
+	<p>Sorry there are no albums for {{ artist.title }}</p>
+	{% endif %}
 {% endcomment %}
-{% endif %}
 
 {% endblock %}
