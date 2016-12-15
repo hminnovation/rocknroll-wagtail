@@ -37,9 +37,23 @@
 }
 
 .feature-items {
-    @include grid-column-row($grid-column-gutter);
+    display: flex;
+    flex-flow: row wrap;
+    @include padding_horizontal_reduced;
     .feature-item {
-        @include grid-column(6, $grid-column-gutter);
+        width: 31.96%;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: $global-margin;
+        margin-right: $global-margin;
+        padding: 0;
+        > *:not(img, a) {
+            padding-left: $global-padding;
+            padding-right: $global-padding;
+        }
+        &:nth-child(3n+3) {
+            margin-right: 0;
+        }
     }
 }
 
@@ -196,22 +210,75 @@
                 .artist {
                     text-align: center;
                     width: 12em;
-                    .artist-image {
-                        border-radius: 100%;
-                        margin: auto;
-                        margin-bottom: $global-margin*2;
-                        width: 120px;
-                        height: 120px;
-                        overflow: hidden;
-                        img {
-                            width: auto;
-                        }
-                    }
                 }
             }
         }
 }
 
+
+/* -------------------- */
+/* ARTIST DETAIL PAGES */
+/* -------------------- */
+/* artist detail page main content */
+.template-artist-detail-page {
+    text-align: center;
+    h1 {
+        // duplicate
+        font-size: 4rem;
+    }
+    .feature-item {
+        background-color: $floor;
+        ul {
+            margin: auto;
+            width: inherit;
+        }
+        li {
+                background-color: $floor;
+                list-style: none;
+                margin: -$global-margin*3 auto 0 auto;
+                padding: 0.5em 1em;
+                width: auto;
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-top: $global-margin;
+            a {
+                border-bottom: none;
+            }
+        }
+        p {
+            font-size: 0.9em;
+            flex-grow: 1;
+        }
+        .feature-item-footer {
+            color: $custom-black;
+            padding-bottom: $global-padding;
+        }
+    }
+    .feature-introduction {
+        // duplicate
+        color: $custom-black;
+        font-size: 1.4em;
+        text-align: center;
+        @include line-height_extra;
+        @include padding_horizontal;
+        @include padding_vertical;
+    }
+}
+
+
+/* Slow refactoring of duplicates used consistently across all detail views */
+.artist-image {
+    border-radius: 100%;
+    margin: auto;
+    margin-bottom: $global-margin*2;
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    img {
+        width: auto;
+    }
+}
 
 // Additional styling for the features app. Specifically features index page
 // and the features page templates

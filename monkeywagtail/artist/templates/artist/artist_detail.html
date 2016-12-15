@@ -3,13 +3,14 @@
 
 
 {% block content %}
+<div class="template-artist-detail-page">
     {% image artist.profile_image fill-200x200-c100 as photo %}
     <div class="artist-image">
         <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
     </div>
     <h1>{{ artist.title }}</h1>
     <div class="feature-introduction">
-    	<div class="row">{{ artist.biography|richtext }}</div>
+        <div class="row">{{ artist.biography|richtext }}</div>
     </div>
 
 {% comment %}
@@ -20,64 +21,83 @@ our views.py file
 <h3>Features</h3>
 {% if article %}
 <div class="feature-items">
-	{% for feature in article %}
-		<div class="feature-item">
-			<a href="{{feature.url}}">
-				{% image feature.image width-400 as photo %}
-              		<img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
-				<h2>{{ feature.title }}</h2>
-				{% for author in feature.authors  %}
-					<div class="feature-item-author">
-						<h5><a href="{% url 'authors' %}{{author.slug}}">{{ author }}</a></h5>
-					</div>
-				{% endfor %}
-			</a>
-				<p>{{ feature.listing_introduction }}</p>
-				<date>{{ feature.date }}</date>
-				{% for genre in feature.genres %}
-					<div class="feature-footer">
-						{{ genre }}
-					</div>
-				{% endfor %}
-			</a>
-		</div>
-	{% endfor %}
-	</div>
-	{% else %}
-	<p>Sorry there are no features for {{ artist.title }}</p>
+    {% for feature in article %}
+        <div class="feature-item">
+        {% comment %}
+        @TODO create an include for all the places we call features as we're
+        currently duplicating thing
+        {% endcomment %}
+            <a href="{{feature.url}}">
+                {% image feature.image width-400 as photo %}
+                    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+            </a>
+                
+                <ul>
+                {% for genre in feature.genres %}
+                    <li>
+                        <a href="{{feature.url}}/../?genre={{ genre.slug }}">{{ genre }}</a>
+                    </li>
+                {% endfor %}
+                </ul>
+                <h2><a href="{{feature.url}}">{{ feature.title }}</a></h2>
+                {% if feature.listing_introduction %}
+                    {% comment %}
+                    @TODO |truncatechars:110 should be defined on the model not here in
+                    the template
+                    {% endcomment %}
+                        <p>{{ feature.listing_introduction|truncatechars:110 }}</p>
+                    {% elif feature.introduction %}
+                        <p>{{ feature.introduction|truncatechars:110 }}</p>
+                    {% else %}
+                        <p><a href="{{feature.url}}">read more</a></p>
+                {% endif %}
+                <div class="feature-item-footer">
+                    <date>{{ feature.date }}</date>
+                    {% for author in feature.authors  %}
+                        <div class="feature-item-author">
+                            <h5>written by <a href="{% url 'authors' %}{{author.slug}}">{{ author }}</a></h5>
+                        </div>
+                    {% endfor %}
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+    </div>
+    {% else %}
+    <p>Sorry there are no features for {{ artist.title }}</p>
 </div>
 {% endif %}
 
 <h3>Reviews</h3>
 {% for album in album  %}
 {% if album.album_review_relationship %}
-	<div class="review-items">
-	{% for review in album.album_review_relationship.all %}
-	<div class="review-item">
-	<a href="{{ review.page.url }}">
-		<div class="review-item-image">
-			{{ album.album_image }}	
-		</div>
-		<div class="review-item-text">
-			<h3>{{ artist.title }}</h3>
-			<h4>{{ album.title }}</h4>
-		</div>
-	</a>
-		<div class="review-item-meta">
-			<p>{{ review.page.listing_introduction }}</p>
+    <div class="review-items">
+    {% for review in album.album_review_relationship.all %}
+    <div class="review-item">
+    <a href="{{ review.page.url }}">
+        <div class="review-item-image">
+            {{ album.album_image }} 
+        </div>
+        <div class="review-item-text">
+            <h3>{{ artist.title }}</h3>
+            <h4>{{ album.title }}</h4>
+        </div>
+    </a>
+        <div class="review-item-meta">
+            <p>{{ review.page.listing_introduction }}</p>
             {% with width=review.page.rating %}
-              	<div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+                <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
             {% endwith %}
-		</div>
-	</div>
-	{% endfor %}
-	{% comment %}
-	review.page because page is the ParentalKey on reviews/models.py
-	`album_review_relationship` because that's the album related name on
-	the ReviewAlbumRelationship class
-	`.all` because we otherwise can't iterate. You'll hit the error
-	"'RelatedManager' object is not iterable" without it.
-	{% endcomment %}
+        </div>
+    </div>
+    {% endfor %}
+    {% comment %}
+    review.page because page is the ParentalKey on reviews/models.py
+    `album_review_relationship` because that's the album related name on
+    the ReviewAlbumRelationship class
+    `.all` because we otherwise can't iterate. You'll hit the error
+    "'RelatedManager' object is not iterable" without it.
+    {% endcomment %}
 {% else %}
 <p>Sorry there are no reviews for {{ artist.title }}</p>
 </div>
@@ -89,18 +109,18 @@ Note 15 December 2016
 Albums exist as their own app, and could be accessed by users, but for this
 release of Rock n Roll Wagtail they aren't. If you did want to include them
 you could do something like the following
-	<h3>Albums</h3>
-	{% if album %}
-		{% for object in album  %}
-			<li>
-			{{ object.album_image }}
-			<a href="{{object.url}}">{{ object.title }}</a>
-			{{ object.release_date }}
-			{{ object.genre }}
-		{% endfor %}
-	{% else %}
-	<p>Sorry there are no albums for {{ artist.title }}</p>
-	{% endif %}
+    <h3>Albums</h3>
+    {% if album %}
+        {% for object in album  %}
+            <li>
+            {{ object.album_image }}
+            <a href="{{object.url}}">{{ object.title }}</a>
+            {{ object.release_date }}
+            {{ object.genre }}
+        {% endfor %}
+    {% else %}
+    <p>Sorry there are no albums for {{ artist.title }}</p>
+    {% endif %}
 {% endcomment %}
-
+</div>
 {% endblock %}

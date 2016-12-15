@@ -15,6 +15,23 @@
     }
 }
 
+@mixin padding_horizontal_reduced {
+    padding-left: $global-padding*10;
+    padding-right: $global-padding*10;
+    @include breakpoint(large down){
+        padding-left: $global-padding*6;
+        padding-right: $global-padding*6;
+    }
+    @include breakpoint(medium down){
+        padding-left: $global-padding*2;
+        padding-right: $global-padding*2;
+    }
+    @include breakpoint(medium down){
+        padding-left: $global-padding;
+        padding-right: $global-padding;
+    }
+}
+
 @mixin padding_horizontal_left {
     padding-left: $global-padding*20;
     @include breakpoint(large down){
