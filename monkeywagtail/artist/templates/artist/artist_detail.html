@@ -76,21 +76,36 @@ our views.py file
     <div class="review-items">
     {% for review in album.album_review_relationship.all %}
     <div class="review-item">
-    <a href="{{ review.page.url }}">
         <div class="review-item-image">
-            {{ album.album_image }} 
+            <a href="{{ review.page.url }}">
+                {{ album.album_image }} 
+            </a>
         </div>
         <div class="review-item-text">
-            <h3>{{ artist.title }}</h3>
-            <h4>{{ album.title }}</h4>
+            <a href="{{ review.page.url }}">
+                <h3>
+                        {{ artist.title }}
+                </h3>
+                <h4>
+                        {{ album.title }}
+                </h4>
+            </a>
         </div>
-    </a>
-        <div class="review-item-meta">
-            <p>{{ review.page.listing_introduction }}</p>
+    
+        <div class="review-item-rating">
             {% with width=review.page.rating %}
                 <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
             {% endwith %}
         </div>
+        <ul>
+        {% for genre in feature.genres %}
+            <li>
+                {# @TODO fix URL #}
+                <a href="{{review.page.url}}/../?genre={{ genre.slug }}">{{ genre }}</a>
+                {% if not forloop.last %}, {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
     </div>
     {% endfor %}
     {% comment %}
