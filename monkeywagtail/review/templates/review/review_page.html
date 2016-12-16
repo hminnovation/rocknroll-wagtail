@@ -44,7 +44,7 @@
              {% if album.genre %}
              <ul class="genre">   
                 {% for foo in album.genres %}
-                     <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
+                     <li><a href="..?genre={{ foo.slug }}">{{ foo.title }}</a></li>
                      {% if not forloop.last %}, {% endif %}
                 {% endfor %}
                 </ul>
