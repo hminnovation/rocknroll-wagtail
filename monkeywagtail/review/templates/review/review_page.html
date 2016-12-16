@@ -1,71 +1,111 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags mathfilters wagtailimages_tags %}
 
 {% block content %}
 <article class="article">
-
-<header class="row feature_title">
-        {% for album in page.albums %}
-        <h2 class="subheadline">
-            {{ album.title }} 
-                <span>by</span> 
-            {% for artist in album.artists %}
-                {{ artist.title }}
-                    {% if not forloop.last %}, {% endif %}
-            {% endfor %}
+    <div class="header">
+        <header class="row feature_title text-center">
+        {# @TODO put text-center into sass #}
+            {% for album in page.albums %}
+            <figure>{% image album.image fill-200x200 %}</figure>
+                <h2 class="album-artist">
+                {% for artist in album.artists %}
+                        {{ artist.title }}
+                        {% if not forloop.last %}, {% endif %}
+                {% endfor %}
                 </h2>
-            <p>Released {{ album.release_date }}</p>
-        {% endfor %}
-</header>
+                <h2 class="album-title">
+                    "<em>{{ album.title }}</em>"
+                </h2>
+                <date>Released {{ album.release_date }}</date>
+            {% endfor %}
+        </header>
+    </div>
 
+<aside>
+    <div class="row feature_title_meta">
+        <div class="columns small-12 text-center">
+        {# @TODO refactor these div classes. Dedupe between review_page and feature_content_page #}
+            Review by {% for author in page.authors %}
+                <a href="{% url 'authors' %}{{ author.slug}}">{{ author.title }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            <p>{{ page.date_release }}</p>
+            
+            <div class="review-item-rating">
+                {% with width=self.rating %}
+                    <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+                {% endwith %}
+            </div>
+            
 
-<aside class="meta small-12 medium-2 columns feature_title_meta">
-    Review by {% for author in page.authors %}
-        <a href="{% url 'authors' %}{{ author.slug}}">{{ author.title }}</a>{% if not forloop.last %}, {% endif %}
-    {% endfor %}
-    <p>{{ page.date_release }}</p>
-    <p>{{ self.rating }}</p>
-    
-
-    
-    <div class="row feature_artist_genre">
-    {% for album in page.albums %}
-     {% if album.genre %}
-     <ul class="genre">   
-        {% for foo in album.genres %}
-             <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-    {% endfor %}
+            
+            <div class="row feature_artist_genre">
+            {% for album in page.albums %}
+             {% if album.genre %}
+             <ul class="genre">   
+                {% for foo in album.genres %}
+                     <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
+                {% endfor %}
+                </ul>
+                {% endif %}
+            {% endfor %}
+            </div>
+        </div>
     </div>
 </aside>
 
-
-<div class="feature-content">
+{% if page.introduction %}
     <div class="feature-introduction">
         {{ page.introduction }}
     </div>
+{% endif %}
 
-{% image page.image width-400 %}
+<div class="feature-content">
     <div class="feature-body">
         {{ page.body }}
     </div>
 
 
 <aside class="feature-related">
-{% for album in page.albums %}
-        <figure>{% image album.image fill-200x200 %}
-        <figcaption>{{ album.image }}</figcaption>
-        </figure>
-        <h3>Songs:</h3>
-            <ol>
-                {{ album.song_details }}
-            </ol>
+    <div class="artist">
+        {% for album in page.albums %}
+        {% for artist in album.album_artist_relationship.all  %}
+            {% image artist.artist_name.profile_image fill-200x200-c100 as photo %}
+                <div class="artist-image">
+                    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+                </div>
+            <h2>{{ artist.artist_name.title }}</h2>
+            <a href="{% url 'artists' %}{{ artist.artist_name.slug }}">Artist page</a>
+        {% endfor %}
+
         {% comment %}
-            static/blocks/songblock.html
+        We don't attach the artist directly to the review instead we get it via
+        the album.
+
+        It's `album.album_artist_relationship` because that's what the 
+        related_name is within the album/models.py file
+
+        It's appended with `.all` (e.g. `album.album_artist_relationship.all`)
+        as it would otherwise not be iterable
+
+        We then have to use `artist_name` to get to the artist objects e.g.
+        `artist.artist_name.profile_image`. We have to do this because that's
+        how the ForeignKey is named within the album/models.py file
         {% endcomment %}
-{% endfor %}
+        {% endfor %}
+    </div>
+    <div class="album">
+        {% for album in page.albums %}
+            <figure>{% image album.image fill-100x100 %}</figure>
+            <h3 class="text-center">Songs</h3>
+                <ol>
+                    {{ album.song_details }}
+                </ol>
+            {% comment %}
+                static/blocks/songblock.html
+            {% endcomment %}
+        {% endfor %}
+    </div>
 </aside>
 </div>
 </div>
