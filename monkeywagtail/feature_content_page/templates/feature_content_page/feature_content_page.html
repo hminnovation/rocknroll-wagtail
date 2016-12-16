@@ -105,6 +105,7 @@ quote &etc.
     {% endif %}
         <div class="feature-related aside">
             <div class="artist">
+            {# @TODO make an include #}
             {% for artist in page.artists %}
                 {% image artist.profile_image fill-200x200-c100 as photo %}
                     <div class="artist-image">
