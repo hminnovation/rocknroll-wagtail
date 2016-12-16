@@ -14,6 +14,7 @@
         <aside>
             <div class="row feature_artist_genre">
                 <div class="columns small-12 text-center">
+                {# @TODO put text-center into sass #}
                     <ul class="artists">
                     {% for artist in page.artists %}
                         <li class="artist">
@@ -103,16 +104,16 @@ quote &etc.
         </div>
     {% endif %}
         <div class="feature-related aside">
-            {% for artist in page.artists %}
             <div class="artist">
+            {% for artist in page.artists %}
                 {% image artist.profile_image fill-200x200-c100 as photo %}
                     <div class="artist-image">
                         <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
                     </div>
                 <h2>{{ artist.title }}</h2>
                 <a href="{% url 'artists' %}{{ artist.slug }}">Artist page</a>
-            </div>
             {% endfor %}
+            </div>
         </div>
 </div>
 
