@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from wagtail.wagtailcore.models import Page
 from .models import Artist
 
 
@@ -37,9 +38,10 @@ def artist_genre_list(request, genre):
 
 def artist_detail(request, slug):
     artist = get_object_or_404(Artist, slug=slug)
-    articles = set(
+    features = set(
         p.page for p in artist.artist_feature_page_relationship.select_related('page')
         .all() if p.page.live)
+    # feature_index = Page.objects.parent_of(features)
     albums = set(
         p.page for p
         in artist.artist_album_relationship.select_related('page')
@@ -71,7 +73,8 @@ def artist_detail(request, slug):
     # Docs https://docs.djangoproject.com/en/1.10/topics/db/queries/#many-to-many-relationships
     return render(request, 'artist/artist_detail.html', {
          'artist': artist,
-         'article': articles,
+         'articles': features,
+         # 'feature_index': feature_index,
          'review': reviews,
          'album': albums,
     })
