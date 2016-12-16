@@ -62,12 +62,23 @@
 {% endif %}
 
 <div class="feature-content">
-    <div class="feature-body">
-        {{ page.body }}
-    </div>
+    {% if page.body %}
+        <div class="feature-body">
+            {{ page.body }}
+        </div>
+    {% endif %}
 
 
 <aside class="feature-related">
+    {% if page.body %}
+    {% comment %}
+    @TODO
+    This is a nasty hack because we need .feature-related to be an :only-child
+    for the CSS to correctly style it.
+    {% endcomment %}
+        {% else %}
+        <p>Sorry this record hasn't been reviewed yet</p>
+    {% endif %}    
     <div class="artist">
         {% for album in page.albums %}
         {% for artist in album.album_artist_relationship.all  %}
@@ -97,7 +108,7 @@
     </div>
     <div class="album">
         {% for album in page.albums %}
-            <figure>{% image album.image fill-100x100 %}</figure>
+            <figure>{% image album.image fill-200x200 %}</figure>
             <h3 class="text-center">Songs</h3>
                 <ol>
                     {{ album.song_details }}

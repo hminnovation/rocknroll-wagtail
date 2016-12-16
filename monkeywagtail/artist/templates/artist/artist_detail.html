@@ -19,9 +19,9 @@ our views.py file
 {% endcomment %}
 
 <h3>Features</h3>
-{% if article %}
+{% if articles %}
 <div class="feature-items">
-    {% for feature in article %}
+    {% for feature in articles %}
         <div class="feature-item">
         {% comment %}
         @TODO create an include for all the places we call features as we're

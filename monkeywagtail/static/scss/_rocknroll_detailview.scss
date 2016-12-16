@@ -221,6 +221,14 @@
             }
         }
     }
+    .feature-related:only-child {
+        flex: 0;
+        margin: auto;
+        p {
+            margin: 0 auto 10px auto;
+            text-align: center;
+        }
+    }
 /* Feature detail page related content */
     .feature-content {
         .feature-related {
@@ -298,6 +306,21 @@
         li {
             display: inline-block;
             margin: auto $global-margin 0 0
+        }
+    }
+    .block-Songs {
+    font-size: 0.9em;
+    text-align: left;
+        li {
+            margin-left: $global-margin*0.5;
+            > * {
+                display: inline-block;
+            }
+            .song_title::after {
+                content: "-";
+                margin: 0 0 0 2px;
+                display: inline-block;
+            }
         }
     }
 }
