@@ -228,7 +228,7 @@
             h2 {
                 font-size: 1.7em;
             }
-                .artist {
+                .artist, .album {
                     text-align: center;
                     width: 12em;
                 }
@@ -285,6 +285,22 @@
     }
 }
 
+
+/* -------------------- */
+/*  REVIEW DETAIL PAGES */
+/* -------------------- */
+.template-review-page {
+    // note most of this is defined on the feature-content-page
+    .star_ratings_sprite {
+        margin: 10px auto;
+    }
+    ul.genre {
+        li {
+            display: inline-block;
+            margin: auto $global-margin 0 0
+        }
+    }
+}
 
 /* Slow refactoring of duplicates used consistently across all detail views */
 .artist-image {

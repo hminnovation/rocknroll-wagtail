@@ -45,6 +45,7 @@
              <ul class="genre">   
                 {% for foo in album.genres %}
                      <li><a href="{{ foo.url }}">{{ foo.title }}</a></li>
+                     {% if not forloop.last %}, {% endif %}
                 {% endfor %}
                 </ul>
                 {% endif %}
