@@ -27,8 +27,8 @@
             {% endif %}
 
             <div class="filter-bar_item filter-rating-items filter">
+            <label for="filter_genre" class="filter_label">Rating</label>
             {% for i in "xxxxx" %}
-              <label for="filter_genre" class="filter_label">Rating</label>
                <div class="filter-rating-item"><input type="radio" name="rating" value="{{ forloop.counter }}" {% if filters.rating == forloop.counter|slugify %}checked{% endif %}>
                 <p><span style="width:{{ forloop.counter|mul:8 }}%" class="star_ratings_sprite_rating"></span> {{forloop.counter}} and above</p></div>
                {% comment %}
@@ -65,6 +65,7 @@
     <a href="?sort_by=rating-desc{% if search_query %}query={{ search_query|urlencode }}{% endif %}{% if filters %}{% filters_query filters=filters %}{% endif %}">high to low</a> &middot; <a href="?sort_by=rating-asc">low to high</a>
   </div>
   <div class="columns">
+    {% if reviews %}
     {% for review in reviews %}
             
       {% for album in review.albums %}
@@ -108,6 +109,9 @@
         {% endcomment %}
 
     {% endfor %}
+    {% else %}
+    <p>Sorry there are no reviews matching your filters</p>
+    {% endif %}
   </div>
   </div>
 </div>
