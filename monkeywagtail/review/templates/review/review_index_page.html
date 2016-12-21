@@ -2,8 +2,8 @@
 {% load wagtailcore_tags mathfilters wagtailimages_tags navigation_tags %}
 
 {% block content %}
-
-<div class="review_filters">
+<div class="review-group">
+<div class="review-filters">
 <form action="." method="get" class="filter-bar">
             {% if page.filter_years %}
                 <div class="filter-bar_item filter">
@@ -18,11 +18,15 @@
             {% endif %}
 
             {% if page.genres %}
+            <div class="filter-bar_item filter">
              <label for="filter_genre" class="filter_label">Genre</label>
               {% for genre in page.genres %}
                 <input type="checkbox" name="genre" value="{{ genre.slug }}" {% if filters.genre == genre.slug|slugify %}checked{% endif %}> {{ genre.name }}
-            {% endfor %}
+              {% endfor %}
+            </div>
+            {% endif %}
 
+            <div class="filter-bar_item filter">
             {% for i in "xxxxx" %}
                <input type="radio" name="rating" value="{{ forloop.counter }}" {% if filters.rating == forloop.counter|slugify %}checked{% endif %}>
                 <span style="width:{{ forloop.counter|mul:1.3 }}%" class="star_ratings_sprite_rating"></span> {{forloop.counter}} and above
@@ -31,10 +35,10 @@
                http://stackoverflow.com/questions/1107737/numeric-for-loop-in-django-templates
                {% endcomment %}
             {% endfor %}
+            </div>
             <div class="filter-bar_item filter-bar_submit">
                 <button type="submit" class="button">Filter</button>
             </div>
-            {% endif %}
 </form>
 
 
@@ -53,8 +57,8 @@
 {% endfor %}
 </div>
 
-<div class="row review_list">
-  <div class="review_order">
+<div class="row review-list">
+  <div class="review-order">
     <label>Order by rating</label>
     <a href="?sort_by=rating-desc{% if search_query %}query={{ search_query|urlencode }}{% endif %}{% if filters %}{% filters_query filters=filters %}{% endif %}">high to low</a> &middot; <a href="?sort_by=rating-asc">low to high</a>
   </div>
@@ -102,7 +106,8 @@
         {% endcomment %}
 
     {% endfor %}
-</div>
+  </div>
+  </div>
 </div>
 
 {% if reviews.paginator.count > 1 %}
