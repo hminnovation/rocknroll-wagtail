@@ -48,9 +48,15 @@
         margin-left: auto;
         margin-right: auto;
         padding: 0;
-        > *:not(img, a, ul) {
+        > *:not(.feature-item-image, ul) {
             padding-left: $global-padding;
             padding-right: $global-padding;
+        }
+        img {
+            background-color: $metal;
+            height: 200px;
+            overflow: hidden;
+            width: 400px;
         }
     }
 }
@@ -68,7 +74,9 @@
         margin-right: auto;
         padding: 0;
         .review-item-image {
+            background-color: $floor;
             margin: $global-margin auto;
+            height: 200px;
             width: 200px;
         }
         .review-item-rating {

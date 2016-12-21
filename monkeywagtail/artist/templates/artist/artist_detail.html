@@ -31,15 +31,18 @@ our views.py file
         @TODO create an include for all the places we call features as we're
         currently duplicating thing
         {% endcomment %}
-            {% if feature.image %}
-                <a href="{{feature.url}}">
-                    {% image feature.image width-400 as photo %}
-                    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
-                </a>
-            {% endif %}
-                
-                <ul>
-                {% for genre in feature.genres %}
+                <div class="feature-item-image">
+                    <a href="{{feature.url}}">
+                        {% if feature.image %}
+                            {% image feature.image width-400 as photo %}
+                                <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+                        {% else %}
+                        <img />
+                        {% endif %}
+                    </a>
+                </div>
+            <ul>
+            {% for genre in feature.genres %}
                     <li>
                         {# @TODO fix URL #}
                         <a href="{{feature.url}}/../?genre={{ genre.slug }}">{{ genre }}</a>
@@ -81,13 +84,11 @@ our views.py file
 {% if album.album_review_relationship %}
     {% for review in album.album_review_relationship.all %}
     <div class="review-item">
-        {% if album.album_image %}
             <div class="review-item-image">
                 <a href="{{ review.page.url }}">
-                    {{ album.album_image }} 
+                    {{ album.album_image }}
                 </a>
             </div>
-        {% endif %}
         <div class="review-item-text">
             <a href="{{ review.page.url }}">
                 <h3>
