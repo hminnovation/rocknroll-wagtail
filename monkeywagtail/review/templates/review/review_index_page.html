@@ -26,12 +26,13 @@
             </div>
             {% endif %}
 
-            <div class="filter-bar_item filter">
+            <div class="filter-bar_item filter-rating-items filter">
             {% for i in "xxxxx" %}
-               <input type="radio" name="rating" value="{{ forloop.counter }}" {% if filters.rating == forloop.counter|slugify %}checked{% endif %}>
-                <span style="width:{{ forloop.counter|mul:1.3 }}%" class="star_ratings_sprite_rating"></span> {{forloop.counter}} and above
+              <label for="filter_genre" class="filter_label">Rating</label>
+               <div class="filter-rating-item"><input type="radio" name="rating" value="{{ forloop.counter }}" {% if filters.rating == forloop.counter|slugify %}checked{% endif %}>
+                <p><span style="width:{{ forloop.counter|mul:8 }}%" class="star_ratings_sprite_rating"></span> {{forloop.counter}} and above</p></div>
                {% comment %}
-               This is a quick hack because we don't have an equivalent of `for i = 1 to n`
+               This is a quick hack because we don't have an equivalent of `for i = 1 to n` in Django
                http://stackoverflow.com/questions/1107737/numeric-for-loop-in-django-templates
                {% endcomment %}
             {% endfor %}
@@ -39,6 +40,7 @@
             <div class="filter-bar_item filter-bar_submit">
                 <button type="submit" class="button">Filter</button>
             </div>
+            {# @TODO clear filters link #}
 </form>
 
 
