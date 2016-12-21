@@ -80,6 +80,7 @@ our views.py file
 <h3>Reviews</h3>
 <div class="review-items">
 {% for album in album  %}
+{# @TODO rename the views.py file #}
 {% if album.album_review_relationship %}
     {% for review in album.album_review_relationship.all %}
     <div class="review-item">

@@ -64,25 +64,28 @@
     <label>Order by rating</label>
     <a href="?sort_by=rating-desc{% if search_query %}query={{ search_query|urlencode }}{% endif %}{% if filters %}{% filters_query filters=filters %}{% endif %}">high to low</a> &middot; <a href="?sort_by=rating-asc">low to high</a>
   </div>
-  <div class="columns">
+  <div class="review-items">
     {% if reviews %}
     {% for review in reviews %}
-            
       {% for album in review.albums %}
-        {% if album.image %}
-            <div class="review_artwork">
+      <div class="review-item">
+            <div class="review-item-image">
+            {% if album.image %}
               {% image album.image width-400 as photo %}
               <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+            {% endif %}
             </div>
-        {% endif %}
-      <h2> 
-        <a href="{{ review.url }}">
-          <span class="album_title">{{ album.title }}</span> <span>by</span>
-          {% for artist in album.artists %}
-                <span class="artist_name">{{ artist.title }}</span>
-          {% endfor %}
-        </a>
-      </h2>
+        <div class="review-item-text">
+            <a href="{{ review.url }}">
+                <h3>
+                     {{ artist.title }}
+                </h3>
+                <h4>
+                        {{ album.title }}
+                </h4>
+            </a>
+        </div>
+
           <ul class="genre">
               {% for genre in album.genres %}
                   <li><a href="/?{{ genre.slug }}">{{ genre }}</a></li>
@@ -94,10 +97,11 @@
            by: <a href="{{ author.url }}">{{ author }}</a><br />
       {% endfor %}
 
-
+      <div class="review-item-rating">
         {% with width=review.rating %}
                 <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
         {% endwith %}
+      </div>
         
         {{ review.first_published_at|date:"F d Y" }}
         {% comment %}
@@ -107,7 +111,7 @@
           Exhaustive docs on _all_ the possible date combinations are at
           https://docs.djangoproject.com/en/1.10/ref/templates/builtins/#date
         {% endcomment %}
-
+      </div>
     {% endfor %}
     {% else %}
     <p>Sorry there are no reviews matching your filters</p>
