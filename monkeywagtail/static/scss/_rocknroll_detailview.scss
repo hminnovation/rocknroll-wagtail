@@ -324,11 +324,9 @@
             > * {
                 display: inline-block;
             }
-            .song_title::after {
-                content: "-";
-                margin: 0 0 0 2px;
-                display: inline-block;
-            }
+        }
+        .song-length {
+            color: $custom-black;
         }
     }
 }
