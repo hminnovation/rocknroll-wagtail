@@ -8,6 +8,23 @@
 
 /* ALBUMS */
 /* note to self http://www.sketchingwithcss.com/samplechapter/cheatsheet.html */
+.template-review-index-page {
+    .review-group {
+        display: flex;
+        .review-filters {
+            flex: 1;
+            .filter-rating-items {
+                input[type="radio"] {
+                    float: left;
+                    margin-right: $global-margin/2;
+                }
+            }
+        }
+        .review-list {
+            flex: 4;
+        }
+    }
+}
 .album-list {
     display: flex;
     flex-direction: row;
