@@ -4,14 +4,18 @@
 
 {% block content %}
 <div class="template-artist-detail-page">
-    {% image artist.profile_image fill-200x200-c100 as photo %}
-    <div class="artist-image">
-        <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
-    </div>
+    {% if artist.profile_image %}
+        {% image artist.profile_image fill-200x200-c100 as photo %}
+        <div class="artist-image">
+            <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+        </div>
+    {% endif %}
     <h1>{{ artist.title }}</h1>
-    <div class="feature-introduction">
-        <div class="row">{{ artist.biography|richtext }}</div>
-    </div>
+    {% if artist.biography %}
+        <div class="feature-introduction">
+            <div class="row">{{ artist.biography|richtext }}</div>
+        </div>
+    {% endif %}
 
 {% comment %}
 We get the features and reviews, that this artist has a relationship to, from 
@@ -27,10 +31,12 @@ our views.py file
         @TODO create an include for all the places we call features as we're
         currently duplicating thing
         {% endcomment %}
-            <a href="{{feature.url}}">
-                {% image feature.image width-400 as photo %}
+            {% if feature.image %}
+                <a href="{{feature.url}}">
+                    {% image feature.image width-400 as photo %}
                     <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
-            </a>
+                </a>
+            {% endif %}
                 
                 <ul>
                 {% for genre in feature.genres %}
@@ -67,20 +73,21 @@ our views.py file
     </div>
     {% else %}
     <p>Sorry there are no features for {{ artist.title }}</p>
-</div>
 {% endif %}
 
 <h3>Reviews</h3>
+<div class="review-items">
 {% for album in album  %}
 {% if album.album_review_relationship %}
-    <div class="review-items">
     {% for review in album.album_review_relationship.all %}
     <div class="review-item">
-        <div class="review-item-image">
-            <a href="{{ review.page.url }}">
-                {{ album.album_image }} 
-            </a>
-        </div>
+        {% if album.album_image %}
+            <div class="review-item-image">
+                <a href="{{ review.page.url }}">
+                    {{ album.album_image }} 
+                </a>
+            </div>
+        {% endif %}
         <div class="review-item-text">
             <a href="{{ review.page.url }}">
                 <h3>
@@ -117,9 +124,9 @@ our views.py file
     {% endcomment %}
 {% else %}
 <p>Sorry there are no reviews for {{ artist.title }}</p>
-</div>
 {% endif %}
 {% endfor %}
+</div>
 
 {% comment %}
 Note 15 December 2016
