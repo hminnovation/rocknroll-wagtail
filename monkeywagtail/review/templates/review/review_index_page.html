@@ -21,7 +21,7 @@
             <div class="filter-bar_item filter">
              <label for="filter_genre" class="filter_label">Genre</label>
               {% for genre in page.genres %}
-                <input type="checkbox" name="genre" value="{{ genre.slug }}" {% if filters.genre == genre.slug|slugify %}checked{% endif %}> {{ genre.name }}
+                <input type="checkbox" name="genre" value="{{ genre.slug }}" {% if filters.genre == genre.slug|slugify %}checked{% endif %}> <label>{{ genre.name }}</label>
               {% endfor %}
             </div>
             {% endif %}
@@ -30,7 +30,7 @@
             <label for="filter_genre" class="filter_label">Rating</label>
             {% for i in "xxxxx" %}
                <div class="filter-rating-item"><input type="radio" name="rating" value="{{ forloop.counter }}" {% if filters.rating == forloop.counter|slugify %}checked{% endif %}>
-                <p><span style="width:{{ forloop.counter|mul:8 }}%" class="star_ratings_sprite_rating"></span> {{forloop.counter}} and above</p></div>
+                <label><span style="width:{{ forloop.counter|mul:8 }}%" class="star_ratings_sprite_rating"></span> {{forloop.counter}} and above</label></div>
                {% comment %}
                This is a quick hack because we don't have an equivalent of `for i = 1 to n` in Django
                http://stackoverflow.com/questions/1107737/numeric-for-loop-in-django-templates
@@ -62,7 +62,7 @@
 <div class="row review-list">
   <div class="review-order">
     <label>Order by rating</label>
-    <a href="?sort_by=rating-desc{% if search_query %}query={{ search_query|urlencode }}{% endif %}{% if filters %}{% filters_query filters=filters %}{% endif %}">high to low</a> &middot; <a href="?sort_by=rating-asc">low to high</a>
+    <a href="?sort_by=rating-asc">high to low</a> &middot; <a href="?sort_by=rating-desc">low to high</a>
   </div>
   <div class="review-items">
     {% if reviews %}
@@ -71,37 +71,41 @@
       <div class="review-item">
             <div class="review-item-image">
             {% if album.image %}
-              {% image album.image width-400 as photo %}
+              {% image album.image fill-400x400-c100 as photo %}
               <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
             {% endif %}
             </div>
         <div class="review-item-text">
             <a href="{{ review.url }}">
                 <h3>
+                  {% for artist in album.artists %}
                      {{ artist.title }}
+                  {% endfor %}
                 </h3>
                 <h4>
                         {{ album.title }}
                 </h4>
             </a>
         </div>
+        <div class="review-item-rating">
+        {% with width=review.rating %}
+                <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+        {% endwith %}
+        </div>
 
+      <div class="review-item-text">
+        <p>by: 
+          {% for author in review.authors %}
+            <a href="{{ author.url }}">{{ author }}</a>
+          {% endfor %}
+        </p>
+      </div>
           <ul class="genre">
               {% for genre in album.genres %}
                   <li><a href="/?{{ genre.slug }}">{{ genre }}</a></li>
               {% endfor %}
           </ul> 
-      {% endfor %}
 
-      {% for author in review.authors %}
-           by: <a href="{{ author.url }}">{{ author }}</a><br />
-      {% endfor %}
-
-      <div class="review-item-rating">
-        {% with width=review.rating %}
-                <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
-        {% endwith %}
-      </div>
         
         {{ review.first_published_at|date:"F d Y" }}
         {% comment %}
@@ -112,6 +116,7 @@
           https://docs.djangoproject.com/en/1.10/ref/templates/builtins/#date
         {% endcomment %}
       </div>
+    {% endfor %}
     {% endfor %}
     {% else %}
     <p>Sorry there are no reviews matching your filters</p>

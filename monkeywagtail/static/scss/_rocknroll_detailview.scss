@@ -66,6 +66,7 @@
     flex-flow: row wrap;
     @include padding_horizontal_reduced;
     .review-item {
+        text-align: center;
         width: 24%;
         display: flex;
         flex-direction: column;
@@ -335,7 +336,6 @@
 .artist-image {
     border-radius: 100%;
     margin: auto;
-    margin-bottom: $global-margin*2;
     width: 120px;
     height: 120px;
     overflow: hidden;
