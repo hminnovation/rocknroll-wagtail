@@ -28,7 +28,8 @@ class GenreArtistRelationship(Orderable, models.Model):
 
 
 @register_snippet
-# A snippet is created by adding a `@snippet` decorator to a ClusterableModel.
+# A snippet is created by adding a `@register_snippet` decorator to a
+# ClusterableModel.
 #
 # A snippet is a way to create non-hierarchy content on Wagtail
 # (http://docs.wagtail.io/en/v1.4.3/topics/snippets.html)
