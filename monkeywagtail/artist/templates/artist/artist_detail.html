@@ -80,6 +80,7 @@ our views.py file
 <h3>Reviews</h3>
 <div class="review-items">
 {% for album in album  %}
+
 {# @TODO rename the views.py file #}
 {% if album.album_review_relationship %}
     {% for review in album.album_review_relationship.all %}
@@ -92,7 +93,7 @@ our views.py file
         <div class="review-item-text">
             <a href="{{ review.page.url }}">
                 <h3>
-                        {{ artist.title }}
+                    {{ album.artist_name }}
                 </h3>
                 <h4>
                         {{ album.title }}
@@ -106,7 +107,7 @@ our views.py file
             {% endwith %}
         </div>
         <ul>
-        {% for genre in feature.genres %}
+        {% for genre in album.genres %}
             <li>
                 {# @TODO fix URL #}
                 <a href="{{review.page.url}}/../?genre={{ genre.slug }}">{{ genre }}</a>

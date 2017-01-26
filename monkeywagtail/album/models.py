@@ -1,3 +1,5 @@
+import collections
+
 from django.db import models
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
@@ -11,6 +13,7 @@ from monkeywagtail.core.blocks import SongStreamBlock
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
+FilterObject = collections.namedtuple('FilterObject', 'title')
 
 # Many-to-many relationships
 # The first three models in this document define many-to-many relationships
@@ -87,7 +90,7 @@ class Album(ClusterableModel):
 
     panels = [
         FieldPanel('title'),
-        FieldPanel('slug'),
+        # FieldPanel('slug'), # Removed from admin view @TODO remove from DB
         InlinePanel(
             'album_artist_relationship', label="Arist(s)", panels=None, min_num=1),
         ImageChooserPanel('image'),
@@ -104,6 +107,8 @@ class Album(ClusterableModel):
         StreamFieldPanel('song_details'),
     ]
 
+    # We iterate within the model over the artists, genres and subgenres
+    # so they can be accessible to the template via a for loop
     def artists(self):
         artists = [
             n.artist_name for n in self.album_artist_relationship.all()
@@ -122,18 +127,25 @@ class Album(ClusterableModel):
         ]
         return subgenres
 
+    def artist_name(self):
+        artists = [
+             n.artist_name.title for n in self.album_artist_relationship.all()
+        ]
+
+        return ", ".join(artists)
+        # We return the list as a string by joining all the list items. We do this
+        # to avoid returning something like "['Fugazi']" when we want to return
+        # "Fugazi"
+
     def __str__(self):
         string = (
             "Album: " + self.title +
-            " by " +
-            ','.join([str(self.artists())])
+            " by " + self.artist_name()
             )
         return string
         # This will return something like Album: 13 Songs by Fugazi
-        # Need to get the result of the function call using artists(). Rather
-        # than just artists. c/f http://stackoverflow.com/questions/31937532/python-django-query-error-cant-convert-method-object-to-str-implicitly
-        # Then need to get the string out of the list
-        # http://stackoverflow.com/questions/9165421/python-typeerror-cant-convert-list-object-to-str-implicitly
+        # Need to get the result of the function call using artist_name(). Rather
+        # than just artist_name. c/f http://stackoverflow.com/questions/31937532/python-django-query-error-cant-convert-method-object-to-str-implicitly
 
     @property
     def album_image(self):
@@ -144,16 +156,9 @@ class Album(ClusterableModel):
         except:
             return ''
 
-    def artist(obj):
-        artist = ','.join([
-            str(i.artist_name) for i in obj.album_artist_relationship.all()
-            ])
-        return artist
-        # Note that we call `artist_name` because it's what we called the
-        # ForeignKey on line 58 where we defined the relationship between
-        # the album and artist in `AlbumArtistRelationship`
-
-    artist.admin_order_field = 'album_artist_relationship__artist_name'
+    artist_name.admin_order_field = 'album_artist_relationship__artist_name'
+    # artist_name references the string created from the artist_name list whilst
+    # the reverse lookup to __artist_name is the related name ForeignKey
 
     def genre(obj):
         genre = ','.join([
