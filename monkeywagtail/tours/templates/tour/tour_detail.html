@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags mathfilters wagtailimages_tags %}
+
+
+{% block content %}
+<div class="template-artist-detail-page">
+    {% if artist.profile_image %}
+        {% image artist.profile_image fill-200x200-c100 as photo %}
+        <div class="artist-image">
+            <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+        </div>
+    {% endif %}
+    <h1>{{ artist.title }}</h1>
+    {% if artist.biography %}
+        <div class="feature-introduction">
+            <div class="row">{{ artist.biography|richtext }}</div>
+        </div>
+    {% endif %}
+
+{% comment %}
+We get the features and reviews, that this artist has a relationship to, from 
+our views.py file
+{% endcomment %}
+
+<h3>Features</h3>
+{% if articles %}
+<div class="feature-items">
+    {% for feature in articles %}
+        <div class="feature-item">
+        {% comment %}
+        @TODO create an include for all the places we call features as we're currently duplicating thing
+        {% endcomment %}
+                <div class="feature-item-image">
+                    <a href="{{feature.url}}">
+                        {% if feature.image %}
+                            {% image feature.image width-400 as photo %}
+                                <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+                        {% else %}
+                        <img />
+                        {% endif %}
+                    </a>
+                </div>
+            <ul>
+            {% for genre in feature.genres %}
+                    <li>
+                        {# @TODO fix URL #}
+                        <a href="{{feature.url}}/../?genre={{ genre.slug }}">{{ genre }}</a>
+                        {% if not forloop.last %}, {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+                <h2><a href="{{feature.url}}">{{ feature.title }}</a></h2>
+                {% if feature.listing_introduction %}
+                    {% comment %}
+                    @TODO |truncatechars:110 should be defined on the model not here in
+                    the template
+                    {% endcomment %}
+                        <p>{{ feature.listing_introduction|truncatechars:110 }}</p>
+                    {% elif feature.introduction %}
+                        <p>{{ feature.introduction|truncatechars:110 }}</p>
+                    {% else %}
+                        <p><a href="{{feature.url}}">read more</a></p>
+                {% endif %}
+                <div class="feature-item-footer">
+                    <date>{{ feature.date }}</date>
+                    {% for author in feature.authors  %}
+                        <div class="feature-item-author">
+                            <h5>written by <a href="{% url 'authors' %}{{author.slug}}">{{ author }}</a></h5>
+                        </div>
+                    {% endfor %}
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+    </div>
+    {% else %}
+    <p>Sorry there are no features for {{ artist.title }}</p>
+{% endif %}
+
+<h3>Reviews</h3>
+<div class="review-items">
+{% for album in album  %}
+
+{# @TODO rename the views.py file #}
+{% if album.album_review_relationship %}
+    {% for review in album.album_review_relationship.all %}
+    <div class="review-item">
+            <div class="review-item-image">
+                <a href="{{ review.page.url }}">
+                    {{ album.album_image }}
+                </a>
+            </div>
+        <div class="review-item-text">
+            <a href="{{ review.page.url }}">
+                <h3>
+                    {{ album.artist_name }}
+                </h3>
+                <h4>
+                        {{ album.title }}
+                </h4>
+            </a>
+        </div>
+    
+        <div class="review-item-rating">
+            {% with width=review.page.rating %}
+                <div class="rating star_ratings_sprite"><span style="width:{{ width|mul:20 }}%" class="star_ratings_sprite_rating"></span></div>
+            {% endwith %}
+        </div>
+        <ul>
+        {% for genre in album.genres %}
+            <li>
+                {# @TODO fix URL #}
+                <a href="{{review.page.url}}/../?genre={{ genre.slug }}">{{ genre }}</a>
+                {% if not forloop.last %}, {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+    {% comment %}
+    review.page because page is the ParentalKey on reviews/models.py
+    `album_review_relationship` because that's the album related name on
+    the ReviewAlbumRelationship class
+    `.all` because we otherwise can't iterate. You'll hit the error
+    "'RelatedManager' object is not iterable" without it.
+    {% endcomment %}
+{% else %}
+<p>Sorry there are no reviews for {{ artist.title }}</p>
+{% endif %}
+{% endfor %}
+</div>
+
+{% comment %}
+Note 15 December 2016
+Albums exist as their own app, and could be accessed by users, but for this
+release of Rock n Roll Wagtail they aren't. If you did want to include them
+you could do something like the following
+    <h3>Albums</h3>
+    {% if album %}
+        {% for object in album  %}
+            <li>
+            {{ object.album_image }}
+            <a href="{{object.url}}">{{ object.title }}</a>
+            {{ object.release_date }}
+            {{ object.genre }}
+        {% endfor %}
+    {% else %}
+    <p>Sorry there are no albums for {{ artist.title }}</p>
+    {% endif %}
+{% endcomment %}
+</div>
+{% endblock %}
