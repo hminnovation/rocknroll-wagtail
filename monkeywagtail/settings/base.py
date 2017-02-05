@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'monkeywagtail.genre',
     'monkeywagtail.author',
     'monkeywagtail.feature_content_page',
+    'monkeywagtail.tours',
+    'monkeywagtail.news',
 
     'wagtailfontawesome',
     'wagtailerrorpages',

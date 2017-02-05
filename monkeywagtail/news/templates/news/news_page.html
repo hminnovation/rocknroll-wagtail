@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div class="article">
+    <div class="header">
+        <div class="row news_title">
+            <div class="columns small-12 text-center">
+                <h1>{{ page.title }}</h1>
+            </div>
+        </div>
+
+
+        <aside>
+            <div class="row news_artist_genre">
+                <div class="columns small-12 text-center">
+                {# @TODO put text-center into sass #}
+                    <ul class="artists">
+                    {% for artist in page.artists %}
+                        <li class="artist">
+                            <a href="{% url 'artists' %}{{ artist.slug}}">{{ artist.title|title }}</a>
+                            {% if not forloop.last %}, {% endif %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row news_title-meta">
+                    <span class="date">
+                        <strong>Written</strong> <date>{{ page.date|date:"F d Y" }}</date>
+                    </span>
+                    
+                    <ul class="authors">
+                    <strong>by</strong> {% for author in page.authors %}
+                        {% if forloop.last and forloop.counter > 1 %}
+                        &nbsp;and&nbsp;
+                        {% endif %}
+                            <li><a href="{% url 'authors' %}{{ author.slug}}">{{ author.title }}</a></li>
+                        {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                    </ul>
+            </div>
+        </aside>
+    </div>
+
+{% if page.introduction %}
+    <div class="news-introduction introduction">
+        <div class="row">{{ page.introduction }}</div>        
+    </div>
+{% endif %}
+
+<div class="news-content content">
+    {% if page.news_body %}
+        <div class="news-body body">
+            {{ page.news_body }}
+        </div>
+    {% endif %}
+        <div class="news-related aside">
+            <div class="artist">
+            {# @TODO make an include #}
+            {% for artist in page.artists %}
+                {% image artist.profile_image fill-200x200-c100 as photo %}
+                    <div class="artist-image">
+                        <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-thumbnail" />
+                    </div>
+                <h2>{{ artist.title }}</h2>
+                <a href="{% url 'artists' %}{{ artist.slug }}">Artist page</a>
+            {% endfor %}
+            </div>
+            <div class="related_pages">
+
+                {% for page in page.relatedpages  %}
+                    <a href="{{ page.slug }}">{{ page.title }}</a>
+                    <div class="related-page-image">
+                    {% image artist.news_image fill-200x200-c100 as related_photo %}
+                        <img src="{{ related_photo.url }}" width="{{ related_photo.width }}" height="{{ related_photo.height }}" alt="{{ related_photo.alt }}" class="img-thumbnail" />
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+</div>
+
+</div>
+</div>
+</div>
+{% endblock %}

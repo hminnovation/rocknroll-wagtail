@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+    <h2>Artists</h2>
+    <ul>
+    {% if artists %}
+        {% for artist in artists %}
+            <li><a href="{{ artist.url }}">{{ artist.title }}</a></li>
+        {% endfor %}
+     {% else %}
+     <p>You've not added any bands yet</p>
+     {% endif %}
+    </ul>
+
+{% if artists.paginator.count > 1 %}
+        {% include "includes/pagination.html" with subpages=artists %}
+        {% comment %} We use an include for the pagination to introduce consistency
+           across the site. The `features` comes from the property that we
+           defined in the FeatureContentPageIndex class {% endcomment %}
+{% endif %}
+{% endblock %}
