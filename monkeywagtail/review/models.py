@@ -124,7 +124,8 @@ class ReviewPage(Page):
                     max_num=1),
         InlinePanel(
             'related_pages', label="Related pages",
-            help_text="Other pages from across the site that relate to this review")
+            help_text="Other pages from across the site that relate to this "
+            "review")
     ]
 
     review_panels = [

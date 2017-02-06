@@ -1,0 +1,65 @@
+[
+{
+  "model": "artist.genreartistrelationship",
+  "pk": 1,
+  "fields": {
+    "sort_order": 0,
+    "page": 2,
+    "genres": 1
+  }
+},
+{
+  "model": "artist.genreartistrelationship",
+  "pk": 2,
+  "fields": {
+    "sort_order": 0,
+    "page": 3,
+    "genres": 1
+  }
+},
+{
+  "model": "artist.genreartistrelationship",
+  "pk": 3,
+  "fields": {
+    "sort_order": 0,
+    "page": 1,
+    "genres": 1
+  }
+},
+{
+  "model": "artist.artist",
+  "pk": 1,
+  "fields": {
+    "title": "Nirvana",
+    "slug": "nirvana",
+    "profile_image": 7,
+    "date_formed": "2016-09-01",
+    "biography": "<p>Biography for the band nirvana</p>",
+    "external_url": "https://google.com"
+  }
+},
+{
+  "model": "artist.artist",
+  "pk": 2,
+  "fields": {
+    "title": "Fugazi",
+    "slug": "fugazi",
+    "profile_image": 8,
+    "date_formed": null,
+    "biography": "<p>Authentic sriracha ugh tumeric etsy, slow-carb meh migas glossier veniam offal pitchfork seitan. Yuccie poutine cliche fugiat, officia sunt meditation portland dreamcatcher sriracha lo-fi. Nostrud echo park mollit keytar. Tumblr organic man bun vexillologist literally, thundercats deserunt. Farm-to-table tousled prism ullamco occaecat,\u00a0</p>",
+    "external_url": ""
+  }
+},
+{
+  "model": "artist.artist",
+  "pk": 3,
+  "fields": {
+    "title": "Bjork",
+    "slug": "bjork",
+    "profile_image": 11,
+    "date_formed": "2017-01-26",
+    "biography": "<p>This is a biography thing</p>",
+    "external_url": "http://bjorkrocks.com"
+  }
+}
+]

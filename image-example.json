@@ -1,0 +1,814 @@
+[
+{
+  "model": "wagtailimages.image",
+  "pk": 1,
+  "fields": {
+    "collection": 1,
+    "title": "This is an image title",
+    "file": "original_images/A_Schwarzhoff_photo_uV9FHNw.png",
+    "width": 349,
+    "height": 362,
+    "created_at": "2016-09-17T11:20:08.153Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 2,
+  "fields": {
+    "collection": 1,
+    "title": "Nevermind",
+    "file": "original_images/big_data.jpg",
+    "width": 786,
+    "height": 819,
+    "created_at": "2016-09-17T11:34:33.622Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 3,
+  "fields": {
+    "collection": 1,
+    "title": "fghjkl",
+    "file": "original_images/check.jpg",
+    "width": 1920,
+    "height": 1082,
+    "created_at": "2016-09-17T11:49:44.232Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 4,
+  "fields": {
+    "collection": 1,
+    "title": "Screenshot",
+    "file": "original_images/Capture_decran_2016-12-14_a_14.18.33.png",
+    "width": 883,
+    "height": 514,
+    "created_at": "2016-12-14T14:18:52.386Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 5,
+  "fields": {
+    "collection": 1,
+    "title": "Fugazin",
+    "file": "original_images/600x600bb.jpg",
+    "width": 600,
+    "height": 600,
+    "created_at": "2016-12-15T11:11:28.607Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 6,
+  "fields": {
+    "collection": 1,
+    "title": "Nirvana Bleach",
+    "file": "original_images/61ZuYjxldML.jpg",
+    "width": 500,
+    "height": 500,
+    "created_at": "2016-12-21T20:41:08.523Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 7,
+  "fields": {
+    "collection": 1,
+    "title": "Nirvana",
+    "file": "original_images/Nirvana.jpg",
+    "width": 800,
+    "height": 600,
+    "created_at": "2016-12-21T20:43:17.507Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 8,
+  "fields": {
+    "collection": 1,
+    "title": "Fugazi",
+    "file": "original_images/Guy_Picciotto_1.jpg",
+    "width": 500,
+    "height": 333,
+    "created_at": "2017-01-17T10:07:59.599Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 9,
+  "fields": {
+    "collection": 1,
+    "title": "In Utero",
+    "file": "original_images/643FLKq.jpg",
+    "width": 953,
+    "height": 953,
+    "created_at": "2017-01-17T10:10:18.848Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 10,
+  "fields": {
+    "collection": 1,
+    "title": "Bjork Post",
+    "file": "original_images/0416aad9845ed91751bf880c3951f34f.1000x1000x1_1.jpg",
+    "width": 1000,
+    "height": 1000,
+    "created_at": "2017-01-17T10:12:14.020Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 11,
+  "fields": {
+    "collection": 1,
+    "title": "Bjork",
+    "file": "original_images/Bjork_EB.jpg",
+    "width": 1600,
+    "height": 1000,
+    "created_at": "2017-01-17T10:13:00.782Z",
+    "uploaded_by_user": 1,
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 1,
+  "fields": {
+    "spec": "max-165x165"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 2,
+  "fields": {
+    "spec": "fill-50x50"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 3,
+  "fields": {
+    "spec": "fill-400x400"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 4,
+  "fields": {
+    "spec": "fill-200x200"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 5,
+  "fields": {
+    "spec": "width-400"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 6,
+  "fields": {
+    "spec": "max-800x600"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 7,
+  "fields": {
+    "spec": "width-950"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 8,
+  "fields": {
+    "spec": "width-1088"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 9,
+  "fields": {
+    "spec": "width-600"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 10,
+  "fields": {
+    "spec": "fill-200x200-c100"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 11,
+  "fields": {
+    "spec": "width-200"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 12,
+  "fields": {
+    "spec": "fill-100x100"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 13,
+  "fields": {
+    "spec": "400x400-c100"
+  }
+},
+{
+  "model": "wagtailimages.filter",
+  "pk": 14,
+  "fields": {
+    "spec": "fill-400x400-c100"
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 1,
+  "fields": {
+    "filter": 1,
+    "file": "images/A_Schwarzhoff_photo_uV9FHNw.max-165x165.png",
+    "width": 159,
+    "height": 165,
+    "focal_point_key": "",
+    "image": 1
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 2,
+  "fields": {
+    "filter": 1,
+    "file": "images/big_data.max-165x165.jpg",
+    "width": 158,
+    "height": 165,
+    "focal_point_key": "",
+    "image": 2
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 3,
+  "fields": {
+    "filter": 2,
+    "file": "images/A_Schwarzhoff_photo_uV9FHNw.2e16d0ba.fill-50x50.png",
+    "width": 50,
+    "height": 50,
+    "focal_point_key": "2e16d0ba",
+    "image": 1
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 4,
+  "fields": {
+    "filter": 1,
+    "file": "images/check.max-165x165.jpg",
+    "width": 165,
+    "height": 92,
+    "focal_point_key": "",
+    "image": 3
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 5,
+  "fields": {
+    "filter": 2,
+    "file": "images/check.2e16d0ba.fill-50x50.jpg",
+    "width": 50,
+    "height": 50,
+    "focal_point_key": "2e16d0ba",
+    "image": 3
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 6,
+  "fields": {
+    "filter": 3,
+    "file": "images/big_data.2e16d0ba.fill-400x400.jpg",
+    "width": 400,
+    "height": 400,
+    "focal_point_key": "2e16d0ba",
+    "image": 2
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 7,
+  "fields": {
+    "filter": 4,
+    "file": "images/big_data.2e16d0ba.fill-200x200.jpg",
+    "width": 200,
+    "height": 200,
+    "focal_point_key": "2e16d0ba",
+    "image": 2
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 8,
+  "fields": {
+    "filter": 6,
+    "file": "images/A_Schwarzhoff_photo_uV9FHNw.max-800x600.png",
+    "width": 349,
+    "height": 362,
+    "focal_point_key": "",
+    "image": 1
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 9,
+  "fields": {
+    "filter": 1,
+    "file": "images/Capture_decran_2016-12-14_a_14.18.33.max-165x165.png",
+    "width": 165,
+    "height": 96,
+    "focal_point_key": "",
+    "image": 4
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 10,
+  "fields": {
+    "filter": 7,
+    "file": "images/Capture_decran_2016-12-14_a_14.18.33.width-950.png",
+    "width": 883,
+    "height": 514,
+    "focal_point_key": "",
+    "image": 4
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 11,
+  "fields": {
+    "filter": 8,
+    "file": "images/Capture_decran_2016-12-14_a_14.18.33.width-1088.png",
+    "width": 883,
+    "height": 514,
+    "focal_point_key": "",
+    "image": 4
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 12,
+  "fields": {
+    "filter": 9,
+    "file": "images/Capture_decran_2016-12-14_a_14.18.33.width-600.png",
+    "width": 600,
+    "height": 349,
+    "focal_point_key": "",
+    "image": 4
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 13,
+  "fields": {
+    "filter": 5,
+    "file": "images/Capture_decran_2016-12-14_a_14.18.33.width-400.png",
+    "width": 400,
+    "height": 232,
+    "focal_point_key": "",
+    "image": 4
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 14,
+  "fields": {
+    "filter": 5,
+    "file": "images/check.width-400.jpg",
+    "width": 400,
+    "height": 225,
+    "focal_point_key": "",
+    "image": 3
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 15,
+  "fields": {
+    "filter": 10,
+    "file": "images/check.2e16d0ba.fill-200x200-c100.jpg",
+    "width": 200,
+    "height": 200,
+    "focal_point_key": "2e16d0ba",
+    "image": 3
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 16,
+  "fields": {
+    "filter": 1,
+    "file": "images/600x600bb.max-165x165.jpg",
+    "width": 165,
+    "height": 165,
+    "focal_point_key": "",
+    "image": 5
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 17,
+  "fields": {
+    "filter": 3,
+    "file": "images/600x600bb.2e16d0ba.fill-400x400.jpg",
+    "width": 400,
+    "height": 400,
+    "focal_point_key": "2e16d0ba",
+    "image": 5
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 18,
+  "fields": {
+    "filter": 4,
+    "file": "images/600x600bb.2e16d0ba.fill-200x200.jpg",
+    "width": 200,
+    "height": 200,
+    "focal_point_key": "2e16d0ba",
+    "image": 5
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 19,
+  "fields": {
+    "filter": 12,
+    "file": "images/600x600bb.2e16d0ba.fill-100x100.jpg",
+    "width": 100,
+    "height": 100,
+    "focal_point_key": "2e16d0ba",
+    "image": 5
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 20,
+  "fields": {
+    "filter": 5,
+    "file": "images/600x600bb.width-400.jpg",
+    "width": 400,
+    "height": 400,
+    "focal_point_key": "",
+    "image": 5
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 21,
+  "fields": {
+    "filter": 10,
+    "file": "images/A_Schwarzhoff_photo_uV9FHNw.2e16d0ba.fill-200x200-c100.png",
+    "width": 200,
+    "height": 200,
+    "focal_point_key": "2e16d0ba",
+    "image": 1
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 22,
+  "fields": {
+    "filter": 5,
+    "file": "images/big_data.width-400.jpg",
+    "width": 400,
+    "height": 416,
+    "focal_point_key": "",
+    "image": 2
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 23,
+  "fields": {
+    "filter": 14,
+    "file": "images/big_data.2e16d0ba.fill-400x400-c100.jpg",
+    "width": 400,
+    "height": 400,
+    "focal_point_key": "2e16d0ba",
+    "image": 2
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 24,
+  "fields": {
+    "filter": 1,
+    "file": "images/61ZuYjxldML.max-165x165.jpg",
+    "width": 165,
+    "height": 165,
+    "focal_point_key": "",
+    "image": 6
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 25,
+  "fields": {
+    "filter": 4,
+    "file": "images/61ZuYjxldML.2e16d0ba.fill-200x200.jpg",
+    "width": 200,
+    "height": 200,
+    "focal_point_key": "2e16d0ba",
+    "image": 6
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 26,
+  "fields": {
+    "filter": 1,
+    "file": "images/Nirvana.max-165x165.jpg",
+    "width": 165,
+    "height": 123,
+    "focal_point_key": "",
+    "image": 7
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 27,
+  "fields": {
+    "filter": 2,
+    "file": "images/Nirvana.2e16d0ba.fill-50x50.jpg",
+    "width": 50,
+    "height": 50,
+    "focal_point_key": "2e16d0ba",
+    "image": 7
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 28,
+  "fields": {
+    "filter": 10,
+    "file": "images/Nirvana.2e16d0ba.fill-200x200-c100.jpg",
+    "width": 200,
+    "height": 200,
+    "focal_point_key": "2e16d0ba",
+    "image": 7
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 29,
+  "fields": {
+    "filter": 14,
+    "file": "images/61ZuYjxldML.2e16d0ba.fill-400x400-c100.jpg",
+    "width": 400,
+    "height": 400,
+    "focal_point_key": "2e16d0ba",
+    "image": 6
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 30,
+  "fields": {
+    "filter": 1,
+    "file": "images/Guy_Picciotto_1.max-165x165.jpg",
+    "width": 165,
+    "height": 109,
+    "focal_point_key": "",
+    "image": 8
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 31,
+  "fields": {
+    "filter": 1,
+    "file": "images/643FLKq.max-165x165.jpg",
+    "width": 165,
+    "height": 165,
+    "focal_point_key": "",
+    "image": 9
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 32,
+  "fields": {
+    "filter": 1,
+    "file": "images/0416aad9845ed91751bf880c3951f34f.1000x1000x1.max-165x165.jpg",
+    "width": 165,
+    "height": 165,
+    "focal_point_key": "",
+    "image": 10
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 33,
+  "fields": {
+    "filter": 1,
+    "file": "images/Bjork_EB.max-165x165.jpg",
+    "width": 165,
+    "height": 103,
+    "focal_point_key": "",
+    "image": 11
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 34,
+  "fields": {
+    "filter": 2,
+    "file": "images/Bjork_EB.2e16d0ba.fill-50x50.jpg",
+    "width": 50,
+    "height": 50,
+    "focal_point_key": "2e16d0ba",
+    "image": 11
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 35,
+  "fields": {
+    "filter": 2,
+    "file": "images/Guy_Picciotto_1.2e16d0ba.fill-50x50.jpg",
+    "width": 50,
+    "height": 50,
+    "focal_point_key": "2e16d0ba",
+    "image": 8
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 36,
+  "fields": {
+    "filter": 3,
+    "file": "images/61ZuYjxldML.2e16d0ba.fill-400x400.jpg",
+    "width": 400,
+    "height": 400,
+    "focal_point_key": "2e16d0ba",
+    "image": 6
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 37,
+  "fields": {
+    "filter": 3,
+    "file": "images/643FLKq.2e16d0ba.fill-400x400.jpg",
+    "width": 400,
+    "height": 400,
+    "focal_point_key": "2e16d0ba",
+    "image": 9
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 38,
+  "fields": {
+    "filter": 10,
+    "file": "images/Guy_Picciotto_1.2e16d0ba.fill-200x200-c100.jpg",
+    "width": 200,
+    "height": 200,
+    "focal_point_key": "2e16d0ba",
+    "image": 8
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 39,
+  "fields": {
+    "filter": 14,
+    "file": "images/0416aad9845ed91751bf880c3951f.2e16d0ba.fill-400x400-c100.jpg",
+    "width": 400,
+    "height": 400,
+    "focal_point_key": "2e16d0ba",
+    "image": 10
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 40,
+  "fields": {
+    "filter": 14,
+    "file": "images/643FLKq.2e16d0ba.fill-400x400-c100.jpg",
+    "width": 400,
+    "height": 400,
+    "focal_point_key": "2e16d0ba",
+    "image": 9
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 41,
+  "fields": {
+    "filter": 4,
+    "file": "images/0416aad9845ed91751bf880c3951f34f.1.2e16d0ba.fill-200x200.jpg",
+    "width": 200,
+    "height": 200,
+    "focal_point_key": "2e16d0ba",
+    "image": 10
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 42,
+  "fields": {
+    "filter": 10,
+    "file": "images/Bjork_EB.2e16d0ba.fill-200x200-c100.jpg",
+    "width": 200,
+    "height": 200,
+    "focal_point_key": "2e16d0ba",
+    "image": 11
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 43,
+  "fields": {
+    "filter": 3,
+    "file": "images/0416aad9845ed91751bf880c3951f34f.1.2e16d0ba.fill-400x400.jpg",
+    "width": 400,
+    "height": 400,
+    "focal_point_key": "2e16d0ba",
+    "image": 10
+  }
+}
+]

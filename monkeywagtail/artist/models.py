@@ -2,16 +2,15 @@ from django.db import models
 from django.contrib import admin
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
-from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailsearch import index
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.wagtailadmin.edit_handlers import (
+        FieldPanel, InlinePanel, StreamFieldPanel
+    )
 from wagtail.wagtailsnippets.models import register_snippet
-from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from modelcluster.models import ClusterableModel
-from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
-# from taggit.models import TaggedItemBase
-from monkeywagtail.genre.models import SubgenreClass
+from wagtail.wagtailcore.fields import StreamField
+from monkeywagtail.core.blocks import StandardBlock
 
 
 class GenreArtistRelationship(Orderable, models.Model):
@@ -98,12 +97,11 @@ class Artist(ClusterableModel):
 
     date_formed = models.DateField("Date the artist started", blank=True, null=True)
 
-    # tags = ClusterTaggableManager(through=GenreTagRelationship, blank=True)
-
-    # Note below that standard blocks use 'help_text' for supplementary text
-    # rather than 'label' as with StreamField
-    biography = RichTextField(
-        blank=True, help_text="Short biography about the user")
+    biography = StreamField(
+        StandardBlock(),
+        help_text="Blah blah blah",
+        blank=True
+        )
 
     external_url = models.URLField(blank=True, null=True)
 
@@ -130,7 +128,7 @@ class Artist(ClusterableModel):
             max_num=1
         ),
         ImageChooserPanel('profile_image'),
-        FieldPanel('biography'),
+        StreamFieldPanel('biography'),
         FieldPanel('date_formed'),
         FieldPanel('external_url')
     ]
