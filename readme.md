@@ -1,9 +1,11 @@
 Rock n roll wagtail
 ====================
 
-![No Wagtail playing](https://github.com/heymonkeyriot/rocknroll-wagtail-cookiecutter/blob/master/wagtail%20rock%20n%20roll.jpg)
+**Note:** This is still very much a work in progress and shouldn't be used as a good example of how to make a Wagtail site!
 
-**Status:** Work in progress
+See **[Beginner Wagtail](https://github.com/heymonkeyriot/beginner-wagtail/)** for a simpler, working, introduction to Wagtail CMS.
+
+![No Wagtail playing](https://github.com/heymonkeyriot/rocknroll-wagtail-cookiecutter/blob/master/wagtail%20rock%20n%20roll.jpg)
 
 #### A Wagtail project for cut 'n' paste pulling apart
 
@@ -20,11 +22,12 @@ cd monkeywagtail/static
 npm install
 bower install
 gulp watch
+# in a new terminal tab
 cd ../../
-dj makemigrations
-dj migrate
-dj createsuperuser --username username
-djrun
+dj makemigrations   # ./manage.py makemigrations
+dj migrate   # ./manage.py makemigrations
+dj createsuperuser --username username   # ./manage.py createsuperuser
+djrun   # ./manage.py runserver 0.0.0.0:8000
 ```
 
 You should now be able to visit http://localhost:1234 and see the site
@@ -32,7 +35,7 @@ You should now be able to visit http://localhost:1234 and see the site
 
 ## Why
 
-A demo project for those who are bad at reading documentation. At a code sprint for Wagtail in Philadelphia, in March 2016, there was a request for something showing different aspects of Wagtail to help you get set-up with understanding how Wagtail CMS works.
+A demo project for those who are bad at reading documentation. At a code sprint for Wagtail in Philadelphia, in March 2016, there was a request for something showing different aspects of Wagtail and Django to help you get set-up with understanding how Wagtail CMS works.
 
 From a personal perspective this was also a chance to implement a Wagtail projects without client constraint to try and get as full an insight as possible in to the software.
 
@@ -94,13 +97,15 @@ The project is based upon [Torchbox's Wagtail Cookiecutter](https://github.com/t
 
 **06/07/16** Currently very much a work in progress. Models are working, but there aren't any templates!
 
-**19/09/16** Models have all been re-written based on better understanding them. Starting on templating, with aim to finish end of September.
+**19/09/16** Models have all been re-written based on better understanding them.
+
+**04/03/17** Still a work-in-progress(!)
 
 ## TODO 
 
  - [x] Finish the models and Wagtail admin UI
  - [ ] Create more reliable fixtures for initial content population
- - [ ] Introduce filtering for artist and reviews
+ - [x] Introduce filtering for artist and reviews
  - [ ] Template the models
  - [ ] Fully inline comments for the different models and templates
  - [ ] Put `cd monkeywagtail/static && npm install && bower install` within vagrant provision file
