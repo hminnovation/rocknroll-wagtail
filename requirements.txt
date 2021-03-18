@@ -5,7 +5,7 @@ django-redis==4.3.0
 wagtail==1.6
 django-libsass==0.6
 libsass==0.8.3
-Pillow==3.3.0
+Pillow==8.1.1
 Wand==0.4.4 #For animated gifs. Note: It requires the server to be running ImageMagick
 redis==2.10.5
 wagtailfontawesome==1.0.5 #This allows us to use FontAwesome icons for the admin area e.g. with StreamField
