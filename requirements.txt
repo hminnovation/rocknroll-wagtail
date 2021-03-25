@@ -32,7 +32,7 @@ Jinja2==2.8
 MarkupSafe==0.23
 pathtools==0.1.2
 pep8==1.7.0
-PyYAML==3.12
+PyYAML==5.4
 typing==3.5.2.2
 
 # S3
