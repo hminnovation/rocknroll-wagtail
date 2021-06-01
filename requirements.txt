@@ -39,4 +39,4 @@ typing==3.5.2.2
 static3==0.6.1
 django-storages==1.5.1
 boto==2.39.0
-urllib3==1.13
+urllib3==1.26.5
